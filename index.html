@@ -6,6 +6,88 @@
  <li><a href="/image.jpg>secondaire</a> </li>
  <li id="myid"> <a href="#myid">КубГУ</a></a> </li>  
 </ul> 
+<!DOCTYPE html>
+
+<html>
+
+  <head>
+    <title>Пример формы HTML</title>
+  </head>
+
+  <body>
+
+    <h1>Пример формы HTML</h1>
+
+    <form action="/"
+      method="POST">
+
+      <label>
+        Выпишите ФИО:<br />
+        <input name="field-name-1"
+          value="ФИО" />
+		  placeholder="Введите вашу почту" />
+      </label><br />
+
+      <label>
+        Выпишите номер телефона:<br />
+        <input name="phone"
+          type="tel"
+          placeholder="+79664523558" />
+      </label><br />
+
+      <label>
+        Текстовое поле email:<br />
+        <input name="field-email"
+          type="email"
+          placeholder="Введите вашу почту" />
+      </label><br />
+
+      <label>
+       биография:<br />
+        <textarea name="field-name-2">город и тд</textarea>
+      </label><br />
+
+      
+
+      <label>
+        Любовый язык программирование
+        <br />
+        <select name="field-name-4[]"
+          multiple="multiple">
+          <option value="Значение1">C</option>
+          <option value="Значение2" selected="selected">C++</option>
+          <option value="Значение3" selected="selected">JavaScript</option>
+		  <option value="Значение3" selected="selected">PHP</option>
+		  <option value="Значение3" selected="selected">Python</option>
+		  <option value="Значение3" selected="selected">java</option>
+		  <option value="Значение3" selected="selected">Haskel</option>
+		  <option value="Значение3" selected="selected">Clojure</
+		  <option value="Значение3" selected="selected">Prolog</option>
+		  <option value="Значение3" selected="selected">Scala</option>
+		  
+        </select>
+      </label><br />
+
+      Пол:<br />
+      <label><input type="radio" checked="checked"
+        name="radio-group-1" value="Значение1" />
+        Женский</label>
+      <label><input type="radio"
+        name="radio-group-1" value="Значение2" />
+       Мужской</label><br />
+
+      подпись:<br />
+      <label><input type="checkbox" checked="checked"
+        name="check-1" />
+        с контрактом ознакомлен (а)label><br />
+
+      Если готова нажимите сюда:
+      <input type="submit" value="Сохранить" />
+    </form>
+
+  </body>
+
+</html> 
 
 
 
