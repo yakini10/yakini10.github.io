@@ -1,93 +1,197 @@
-/*/<ul> 
- <li><a href="http://kubsu.ru/">КубГУ</a> </li> 
- <li><a href="https://kubsu.ru/">КубГУ</a> </li> 
- <li><a href="https://kubsu.ru/"><img src="image.jpg" style="width: 600px;" /></a> </li> 
- <li><a href="/kubsu.ru>principal</a> </li>
- <li><a href="http://kubsu.ru/">КубГУ</a> </li
- <li id="myid"> <a href="#myid">КубГУ</a></a> </li>  
-</ul> 
 <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Задание 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-<html>
+    <!-- ШАПКА -->
+<header>
+    <div class="logo-container">
+        <img src="flowers.webp" alt="Логотип" class="round-logo">
+		</div>
+	<div class="header-center">
+        <h1>Задание 2</h1>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#list-section">Список гиперссылок</a></li>
+			<li><a href="#table-section">Таблица</a></li>
+            <li><a href="#form-section">Форма</a></li>    
+        </ul>
+    </nav>
+</header>
 
+    <!-- СОДЕРЖИМОЕ -->
+    <main>
+        <!-- Список ссылок -->
+        <section>
+			<section id="list-section">
+            <h2>Список гиперссылок</h2>
+            <ul>
+                <li><a href="http://kubsu.ru/">КубГУ</a></li>
+<li><a href="https://kubsu.ru/">КубГУ</a></li>
+<li><a href="https://kubsu.ru/"><img src="image.jpg" alt="Цветок" style="width: 600px;"/></a></li>
+<li><a href="/index.html">главная</a></li>
+<li><a href="/image.jpg">внутренняя</a></li>
+<li id = "myid"><a href="#myid">текущий фрагмент</a></li>
+<li>
+    <a href="https://yandex.ru/search/?text=погода+в+краснодаре&lr=35&search_source=yaru_desktop_common">
+        Погода в Краснодаре
+    </a>
+</li>
+            </ul>
+        </section>
+
+        <!-- Таблица -->
+		<section id="table-section">
+        
+            <h2>Таблица</h2>
+            <table>
+                <tr>
+                    <th>№</th>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+					<th>Отчество</th>
+                    <th>Возраст</th>
+					<th>Город</th>
+                    <th>Индекс</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Петров</td>
+                    <td>Дима</td>
+					<td>Александрович</td>
+                    <td>21</td>
+					<td colspan="2">Москва, 101000</td>
+                </tr>
+               
+                <tr>
+                    <td>2</td>
+                    <td>Алексеев</td>
+                    <td>Марк</td>
+					<td>Игоревич</td>
+                    <td>19</td>
+					<td colspan="2">Нижний Новгород, 603000</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Титов</td>
+                    <td>Женя</td>
+					<td>Эльдарович</td>
+                    <td>23</td>
+					<td colspan="2">Екатеринбург, 620000</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Тихонова</td>
+                    <td>Алина</td>
+					<td>Марковна</td>
+                    <td>16</td>
+					<td colspan="2">Новосибирск, 630000</td>
+                </tr>
+				<tr>
+                    <td>5</td>
+                    <td>Мамедова</td>
+                    <td>Эльнара</td>
+					<td>Андреевна</td>
+                    <td>18</td>
+					<td colspan="2">Казань, 420000</td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Форма -->
+       
   <head>
-    <title>Пример формы HTML</title>
+    <title> Форма </title>
   </head>
 
   <body>
-
-    <h1>Пример формы HTML</h1>
+     <section id="form-section">
+    <h1>Форма</h1>
 
     <form action="/"
       method="POST">
 
       <label>
-        Выпишите ФИО:<br />
+         Впишите ФИО:<br />
         <input name="field-name-1"
-          value="ФИО" />
-		  placeholder="Введите вашу почту" />
+          value="ФИО" 
+		  placeholder="Введите вашу почту"/>
       </label><br />
-
-      <label>
-        Выпишите номер телефона:<br />
+	  
+	  <label>
+         Впишите номер телефона:<br />
         <input name="phone"
-          type="tel"
-          placeholder="+79664523558" />
+          type="tel" 
+		  placeholder="+79998543251"/>
       </label><br />
 
       <label>
-        Текстовое поле email:<br />
+        Введите email:<br />
         <input name="field-email"
           type="email"
           placeholder="Введите вашу почту" />
       </label><br />
 
       <label>
-       биография:<br />
-        <textarea name="field-name-2">город и тд</textarea>
+         дата рождения:<br />
+        <input name="field-date"
+          value="2019-08-13"
+          type="date" />
+      </label><br />
+
+      <label>
+        биография:<br />
+        <textarea name="field-name-2">город и тп</textarea>
       </label><br />
 
       
 
       <label>
-        Любовый язык программирование
+        Любимый язык программирования:
         <br />
         <select name="field-name-4[]"
           multiple="multiple">
-          <option value="Значение1">C</option>
-          <option value="Значение2" selected="selected">C++</option>
-          <option value="Значение3" selected="selected">JavaScript</option>
-		  <option value="Значение3" selected="selected">PHP</option>
-		  <option value="Значение3" selected="selected">Python</option>
-		  <option value="Значение3" selected="selected">java</option>
-		  <option value="Значение3" selected="selected">Haskel</option>
-		  <option value="Значение3" selected="selected">Clojure</
-		  <option value="Значение3" selected="selected">Prolog</option>
-		  <option value="Значение3" selected="selected">Scala</option>
-		  
+          <option value="Значение1">Pascal</option>
+          <option value="Значение2" selected="selected">C</option>
+          <option value="Значение3" selected="selected">C++</option>
+		  <option value="Значение4" selected="selected">JavaScript</option>
+		  <option value="Значение5" selected="selected">PHP</option>
+		  <option value="Значение6" selected="selected">Python</option>
+		  <option value="Значение7" selected="selected">Java</option>
+		  <option value="Значение8" selected="selected">Haskel</option>
+		  <option value="Значение9" selected="selected">Clojure</option>
+		  <option value="Значение10" selected="selected">Prolog</option>
+		  <option value="Значение11" selected="selected">Scala</option>
         </select>
       </label><br />
 
       Пол:<br />
       <label><input type="radio" checked="checked"
         name="radio-group-1" value="Значение1" />
-        Женский</label>
+        женский</label>
       <label><input type="radio"
         name="radio-group-1" value="Значение2" />
-       Мужской</label><br />
+        мужской</label><br />
 
-      подпись:<br />
+      Подпись:<br />
       <label><input type="checkbox" checked="checked"
         name="check-1" />
-        с контрактом ознакомлен (а)label><br />
+        С контрактом ознакомлен (а)</label><br />
 
-      Если готова нажимите сюда:
+      Если вы готовы, то нажмите сохранить:
       <input type="submit" value="Сохранить" />
     </form>
 
-  </body>
 
-</html> 
+    <!-- ПОДВАЛ -->
+    <footer>
+        <p>&copy; Сергей Синица</p>
+    </footer>
 
-
-
+</body>
+</html>
