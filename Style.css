@@ -21,7 +21,7 @@ body {
 /* Обновите структуру header */
 header {
     background: #a800e6;
-    color: white;
+    color: blue;
     padding: 20px;
     display: flex;
     align-items: center;
