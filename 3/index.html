@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>Задание 3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- ШАПКА -->
+<header>
+    <div class="logo-container">
+        <img src="flowers.webp" alt="Логотип" class="round-logo">
+		</div>
+	<div class="header-center">
+        <h1>Задание 3</h1>
+    </div>
+    <nav>
+        <ul>
+            <li><a href="#list-section">Список гиперссылок</a></li>
+			<li><a href="#table-section">Таблица</a></li>
+            <li><a href="#form-section">Форма</a></li>    
+        </ul>
+    </nav>
+</header>
+
+    <!-- СОДЕРЖИМОЕ -->
+    <main>
+        <!-- Список ссылок -->
+			<section id="list-section">
+            <h2>Список гиперссылок</h2>
+            <ul>
+                <li><a href="http://kubsu.ru/">КубГУ</a></li>
+<li><a href="https://kubsu.ru/">КубГУ</a></li>
+<li><a href="https://kubsu.ru/"><img src="image.jpg" alt="Цветок" style="width: 600px;"/></a></li>
+<li><a href="/index.html">главная</a></li>
+<li><a href="/image.jpg">внутренняя</a></li>
+<li id = "myid"><a href="#myid">Текущий фрагмент</a></li>
+<li>
+    <a href="https://www.lachainemeteo.com/meteo-mali/ville-444/previsions-meteo-bamako-aujourdhui">
+        погода в Мали
+    </a>
+</li>
+            </ul>
+        </section>
+
+ <!-- Таблица -->
+		<section id="table-section">
+        
+            <h2>Таблица</h2>
+            <table>
+                <tr>
+                    <th>№</th>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+					<th>Отчество</th>
+                    <th>Возраст</th>
+					<th>Город</th>
+                    <th>Индекс</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Иванов</td>
+                    <td>Дмитрий</td>
+					<td>Сергеевич</td>
+                    <td>34</td>
+					<td colspan="2">Москва, 101000</td>
+                </tr>
+               
+                <tr>
+                    <td>2</td>
+                    <td>Петров</td>
+                    <td>Алексей</td>
+					<td>Иванович</td>
+                    <td>28</td>
+					<td colspan="2">Санкт-Петербург, 190000</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Соколов</td>
+                    <td>Николай</td>
+					<td>Павлович</td>
+                    <td>42</td>
+					<td colspan="2">Новосибирск, 630000</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>смирнова</td>
+                    <td>Елена</td>
+					<td>Викторовна</td>
+                    <td>37</td>
+					<td colspan="2">Екатеринбург, 620000</td>
+                </tr>
+				<tr>
+                    <td>5</td>
+                    <td>Морозов</td>
+                    <td>Сергей</td>
+					<td>Александрович</td>
+                    <td>50</td>
+					<td colspan="2">Казань, 420000</td>
+                </tr>
+            </table>
+		</section>       
+
+        <!-- Форма -->
+
+		<section id="form-section">
+			<h1>Форма</h1>
+
+			<form action="/"
+			  method="POST">
+
+			  <label>
+				 Впишите ФИО:<br />
+				<input name="field-name-1"
+				  value="ФИО" 
+				  placeholder="Введите вашу почту"/>
+			  </label><br />
+			  
+			  <label>
+				 Впишите номер телефона:<br />
+				<input name="phone"
+				  type="tel" 
+				  placeholder="+79998543251"/>
+			  </label><br />
+
+			  <label>
+				Введите email:<br />
+				<input name="field-email"
+				  type="email"
+				  placeholder="Введите вашу почту" />
+			  </label><br />
+
+			  <label>
+				 дата рождения:<br />
+				<input name="field-date"
+				  value="2019-08-13"
+				  type="date" />
+			  </label><br />
+
+			  <label>
+				биография:<br />
+				<textarea name="field-name-2">город и тп</textarea>
+			  </label><br />
+
+			  
+
+			  <label>
+				Любимый язык программирования:
+				<br />
+				<select name="field-name-4[]"
+				  multiple="multiple">
+				  <option value="Значение1">Pascal</option>
+				  <option value="Значение2" selected="selected">C</option>
+				  <option value="Значение3" selected="selected">C++</option>
+				  <option value="Значение4" selected="selected">JavaScript</option>
+				  <option value="Значение5" selected="selected">PHP</option>
+				  <option value="Значение6" selected="selected">Python</option>
+				  <option value="Значение7" selected="selected">Java</option>
+				  <option value="Значение8" selected="selected">Haskel</option>
+				  <option value="Значение9" selected="selected">Clojure</option>
+				  <option value="Значение10" selected="selected">Prolog</option>
+				  <option value="Значение11" selected="selected">Scala</option>
+				</select>
+			  </label><br />
+
+			  Пол:<br />
+			  <label><input type="radio" checked="checked"
+				name="radio-group-1" value="Значение1" />
+				женский</label>
+			  <label><input type="radio"
+				name="radio-group-1" value="Значение2" />
+				мужской</label><br />
+
+			  Подпись:<br />
+			  <label><input type="checkbox" checked="checked"
+				name="check-1" />
+				С контрактом ознакомлен (а)</label><br />
+
+			  Если вы готовы, то нажмите сохранить:
+			  <input type="submit" value="Сохранить" />
+			</form>
+		</section>
+
+		<!-- ПОДВАЛ -->
+		<footer>
+        <p>&copy; Сергей Синица</p>
+		</footer>
+	</main>
+</body>
+</html>
