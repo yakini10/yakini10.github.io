@@ -87,24 +87,10 @@ footer {
     text-align: center;
     padding: 15px;
 }
-@media screen and (max-width: 799px) {
-  body {
-    background: pink; /* test mobile */
-  }
-}
 
 @media screen and (min-width: 
 800px) {
  header nav ul  {
  flex-direction: row;
  }
-	#list-section {
-    order: 1;
-}
-#table-section {
-    order: 2;
-}
-#form-section {
-	order: 3;
-}
 }
