@@ -32,139 +32,133 @@
 
   <!-- ОСНОВНОЙ КОНТЕНТ -->
   <main class="container my-4">
+    <!-- ✅ Ajout d'une ROW flex pour gérer l’ordre -->
+    <div class="row g-4">
 
-    <!-- Таблица -->
-    <section id="table-section" class="mb-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body">
-          <h2 class="card-title text-center mb-3">Таблица</h2>
-          <div class="table-responsive">
-            <table class="table table-bordered align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th>№</th>
-                  <th>Фамилия</th>
-                  <th>Имя</th>
-                  <th>Отчество</th>
-                  <th>Возраст</th>
-                  <th>Город</th>
-                  <th>Индекс</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>1</td><td>Иванов</td><td>Дмитрий</td><td>Сергеевич</td><td>34</td><td>Москва</td><td>101000</td></tr>
-                <tr><td>2</td><td>Петров</td><td>Алексей</td><td>Иванович</td><td>28</td><td>Санкт-Петербург</td><td>190000</td></tr>
-                <tr><td>3</td><td>Соколов</td><td>Николай</td><td>Павлович</td><td>42</td><td>Новосибирск</td><td>630000</td></tr>
-                <tr><td>4</td><td>Смирнова</td><td>Елена</td><td>Викторовна</td><td>37</td><td>Екатеринбург</td><td>620000</td></tr>
-                <tr><td>5</td><td>Морозов</td><td>Сергей</td><td>Александрович</td><td>50</td><td>Казань</td><td>420000</td></tr>
-              </tbody>
-            </table>
+      <!-- TABLE : première sur mobile, deuxième sur desktop -->
+      <section id="table-section" class="col-12 order-1 order-md-2">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h2 class="card-title text-center mb-3">Таблица</h2>
+            <div class="table-responsive">
+              <table class="table table-bordered align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>№</th>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Возраст</th>
+                    <th>Город</th>
+                    <th>Индекс</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>1</td><td>Иванов</td><td>Дмитрий</td><td>Сергеевич</td><td>34</td><td>Москва</td><td>101000</td></tr>
+                  <tr><td>2</td><td>Петров</td><td>Алексей</td><td>Иванович</td><td>28</td><td>Санкт-Петербург</td><td>190000</td></tr>
+                  <tr><td>3</td><td>Соколов</td><td>Николай</td><td>Павлович</td><td>42</td><td>Новосибирск</td><td>630000</td></tr>
+                  <tr><td>4</td><td>Смирнова</td><td>Елена</td><td>Викторовна</td><td>37</td><td>Екатеринбург</td><td>620000</td></tr>
+                  <tr><td>5</td><td>Морозов</td><td>Сергей</td><td>Александрович</td><td>50</td><td>Казань</td><td>420000</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Список -->
-    <section id="list-section" class="mb-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body">
-          <h2 class="card-title text-center mb-3">Список гиперссылок</h2>
-          <ul class="list-group">
-            <li class="list-group-item"><a href="http://kubsu.ru/">КубГУ (http)</a></li>
-            <li class="list-group-item"><a href="https://kubsu.ru/">КубГУ (https)</a></li>
-            <li class="list-group-item">
-              <a href="https://kubsu.ru/">
-                <img src="image.jpg" alt="Цветок" class="img-fluid rounded shadow-sm">
-              </a>
-            </li>
-            <li class="list-group-item"><a href="/index.html">Главная</a></li>
-            <li class="list-group-item"><a href="/image.jpg">Внутренняя</a></li>
-            <li class="list-group-item" id="myid"><a href="#myid">Текущий фрагмент</a></li>
-            <li class="list-group-item">
-              <a href="https://www.lachainemeteo.com/meteo-mali/ville-444/previsions-meteo-bamako-aujourdhui">
-                Погода в Мали
-              </a>
-            </li>
-          </ul>
+      <!-- LIST : deuxième sur mobile, première sur desktop -->
+      <section id="list-section" class="col-12 order-2 order-md-1">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h2 class="card-title text-center mb-3">Список гиперссылок</h2>
+            <ul class="list-group">
+              <li class="list-group-item"><a href="http://kubsu.ru/">КубГУ (http)</a></li>
+              <li class="list-group-item"><a href="https://kubsu.ru/">КубГУ (https)</a></li>
+              <li class="list-group-item">
+                <a href="https://kubsu.ru/">
+                  <img src="image.jpg" alt="Цветок" class="img-fluid rounded shadow-sm">
+                </a>
+              </li>
+              <li class="list-group-item"><a href="/index.html">Главная</a></li>
+              <li class="list-group-item"><a href="/image.jpg">Внутренняя</a></li>
+              <li class="list-group-item" id="myid"><a href="#myid">Текущий фрагмент</a></li>
+              <li class="list-group-item">
+                <a href="https://www.lachainemeteo.com/meteo-mali/ville-444/previsions-meteo-bamako-aujourdhui">
+                  Погода в Мали
+                </a>
+              </li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Форма -->
-    <section id="form-section" class="mb-4">
-      <div class="card shadow-sm border-0">
-        <div class="card-body">
-          <h2 class="card-title text-center mb-3">Форма</h2>
-          <form method="POST" action="/" class="row g-3">
-
-            <div class="col-md-6">
-              <label class="form-label">ФИО:</label>
-              <input type="text" name="field-name-1" class="form-control" placeholder="Введите ваше ФИО">
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Телефон:</label>
-              <input type="tel" name="phone" class="form-control" placeholder="+79998543251">
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Email:</label>
-              <input type="email" name="field-email" class="form-control" placeholder="Введите вашу почту">
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label">Дата рождения:</label>
-              <input type="date" name="field-date" class="form-control">
-            </div>
-
-            <div class="col-12">
-              <label class="form-label">Биография:</label>
-              <textarea name="field-name-2" class="form-control" rows="3" placeholder="Город, образование и т.п."></textarea>
-            </div>
-
-            <div class="col-12">
-              <label class="form-label">Любимый язык программирования:</label>
-              <select name="field-name-4[]" multiple class="form-select">
-                <option>Pascal</option>
-                <option selected>C</option>
-                <option selected>C++</option>
-                <option>JavaScript</option>
-                <option>PHP</option>
-                <option>Python</option>
-                <option>Java</option>
-                <option>Haskell</option>
-                <option>Clojure</option>
-                <option>Prolog</option>
-                <option>Scala</option>
-              </select>
-            </div>
-
-            <div class="col-12">
-              <label class="form-label d-block">Пол:</label>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="radio-group-1" value="женский" checked>
-                <label class="form-check-label">Женский</label>
+      <!-- FORM : troisième partout -->
+      <section id="form-section" class="col-12 order-3 order-md-3">
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <h2 class="card-title text-center mb-3">Форма</h2>
+            <form method="POST" action="/" class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">ФИО:</label>
+                <input type="text" name="field-name-1" class="form-control" placeholder="Введите ваше ФИО">
               </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="radio-group-1" value="мужской">
-                <label class="form-check-label">Мужской</label>
+              <div class="col-md-6">
+                <label class="form-label">Телефон:</label>
+                <input type="tel" name="phone" class="form-control" placeholder="+79998543251">
               </div>
-            </div>
-
-            <div class="col-12">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" checked name="check-1">
-                <label class="form-check-label">С контрактом ознакомлен(а)</label>
+              <div class="col-md-6">
+                <label class="form-label">Email:</label>
+                <input type="email" name="field-email" class="form-control" placeholder="Введите вашу почту">
               </div>
-            </div>
-
-            <div class="col-12 text-center">
-              <button type="submit" class="btn btn-primary px-4">Сохранить</button>
-            </div>
-          </form>
+              <div class="col-md-6">
+                <label class="form-label">Дата рождения:</label>
+                <input type="date" name="field-date" class="form-control">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Биография:</label>
+                <textarea name="field-name-2" class="form-control" rows="3" placeholder="Город, образование и т.п."></textarea>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Любимый язык программирования:</label>
+                <select name="field-name-4[]" multiple class="form-select">
+                  <option>Pascal</option>
+                  <option selected>C</option>
+                  <option selected>C++</option>
+                  <option>JavaScript</option>
+                  <option>PHP</option>
+                  <option>Python</option>
+                  <option>Java</option>
+                  <option>Haskell</option>
+                  <option>Clojure</option>
+                  <option>Prolog</option>
+                  <option>Scala</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label d-block">Пол:</label>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="radio-group-1" value="женский" checked>
+                  <label class="form-check-label">Женский</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="radio-group-1" value="мужской">
+                  <label class="form-check-label">Мужской</label>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" checked name="check-1">
+                  <label class="form-check-label">С контрактом ознакомлен(а)</label>
+                </div>
+              </div>
+              <div class="col-12 text-center">
+                <button type="submit" class="btn btn-primary px-4">Сохранить</button>
+              </div>
+            </form>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   </main>
 
   <!-- ПОДВАЛ -->
