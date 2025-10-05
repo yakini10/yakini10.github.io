@@ -1,0 +1,52 @@
+/* Цветовая схема и общий стиль */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+/* HEADER + FOOTER : ton bleu d’origine */
+header, footer {
+  background-color: #4A90E2;
+}
+
+/* Lien du menu */
+header .nav-link {
+  transition: 0.2s;
+}
+
+header .nav-link:hover {
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
+/* Table */
+table th {
+  background-color: #4A90E2;
+  color: white;
+}
+
+table td, table th {
+  text-align: center;
+}
+
+/* Cartes */
+.card {
+  border-radius: 1rem;
+  border: 1px solid #ddd;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* Image */
+img.rounded-circle {
+  object-fit: cover;
+}
+
+/* Responsive header (centré sur mobile, horizontal sur desktop) */
+@media (min-width: 768px) {
+  header h1 {
+    font-size: 1.8rem;
+  }
+}
