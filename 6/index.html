@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="generator" content="GitLab Pages">
+    <title>Plain HTML site using GitLab Pages</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="my.js"></script>
+  </head>
+  <body>
+  
+  <div id="prodPrice">Выберите тип товара</div>
+  <form>
+    <div id="result"></div>
+    Количество: 
+  <input name="quantity" type="text">
+  	Тип товара:
+    <select name="prodType">
+      <option value="1">carottes</option>
+      <option value="2">concombres</option>
+      <option value="3">salades</option>
+    </select>
+	<button id="button1" onclick="return click1();">OK</button>
+    <div id="radios">
+      <label><input type="radio" name="prodOptions" value="option1"> Опция 1</label>
+      <label><input type="radio" name="prodOptions" value="option2"> Опция 2</label>
+      <label><input type="radio" name="prodOptions" value="option3"> Опция 3</label>
+    </div>
+    <div id="checkboxes">
+      <label><input type="checkbox" name="prop1"> Свойство 1</label>
+      <label><input type="checkbox" name="prop2"> Свойство 2</label>
+    </div>
+  </form>
+  
+  </body>
+</html>
