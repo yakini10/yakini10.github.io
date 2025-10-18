@@ -1,97 +1,73 @@
-function updatePrice() {
-  // Находим select по имени в DOM.
-  let s = document.getElementsByName("prodType");
-  let select = s[0];
-  let price = 0;
-  let prices = getPrices();
-  let priceIndex = parseInt(select.value) - 1;
-  if (priceIndex >= 0) {
-    price = prices.prodTypes[priceIndex];
-  }
-  
-  // Скрываем или показываем радиокнопки.
-  let radioDiv = document.getElementById("radios");
-  radioDiv.style.display = (select.value == "3" ? "block" : "none");
-  
-  // Смотрим какая товарная опция выбрана.
-  let radios = document.getElementsByName("prodOptions");
-  radios.forEach(function(radio) {
-    if (radio.checked) {
-      let optionPrice = prices.prodOptions[radio.value];
-      if (optionPrice !== undefined) {
-        price += optionPrice;
-      }
-    }
-  });
+"use strict";
 
-  // Скрываем или показываем чекбоксы.
-  let checkDiv = document.getElementById("checkboxes");
-  checkDiv.style.display = (select.value == "3" ? "none" : "block");
-
-  // Смотрим какие товарные свойства выбраны.
-  let checkboxes = document.querySelectorAll("#checkboxes input");
-  checkboxes.forEach(function(checkbox) {
-    if (checkbox.checked) {
-      let propPrice = prices.prodProperties[checkbox.name];
-      if (propPrice !== undefined) {
-        price += propPrice;
-      }
-    }
-  });
-  
-  let prodPrice = document.getElementById("prodPrice");
-  prodPrice.innerHTML = price + " рублей";
-}
-
+// Функция, возвращающая все базовые цены
 function getPrices() {
   return {
-    prodTypes: [150, 200, 350],
+    prodTypes: [100, 150, 200],
     prodOptions: {
+      option1: 5,
       option2: 10,
-      option3: 5,
+      option3: 15
     },
     prodProperties: {
-      prop1: 1,
-      prop2: 9,
+      prop1: 3,
+      prop2: 7
     }
   };
 }
 
-window.addEventListener('DOMContentLoaded', function (event) {
-  // Скрываем радиокнопки.
-  let radioDiv = document.getElementById("radios");
-  radioDiv.style.display = "none";
-  
-  // Находим select по имени в DOM.
-  let s = document.getElementsByName("prodType");
-  let select = s[0];
-  // Назначаем обработчик на изменение select.
-  select.addEventListener("change", function(event) {
-    let target = event.target;
-    console.log(target.value);
-    updatePrice();
-  });
-  
-  // Назначаем обработчик радиокнопок.  
-  let radios = document.getElementsByName("prodOptions");
-  radios.forEach(function(radio) {
-    radio.addEventListener("change", function(event) {
-      let r = event.target;
-      console.log(r.value);
-      updatePrice();
-    });
-  });
+// Главная функция пересчёта стоимости
+function updatePrice() {
+  const prices = getPrices();
+  const select = document.querySelector("select[name='prodType']");
+  const quantityInput = document.querySelector("input[name='quantity']");
+  const radiosDiv = document.getElementById("radios");
+  const checkboxesDiv = document.getElementById("checkboxes");
+  let price = 0;
 
-    // Назначаем обработчик радиокнопок.  
-  let checkboxes = document.querySelectorAll("#checkboxes input");
-  checkboxes.forEach(function(checkbox) {
-    checkbox.addEventListener("change", function(event) {
-      let c = event.target;
-      console.log(c.name);
-      console.log(c.value);
-      updatePrice();
-    });
-  });
+  // Определяем базовую цену по типу
+  const typeIndex = parseInt(select.value, 10) - 1;
+  if (typeIndex >= 0) {
+    price = prices.prodTypes[typeIndex];
+  }
 
+  // Отображаем нужные блоки в зависимости от типа
+  radiosDiv.style.display = (select.value === "2") ? "block" : "none";
+  checkboxesDiv.style.display = (select.value === "3") ? "block" : "none";
+
+  // Если тип 2 — прибавляем цену выбранной опции
+  if (select.value === "2") {
+    const radios = document.querySelectorAll("input[name='prodOptions']");
+    radios.forEach(radio => {
+      if (radio.checked) {
+        price += prices.prodOptions[radio.value];
+      }
+    });
+  }
+
+  // Если тип 3 — прибавляем цену выбранных свойств
+  if (select.value === "3") {
+    const checkboxes = document.querySelectorAll("#checkboxes input");
+    checkboxes.forEach(checkbox => {
+      if (checkbox.checked) {
+        price += prices.prodProperties[checkbox.name];
+      }
+    });
+  }
+
+  // Умножаем на количество
+  const quantity = parseInt(quantityInput.value, 10);
+  if (!isNaN(quantity) && quantity > 0) {
+    price *= quantity;
+  }
+
+  // Выводим цену
+  document.getElementById("prodPrice").textContent = "Стоимость: " + price + " ₽";
+}
+
+// Подключаем обработчики событий при загрузке страницы
+window.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("calcForm");
+  form.addEventListener("input", updatePrice);
   updatePrice();
 });
