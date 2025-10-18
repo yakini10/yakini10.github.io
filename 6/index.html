@@ -1,36 +1,40 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="generator" content="GitLab Pages">
-    <title>Plain HTML site using GitLab Pages</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="my.js"></script>
-  </head>
-  <body>
-  
-  <div id="prodPrice">Выберите тип товара</div>
-  <form>
-    <div id="result"></div>
-    Количество: 
-  <input name="quantity" type="text">
-  	Тип товара:
-    <select name="prodType">
-      <option value="1">carottes</option>
-      <option value="2">concombres</option>
-      <option value="3">salades</option>
-    </select>
-	<button id="button1" onclick="return click1();">OK</button>
-    <div id="radios">
-      <label><input type="radio" name="prodOptions" value="option1"> Опция 1</label>
-      <label><input type="radio" name="prodOptions" value="option2"> Опция 2</label>
-      <label><input type="radio" name="prodOptions" value="option3"> Опция 3</label>
-    </div>
-    <div id="checkboxes">
-      <label><input type="checkbox" name="prop1"> Свойство 1</label>
-      <label><input type="checkbox" name="prop2"> Свойство 2</label>
-    </div>
-  </form>
-  
-  </body>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Калькулятор стоимости услуги</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="my.js" defer></script>
+</head>
+<body>
+
+<h2>Калькулятор стоимости услуги</h2>
+
+<form id="calcForm">
+  <label>Количество:</label>
+  <input name="quantity" type="number" min="1" value="1">
+
+  <label>Тип товара:</label>
+  <select name="prodType">
+    <option value="1">Тип 1 (без опций и свойств)</option>
+    <option value="2">Тип 2 (с опциями)</option>
+    <option value="3">Тип 3 (со свойствами)</option>
+  </select>
+
+  <div id="radios" style="display:none;">
+    <label><input type="radio" name="prodOptions" value="option1"> Опция 1 (+5 ₽)</label>
+    <label><input type="radio" name="prodOptions" value="option2"> Опция 2 (+10 ₽)</label>
+    <label><input type="radio" name="prodOptions" value="option3"> Опция 3 (+15 ₽)</label>
+  </div>
+
+  <div id="checkboxes" style="display:none;">
+    <label><input type="checkbox" name="prop1"> Свойство 1 (+3 ₽)</label>
+    <label><input type="checkbox" name="prop2"> Свойство 2 (+7 ₽)</label>
+  </div>
+</form>
+
+<div id="prodPrice">Стоимость: 0 ₽</div>
+
+</body>
 </html>
