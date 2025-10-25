@@ -5,19 +5,28 @@ const prevBtn = document.querySelector('.prev');
 const nextBtn = document.querySelector('.next');
 
 let slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
-let totalPages = Math.ceil(slides.length / slidesPerPage);
+let pages = [];
 let currentPage = 0;
+
+function calculatePages() {
+  slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
+  pages = [];
+  let i = 0;
+  while (i < slides.length) {
+    pages.push(i);
+    i += slidesPerPage;
+  }
+}
 
 function renderPager() {
   pager.innerHTML = '';
-  // Affichage numéro de page
   const pageNumber = document.createElement('span');
   pageNumber.id = 'page-number';
-  pageNumber.textContent = `${currentPage + 1} / ${totalPages}`;
+  pageNumber.textContent = `${currentPage + 1} / ${pages.length}`;
   pager.appendChild(pageNumber);
 
   // Points
-  for (let i = 0; i < totalPages; i++) {
+  for (let i = 0; i < pages.length; i++) {
     const dot = document.createElement('span');
     dot.classList.add('dot');
     if (i === currentPage) dot.classList.add('active');
@@ -28,33 +37,29 @@ function renderPager() {
 
 function goToPage(page) {
   currentPage = page;
-
   const slideWidth = slides[0].offsetWidth;
-  const maxShift = (slides.length * slideWidth) - (slidesPerPage * slideWidth);
-  let shift = page * slidesPerPage * slideWidth;
-
-  if (shift > maxShift) shift = maxShift; // dernière page
-
+  const shift = pages[page] * slideWidth;
   track.style.transform = `translateX(-${shift}px)`;
   renderPager();
 }
 
 prevBtn.addEventListener('click', () => {
-  currentPage = (currentPage > 0) ? currentPage - 1 : totalPages - 1;
+  currentPage = currentPage > 0 ? currentPage - 1 : pages.length - 1;
   goToPage(currentPage);
 });
 
 nextBtn.addEventListener('click', () => {
-  currentPage = (currentPage < totalPages - 1) ? currentPage + 1 : 0;
+  currentPage = currentPage < pages.length - 1 ? currentPage + 1 : 0;
   goToPage(currentPage);
 });
 
 window.addEventListener('resize', () => {
-  slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
-  totalPages = Math.ceil(slides.length / slidesPerPage);
+  calculatePages();
   currentPage = 0;
   track.style.transform = 'translateX(0)';
   renderPager();
 });
 
+// Initialisation
+calculatePages();
 goToPage(0);
