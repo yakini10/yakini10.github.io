@@ -1,53 +1,73 @@
-const track = document.getElementById('track');
-const slides = document.querySelectorAll('.slide');
-const pager = document.getElementById('pager');
-const prevBtn = document.querySelector('.prev');
-const nextBtn = document.querySelector('.next');
-
-let slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
-let totalPages = Math.ceil(slides.length / slidesPerPage);
-let currentPage = 0;
-
-function renderDots() {
-  pager.innerHTML = '';
-  for (let i = 0; i < totalPages; i++) {
-    const dot = document.createElement('span');
-    dot.classList.add('dot');
-    if (i === currentPage) dot.classList.add('active');
-    dot.addEventListener('click', () => goToPage(i));
-    pager.appendChild(dot);
-  }
-}
-
-function goToPage(page) {
-  currentPage = page;
-  const shift = -(page * 100);
-  track.style.transform = `translateX(${shift}%)`;
-  updateDots();
-}
-
-function updateDots() {
-  document.querySelectorAll('.dot').forEach((dot, i) => {
-    dot.classList.toggle('active', i === currentPage);
-  });
-}
-
-prevBtn.addEventListener('click', () => {
-  currentPage = (currentPage > 0) ? currentPage - 1 : totalPages - 1;
-  goToPage(currentPage);
+document.addEventListener('DOMContentLoaded', function() {
+    const slidesContainer = document.querySelector('.slides-container');
+    const slides = document.querySelectorAll('.slide');
+    const prevButton = document.querySelector('.prev');
+    const nextButton = document.querySelector('.next');
+    const currentPageSpan = document.querySelector('.current-page');
+    const totalPagesSpan = document.querySelector('.total-pages');
+    
+    let currentIndex = 0;
+    let slidesToShow = 3;
+    
+    // Calculer le nombre total de pages
+    function calculateTotalPages() {
+        return Math.ceil(slides.length / slidesToShow);
+    }
+    
+    // Mettre à jour l'affichage en fonction de la taille d'écran
+    function updateSlidesToShow() {
+        if (window.innerWidth <= 768) {
+            slidesToShow = 1;
+        } else {
+            slidesToShow = 3;
+        }
+        
+        // Recalculer le nombre total de pages
+        const totalPages = calculateTotalPages();
+        totalPagesSpan.textContent = totalPages;
+        
+        // Ajuster l'index courant si nécessaire
+        if (currentIndex >= totalPages) {
+            currentIndex = totalPages - 1;
+            updateSlider();
+        }
+    }
+    
+    // Mettre à jour la position du slider
+    function updateSlider() {
+        const slideWidth = 100 / slidesToShow;
+        const translateX = -currentIndex * slideWidth;
+        slidesContainer.style.transform = `translateX(${translateX}%)`;
+        
+        // Mettre à jour le pager
+        currentPageSpan.textContent = currentIndex + 1;
+    }
+    
+    // Aller à l'image suivante
+    function nextSlide() {
+        const totalPages = calculateTotalPages();
+        currentIndex = (currentIndex + 1) % totalPages;
+        updateSlider();
+    }
+    
+    // Aller à l'image précédente
+    function prevSlide() {
+        const totalPages = calculateTotalPages();
+        currentIndex = (currentIndex - 1 + totalPages) % totalPages;
+        updateSlider();
+    }
+    
+    // Initialisation
+    updateSlidesToShow();
+    updateSlider();
+    
+    // Événements
+    prevButton.addEventListener('click', prevSlide);
+    nextButton.addEventListener('click', nextSlide);
+    
+    // Mettre à jour lors du redimensionnement de la fenêtre
+    window.addEventListener('resize', function() {
+        updateSlidesToShow();
+        updateSlider();
+    });
 });
-
-nextBtn.addEventListener('click', () => {
-  currentPage = (currentPage < totalPages - 1) ? currentPage + 1 : 0;
-  goToPage(currentPage);
-});
-
-window.addEventListener('resize', () => {
-  slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
-  totalPages = Math.ceil(slides.length / slidesPerPage);
-  currentPage = 0;
-  track.style.transform = 'translateX(0)';
-  renderDots();
-});
-
-renderDots();
