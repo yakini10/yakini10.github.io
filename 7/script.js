@@ -21,7 +21,7 @@ function renderDots() {
 
 function goToPage(page) {
   currentPage = page;
-  const shift = -(page * (100 / (slides.length / slidesPerPage)));
+  const shift = -(page * 100);
   track.style.transform = `translateX(${shift}%)`;
   updateDots();
 }
