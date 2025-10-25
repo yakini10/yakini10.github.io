@@ -41,6 +41,7 @@ h1 {
 .slide {
     flex: 0 0 calc(100% / 3);
     padding: 10px;
+    min-width: 0; /* Important pour éviter les problèmes de débordement */
 }
 
 .slide img {
