@@ -1,53 +1,89 @@
-const track = document.getElementById('track');
-const slides = document.querySelectorAll('.slide');
-const pager = document.getElementById('pager');
-const prevBtn = document.querySelector('.prev');
-const nextBtn = document.querySelector('.next');
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-let slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
-let totalPages = Math.ceil(slides.length / slidesPerPage);
-let currentPage = 0;
+body {
+  font-family: "Poppins", sans-serif;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-function renderDots() {
-  pager.innerHTML = '';
-  for (let i = 0; i < totalPages; i++) {
-    const dot = document.createElement('span');
-    dot.classList.add('dot');
-    if (i === currentPage) dot.classList.add('active');
-    dot.addEventListener('click', () => goToPage(i));
-    pager.appendChild(dot);
+h1 {
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 600;
+}
+
+.slider {
+  position: relative;
+  width: 80%;
+  max-width: 900px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.slider-track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.slide {
+  min-width: calc(100% / 3);
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+}
+
+@media (max-width: 768px) {
+  .slide {
+    min-width: 100%;
   }
 }
 
-function goToPage(page) {
-  currentPage = page;
-  const shift = -(page * 100);
-  track.style.transform = `translateX(${shift}%)`;
-  updateDots();
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 50%;
 }
 
-function updateDots() {
-  document.querySelectorAll('.dot').forEach((dot, i) => {
-    dot.classList.toggle('active', i === currentPage);
-  });
+.arrow:hover {
+  background: rgba(0, 0, 0, 0.8);
 }
 
-prevBtn.addEventListener('click', () => {
-  currentPage = (currentPage > 0) ? currentPage - 1 : totalPages - 1;
-  goToPage(currentPage);
-});
+.arrow.prev { left: 10px; }
+.arrow.next { right: 10px; }
 
-nextBtn.addEventListener('click', () => {
-  currentPage = (currentPage < totalPages - 1) ? currentPage + 1 : 0;
-  goToPage(currentPage);
-});
+.pager {
+  text-align: center;
+  margin-top: 15px;
+}
 
-window.addEventListener('resize', () => {
-  slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
-  totalPages = Math.ceil(slides.length / slidesPerPage);
-  currentPage = 0;
-  track.style.transform = 'translateX(0)';
-  renderDots();
-});
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 5px;
+  background: #ccc;
+  border-radius: 50%;
+  cursor: pointer;
+}
 
-renderDots();
+.dot.active {
+  background: #0078ff;
+}
