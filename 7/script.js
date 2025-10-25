@@ -4,18 +4,16 @@ const pager = document.getElementById('pager');
 const prevBtn = document.querySelector('.prev');
 const nextBtn = document.querySelector('.next');
 
-let slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
+let slidesPerPage = 3;
 let pages = [];
 let currentPage = 0;
 
-// Calcul des pages en fonction du nombre de slides et slidesPerPage
+// Calcul des pages : indices de slide de départ de chaque page
 function calculatePages() {
   slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
   pages = [];
-  let i = 0;
-  while (i < slides.length) {
+  for (let i = 0; i < slides.length; i += slidesPerPage) {
     pages.push(i);
-    i += slidesPerPage;
   }
 }
 
@@ -30,45 +28,42 @@ function renderPager() {
   pager.appendChild(pageNumber);
 
   // Points cliquables
-  for (let i = 0; i < pages.length; i++) {
+  pages.forEach((_, i) => {
     const dot = document.createElement('span');
     dot.classList.add('dot');
     if (i === currentPage) dot.classList.add('active');
     dot.addEventListener('click', () => goToPage(i));
     pager.appendChild(dot);
-  }
+  });
 }
 
-// Aller à une page spécifique
+// Aller à une page
 function goToPage(page) {
   currentPage = page;
-  const slideWidth = slides[0].offsetWidth;
-  const shift = pages[page] * slideWidth;
+  const slideWidth = slides[0].getBoundingClientRect().width;
+  let shift = pages[page] * slideWidth;
+
+  // Limite pour ne pas dépasser la largeur totale du slider
+  const maxShift = track.scrollWidth - track.parentElement.offsetWidth;
+  if (shift > maxShift) shift = maxShift;
+
   track.style.transform = `translateX(-${shift}px)`;
   renderPager();
 }
 
 // Flèche gauche
 prevBtn.addEventListener('click', () => {
-  if(currentPage > 0){
-    currentPage--;
-  } else {
-    currentPage = pages.length - 1;
-  }
+  currentPage = currentPage > 0 ? currentPage - 1 : pages.length - 1;
   goToPage(currentPage);
 });
 
 // Flèche droite
 nextBtn.addEventListener('click', () => {
-  if(currentPage < pages.length - 1){
-    currentPage++;
-  } else {
-    currentPage = 0;
-  }
+  currentPage = currentPage < pages.length - 1 ? currentPage + 1 : 0;
   goToPage(currentPage);
 });
 
-// Recalculer les pages et réinitialiser le slider au redimensionnement
+// Recalcul sur resize
 window.addEventListener('resize', () => {
   calculatePages();
   currentPage = 0;
