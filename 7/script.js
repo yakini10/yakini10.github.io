@@ -9,12 +9,12 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentIndex = 0;
     let slidesToShow = 3;
     
-    // Calculer le nombre total de pages
+    // Функция для расчета общего количества страниц
     function calculateTotalPages() {
         return Math.ceil(slides.length / slidesToShow);
     }
     
-    // Mettre à jour l'affichage en fonction de la taille d'écran
+    // Функция для обновления количества отображаемых слайдов
     function updateSlidesToShow() {
         if (window.innerWidth <= 768) {
             slidesToShow = 1;
@@ -22,60 +22,69 @@ document.addEventListener('DOMContentLoaded', function() {
             slidesToShow = 3;
         }
         
-        // Recalculer le nombre total de pages
+        // Пересчитываем общее количество страниц
         const totalPages = calculateTotalPages();
         totalPagesSpan.textContent = totalPages;
         
-        // Ajuster l'index courant si nécessaire
+        // Корректируем текущий индекс при необходимости
         if (currentIndex >= totalPages) {
             currentIndex = totalPages - 1;
             updateSlider();
         }
     }
     
-    // Mettre à jour la position du slider
+    // Функция для обновления положения слайдера
     function updateSlider() {
         const slideWidth = 100 / slidesToShow;
         const translateX = -currentIndex * slideWidth;
         slidesContainer.style.transform = `translateX(${translateX}%)`;
         
-        // Mettre à jour le pager
+        // Обновляем пейджер
         currentPageSpan.textContent = currentIndex + 1;
     }
     
-    // Aller à l'image suivante
+    // Функция для перехода к следующему слайду
     function nextSlide() {
         const totalPages = calculateTotalPages();
         if (currentIndex < totalPages - 1) {
             currentIndex++;
         } else {
-            currentIndex = 0; // Retour à la première page
+            currentIndex = 0; // Возврат к первой странице
         }
         updateSlider();
     }
     
-    // Aller à l'image précédente
+    // Функция для перехода к предыдущему слайду
     function prevSlide() {
         const totalPages = calculateTotalPages();
         if (currentIndex > 0) {
             currentIndex--;
         } else {
-            currentIndex = totalPages - 1; // Aller à la dernière page
+            currentIndex = totalPages - 1; // Переход к последней странице
         }
         updateSlider();
     }
     
-    // Initialisation
+    // Инициализация
     updateSlidesToShow();
     updateSlider();
     
-    // Événements
+    // Обработчики событий
     prevButton.addEventListener('click', prevSlide);
     nextButton.addEventListener('click', nextSlide);
     
-    // Mettre à jour lors du redimensionnement de la fenêtre
+    // Обновление при изменении размера окна
     window.addEventListener('resize', function() {
         updateSlidesToShow();
         updateSlider();
+    });
+    
+    // Добавляем поддержку клавиатуры
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'ArrowLeft') {
+            prevSlide();
+        } else if (event.key === 'ArrowRight') {
+            nextSlide();
+        }
     });
 });
