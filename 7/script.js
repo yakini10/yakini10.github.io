@@ -8,7 +8,7 @@ let slidesPerPage = 3;
 let pages = [];
 let currentPage = 0;
 
-// Calcul des pages : indices de slide de départ de chaque page
+// Calcul des pages : indices de départ
 function calculatePages() {
   slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
   pages = [];
@@ -17,17 +17,15 @@ function calculatePages() {
   }
 }
 
-// Affichage du pager avec numéro de page et points
+// Affichage pager et numéro de page
 function renderPager() {
   pager.innerHTML = '';
 
-  // Numéro de page
   const pageNumber = document.createElement('span');
   pageNumber.id = 'page-number';
   pageNumber.textContent = `${currentPage + 1} / ${pages.length}`;
   pager.appendChild(pageNumber);
 
-  // Points cliquables
   pages.forEach((_, i) => {
     const dot = document.createElement('span');
     dot.classList.add('dot');
@@ -40,14 +38,16 @@ function renderPager() {
 // Aller à une page
 function goToPage(page) {
   currentPage = page;
-  const slideWidth = slides[0].getBoundingClientRect().width;
-  let shift = pages[page] * slideWidth;
+  const totalWidth = track.scrollWidth;
+  const containerWidth = track.parentElement.offsetWidth;
 
-  // Limite pour ne pas dépasser la largeur totale du slider
-  const maxShift = track.scrollWidth - track.parentElement.offsetWidth;
-  if (shift > maxShift) shift = maxShift;
+  // Décalage en % pour que ça marche sur toutes tailles
+  let shiftPercent = (pages[page] / slides.length) * 100;
+  // Limite max
+  const maxShiftPercent = ((slides.length - slidesPerPage) / slides.length) * 100;
+  if (shiftPercent > maxShiftPercent) shiftPercent = maxShiftPercent;
 
-  track.style.transform = `translateX(-${shift}px)`;
+  track.style.transform = `translateX(-${shiftPercent}%)`;
   renderPager();
 }
 
