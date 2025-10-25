@@ -8,8 +8,15 @@ let slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
 let totalPages = Math.ceil(slides.length / slidesPerPage);
 let currentPage = 0;
 
-function renderDots() {
+function renderPager() {
   pager.innerHTML = '';
+  // Affichage numéro de page
+  const pageNumber = document.createElement('span');
+  pageNumber.id = 'page-number';
+  pageNumber.textContent = `${currentPage + 1} / ${totalPages}`;
+  pager.appendChild(pageNumber);
+
+  // Points
   for (let i = 0; i < totalPages; i++) {
     const dot = document.createElement('span');
     dot.classList.add('dot');
@@ -22,24 +29,14 @@ function renderDots() {
 function goToPage(page) {
   currentPage = page;
 
-  // Calcul du décalage exact pour la dernière page
-  let shift;
-  if (currentPage === totalPages - 1) {
-    // dernière page : on montre toutes les slides restantes
-    const totalWidthPercent = (slides.length / slidesPerPage) * 100;
-    shift = -(totalWidthPercent - 100);
-  } else {
-    shift = -(page * (100 / slidesPerPage));
-  }
+  const slideWidth = slides[0].offsetWidth;
+  const maxShift = (slides.length * slideWidth) - (slidesPerPage * slideWidth);
+  let shift = page * slidesPerPage * slideWidth;
 
-  track.style.transform = `translateX(${shift}%)`;
-  updateDots();
-}
+  if (shift > maxShift) shift = maxShift; // dernière page
 
-function updateDots() {
-  document.querySelectorAll('.dot').forEach((dot, i) => {
-    dot.classList.toggle('active', i === currentPage);
-  });
+  track.style.transform = `translateX(-${shift}px)`;
+  renderPager();
 }
 
 prevBtn.addEventListener('click', () => {
@@ -57,7 +54,7 @@ window.addEventListener('resize', () => {
   totalPages = Math.ceil(slides.length / slidesPerPage);
   currentPage = 0;
   track.style.transform = 'translateX(0)';
-  renderDots();
+  renderPager();
 });
 
-renderDots();
+goToPage(0);
