@@ -46,14 +46,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Aller à l'image suivante
     function nextSlide() {
         const totalPages = calculateTotalPages();
-        currentIndex = (currentIndex + 1) % totalPages;
+        if (currentIndex < totalPages - 1) {
+            currentIndex++;
+        } else {
+            currentIndex = 0; // Retour à la première page
+        }
         updateSlider();
     }
     
     // Aller à l'image précédente
     function prevSlide() {
         const totalPages = calculateTotalPages();
-        currentIndex = (currentIndex - 1 + totalPages) % totalPages;
+        if (currentIndex > 0) {
+            currentIndex--;
+        } else {
+            currentIndex = totalPages - 1; // Aller à la dernière page
+        }
         updateSlider();
     }
     
