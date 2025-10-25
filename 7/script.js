@@ -8,6 +8,7 @@ let slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
 let pages = [];
 let currentPage = 0;
 
+// Calcul des pages en fonction du nombre de slides et slidesPerPage
 function calculatePages() {
   slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
   pages = [];
@@ -18,14 +19,17 @@ function calculatePages() {
   }
 }
 
+// Affichage du pager avec numéro de page et points
 function renderPager() {
   pager.innerHTML = '';
+
+  // Numéro de page
   const pageNumber = document.createElement('span');
   pageNumber.id = 'page-number';
   pageNumber.textContent = `${currentPage + 1} / ${pages.length}`;
   pager.appendChild(pageNumber);
 
-  // Points
+  // Points cliquables
   for (let i = 0; i < pages.length; i++) {
     const dot = document.createElement('span');
     dot.classList.add('dot');
@@ -35,6 +39,7 @@ function renderPager() {
   }
 }
 
+// Aller à une page spécifique
 function goToPage(page) {
   currentPage = page;
   const slideWidth = slides[0].offsetWidth;
@@ -43,16 +48,27 @@ function goToPage(page) {
   renderPager();
 }
 
+// Flèche gauche
 prevBtn.addEventListener('click', () => {
-  currentPage = currentPage > 0 ? currentPage - 1 : pages.length - 1;
+  if(currentPage > 0){
+    currentPage--;
+  } else {
+    currentPage = pages.length - 1;
+  }
   goToPage(currentPage);
 });
 
+// Flèche droite
 nextBtn.addEventListener('click', () => {
-  currentPage = currentPage < pages.length - 1 ? currentPage + 1 : 0;
+  if(currentPage < pages.length - 1){
+    currentPage++;
+  } else {
+    currentPage = 0;
+  }
   goToPage(currentPage);
 });
 
+// Recalculer les pages et réinitialiser le slider au redimensionnement
 window.addEventListener('resize', () => {
   calculatePages();
   currentPage = 0;
