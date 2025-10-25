@@ -21,7 +21,17 @@ function renderDots() {
 
 function goToPage(page) {
   currentPage = page;
-  const shift = -(page * (100 / slidesPerPage));
+
+  // Calcul du décalage exact pour la dernière page
+  let shift;
+  if (currentPage === totalPages - 1) {
+    // dernière page : on montre toutes les slides restantes
+    const totalWidthPercent = (slides.length / slidesPerPage) * 100;
+    shift = -(totalWidthPercent - 100);
+  } else {
+    shift = -(page * (100 / slidesPerPage));
+  }
+
   track.style.transform = `translateX(${shift}%)`;
   updateDots();
 }
