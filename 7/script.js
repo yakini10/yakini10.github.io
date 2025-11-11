@@ -1,76 +1,320 @@
-const track = document.getElementById('track');
-const slides = document.querySelectorAll('.slide');
-const pager = document.getElementById('pager');
-const prevBtn = document.querySelector('.prev');
-const nextBtn = document.querySelector('.next');
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Галерея изображений – Горизонтальный слайдер</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-let slidesPerPage = 3;
-let pages = [];
-let currentPage = 0;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
 
-// Calcul des pages : indices de départ
-function calculatePages() {
-  slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
-  pages = [];
-  for (let i = 0; i < slides.length; i += slidesPerPage) {
-    pages.push(i);
-  }
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-// Affichage pager et numéro de page
-function renderPager() {
-  pager.innerHTML = '';
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+        }
 
-  const pageNumber = document.createElement('span');
-  pageNumber.id = 'page-number';
-  pageNumber.textContent = `${currentPage + 1} / ${pages.length}`;
-  pager.appendChild(pageNumber);
+        .gallery-container {
+            position: relative;
+            margin: 0 auto 30px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
 
-  pages.forEach((_, i) => {
-    const dot = document.createElement('span');
-    dot.classList.add('dot');
-    if (i === currentPage) dot.classList.add('active');
-    dot.addEventListener('click', () => goToPage(i));
-    pager.appendChild(dot);
-  });
-}
+        .gallery-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
 
-// Aller à une page
-function goToPage(page) {
-  currentPage = page;
-  const totalWidth = track.scrollWidth;
-  const containerWidth = track.parentElement.offsetWidth;
+        .gallery-slide {
+            flex: 0 0 33.333%;
+            padding: 10px;
+        }
 
-  // Décalage en % pour que ça marche sur toutes tailles
-  let shiftPercent = (pages[page] / slides.length) * 100;
-  // Limite max
-  const maxShiftPercent = ((slides.length - slidesPerPage) / slides.length) * 100;
-  if (shiftPercent > maxShiftPercent) shiftPercent = maxShiftPercent;
+        .gallery-slide img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 6px;
+            display: block;
+        }
 
-  track.style.transform = `translateX(-${shiftPercent}%)`;
-  renderPager();
-}
+        .gallery-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
 
-// Flèche gauche
-prevBtn.addEventListener('click', () => {
-  currentPage = currentPage > 0 ? currentPage - 1 : pages.length - 1;
-  goToPage(currentPage);
-});
+        .gallery-nav:hover {
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
 
-// Flèche droite
-nextBtn.addEventListener('click', () => {
-  currentPage = currentPage < pages.length - 1 ? currentPage + 1 : 0;
-  goToPage(currentPage);
-});
+        .gallery-nav.prev {
+            left: 10px;
+        }
 
-// Recalcul sur resize
-window.addEventListener('resize', () => {
-  calculatePages();
-  currentPage = 0;
-  track.style.transform = 'translateX(0)';
-  renderPager();
-});
+        .gallery-nav.next {
+            right: 10px;
+        }
 
-// Initialisation
-calculatePages();
-goToPage(0);
+        .pager {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .pager-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .pager-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .pager-dot.active {
+            background-color: #3498db;
+        }
+
+        .pager-text {
+            font-size: 14px;
+            color: #666;
+            margin-left: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-slide {
+                flex: 0 0 50%;
+            }
+            
+            .gallery-slide img {
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-slide {
+                flex: 0 0 100%;
+            }
+            
+            .gallery-slide img {
+                height: 200px;
+            }
+            
+            .gallery-nav {
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Картинки</h1>
+        
+        <div class="gallery-container">
+            <button class="gallery-nav prev" aria-label="Image précédente">&#10094;</button>
+            
+            <div class="gallery-track">
+                
+            </div>
+            
+            <button class="gallery-nav next" aria-label="Image suivante">&#10095;</button>
+        </div>
+        
+        <div class="pager">
+            <div class="pager-dots">
+            
+            </div>
+            <div class="pager-text">
+                <span class="current-page">1</span> / <span class="total-pages">3</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const galleryConfig = {
+                totalImages: 9,
+                visibleImages: 3,
+                currentPosition: 0,
+                imageWidth: 0,
+                track: null,
+                pagerDots: null,
+                currentPageElement: null,
+                totalPagesElement: null
+            };
+
+            function initGallery() {
+                galleryConfig.track = document.querySelector('.gallery-track');
+                galleryConfig.pagerDots = document.querySelector('.pager-dots');
+                galleryConfig.currentPageElement = document.querySelector('.current-page');
+                galleryConfig.totalPagesElement = document.querySelector('.total-pages');
+                
+                createSlides();
+                
+                updateImageWidth();
+                
+                createPagerDots();
+            
+                addEventListeners();
+        
+                updateGallery();
+            }
+
+            function createSlides() {
+                const imageNames = [
+                    'image1.jpg',
+                    'image2.jpg',
+                    'image3.jpg',
+                    'image4.jpg',
+                    'image5.jpg',
+                    'image6.jpg',
+                    'image7.jpg',
+                    'image8.jpg'
+                ];
+
+                for (let i = 0; i < galleryConfig.totalImages; i++) {
+                    const slide = document.createElement('div');
+                    slide.className = 'gallery-slide';
+                    
+                    const img = document.createElement('img');
+                    img.src = imageNames[i];
+                    img.alt = `Image ${i + 1}`;
+                    
+                    slide.appendChild(img);
+                    galleryConfig.track.appendChild(slide);
+                }
+            }
+
+            function updateImageWidth() {
+                const slides = document.querySelectorAll('.gallery-slide');
+                if (slides.length > 0) {
+                    galleryConfig.imageWidth = slides[0].getBoundingClientRect().width;
+                }
+                
+                if (window.innerWidth <= 480) {
+                    galleryConfig.visibleImages = 1;
+                } else if (window.innerWidth <= 768) {
+                    galleryConfig.visibleImages = 2;
+                } else {
+                    galleryConfig.visibleImages = 3;
+                }
+            }
+            
+            function createPagerDots() {
+                const totalPages = Math.ceil(galleryConfig.totalImages / galleryConfig.visibleImages);
+                galleryConfig.totalPagesElement.textContent = totalPages;
+                
+                galleryConfig.pagerDots.innerHTML = '';
+                
+                for (let i = 0; i < totalPages; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'pager-dot';
+                    if (i === 0) dot.classList.add('active');
+                    
+                    dot.addEventListener('click', function() {
+                        goToPage(i);
+                    });
+                    
+                    galleryConfig.pagerDots.appendChild(dot);
+                }
+            }
+
+            function addEventListeners() {
+                document.querySelector('.gallery-nav.prev').addEventListener('click', prevSlide);
+                document.querySelector('.gallery-nav.next').addEventListener('click', nextSlide);
+                
+                window.addEventListener('resize', function() {
+                    updateImageWidth();
+                    createPagerDots();
+                    updateGallery();
+                });
+            }
+
+            function prevSlide() {
+                if (galleryConfig.currentPosition > 0) {
+                    galleryConfig.currentPosition--;
+                    updateGallery();
+                }
+            }
+
+            function nextSlide() {
+                const maxPosition = galleryConfig.totalImages - galleryConfig.visibleImages;
+                if (galleryConfig.currentPosition < maxPosition) {
+                    galleryConfig.currentPosition++;
+                    updateGallery();
+                }
+            }
+
+            function goToPage(pageIndex) {
+                galleryConfig.currentPosition = pageIndex * galleryConfig.visibleImages;
+                updateGallery();
+            }
+
+            function updateGallery() {
+                galleryConfig.track.style.transform = `translateX(-${galleryConfig.currentPosition * galleryConfig.imageWidth}px)`;
+                
+                updatePager();
+            }
+
+            function updatePager() {
+                const currentPage = Math.floor(galleryConfig.currentPosition / galleryConfig.visibleImages);
+                const dots = document.querySelectorAll('.pager-dot');
+                
+                dots.forEach((dot, index) => {
+                    if (index === currentPage) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+                
+                galleryConfig.currentPageElement.textContent = currentPage + 1;
+            }
+            initGallery();
+        });
+    </script>
+</body>
+</html>
