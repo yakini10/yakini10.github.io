@@ -1,320 +1,191 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Галерея изображений – Горизонтальный слайдер</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galerie de fleurs</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f5f5f5;
-            padding: 20px;
-        }
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+    h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #2c3e50;
-        }
+    .slider {
+      position: relative;
+      width: 80%;
+      max-width: 900px;
+      overflow: hidden;
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
 
-        .gallery-container {
-            position: relative;
-            margin: 0 auto 30px;
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            background-color: white;
-        }
+    .slider-track {
+      display: flex;
+      transition: transform 0.6s ease;
+    }
 
-        .gallery-track {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
+    .slide {
+      min-width: calc(100% / 3);
+      height: 300px;
+      background-size: cover;
+      background-position: center;
+    }
 
-        .gallery-slide {
-            flex: 0 0 33.333%;
-            padding: 10px;
-        }
+    @media (max-width: 768px) {
+      .slide {
+        min-width: 100%;
+      }
+    }
 
-        .gallery-slide img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            border-radius: 6px;
-            display: block;
-        }
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 22px;
+      border-radius: 50%;
+      transition: background 0.3s;
+    }
 
-        .gallery-nav {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(255, 255, 255, 0.8);
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            z-index: 10;
-        }
+    .arrow:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
 
-        .gallery-nav:hover {
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
+    .arrow.prev { left: 10px; }
+    .arrow.next { right: 10px; }
 
-        .gallery-nav.prev {
-            left: 10px;
-        }
+    .pager {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 16px;
+    }
 
-        .gallery-nav.next {
-            right: 10px;
-        }
+    .dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin: 0 5px;
+      background: #ccc;
+      border-radius: 50%;
+      cursor: pointer;
+    }
 
-        .pager {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-            gap: 10px;
-        }
+    .dot.active {
+      background: #0078ff;
+    }
 
-        .pager-dots {
-            display: flex;
-            gap: 8px;
-        }
-
-        .pager-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: #ddd;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .pager-dot.active {
-            background-color: #3498db;
-        }
-
-        .pager-text {
-            font-size: 14px;
-            color: #666;
-            margin-left: 15px;
-        }
-
-        @media (max-width: 768px) {
-            .gallery-slide {
-                flex: 0 0 50%;
-            }
-            
-            .gallery-slide img {
-                height: 250px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .gallery-slide {
-                flex: 0 0 100%;
-            }
-            
-            .gallery-slide img {
-                height: 200px;
-            }
-            
-            .gallery-nav {
-                width: 35px;
-                height: 35px;
-                font-size: 16px;
-            }
-        }
-    </style>
+    #page-number {
+      margin-right: 10px;
+      font-weight: bold;
+      color: #333;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Картинки</h1>
-        
-        <div class="gallery-container">
-            <button class="gallery-nav prev" aria-label="Image précédente">&#10094;</button>
-            
-            <div class="gallery-track">
-                
-            </div>
-            
-            <button class="gallery-nav next" aria-label="Image suivante">&#10095;</button>
-        </div>
-        
-        <div class="pager">
-            <div class="pager-dots">
-            
-            </div>
-            <div class="pager-text">
-                <span class="current-page">1</span> / <span class="total-pages">3</span>
-            </div>
-        </div>
+  <h1>Galerie de fleurs</h1>
+
+  <div class="slider">
+    <button class="arrow prev">&#10094;</button>
+    <div class="slider-track" id="track">
+      <div class="slide" style="background-image:url('images/image1.jpg');"></div>
+      <div class="slide" style="background-image:url('images/image2.jpg');"></div>
+      <div class="slide" style="background-image:url('images/image3.jpg');"></div>
+      <div class="slide" style="background-image:url('images/image4.jpg');"></div>
+      <div class="slide" style="background-image:url('images/image5.jpg');"></div>
+      <div class="slide" style="background-image:url('images/image6.jpg');"></div>
+      <div class="slide" style="background-image:url('images/image7.jpg');"></div>
+      <div class="slide" style="background-image:url('images/image8.jpg');"></div>
     </div>
+    <button class="arrow next">&#10095;</button>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const galleryConfig = {
-                totalImages: 9,
-                visibleImages: 3,
-                currentPosition: 0,
-                imageWidth: 0,
-                track: null,
-                pagerDots: null,
-                currentPageElement: null,
-                totalPagesElement: null
-            };
+  <div class="pager" id="pager"></div>
 
-            function initGallery() {
-                galleryConfig.track = document.querySelector('.gallery-track');
-                galleryConfig.pagerDots = document.querySelector('.pager-dots');
-                galleryConfig.currentPageElement = document.querySelector('.current-page');
-                galleryConfig.totalPagesElement = document.querySelector('.total-pages');
-                
-                createSlides();
-                
-                updateImageWidth();
-                
-                createPagerDots();
-            
-                addEventListeners();
-        
-                updateGallery();
-            }
+  <script>
+    const track = document.getElementById('track');
+    const slides = document.querySelectorAll('.slide');
+    const pager = document.getElementById('pager');
+    const prevBtn = document.querySelector('.prev');
+    const nextBtn = document.querySelector('.next');
 
-            function createSlides() {
-                const imageNames = [
-                    'image1.png',
-                    'image2.png',
-                    'image3.png',
-                    'image4.png',
-                    'image5.png',
-                    'image6.png',
-                    'image7.png',
-                    'imgae8.png'
-                ];
+    let slidesPerPage = 3;
+    let pages = [];
+    let currentPage = 0;
 
-                for (let i = 0; i < galleryConfig.totalImages; i++) {
-                    const slide = document.createElement('div');
-                    slide.className = 'gallery-slide';
-                    
-                    const img = document.createElement('img');
-                    img.src = imageNames[i];
-                    img.alt = `Image ${i + 1}`;
-                    
-                    slide.appendChild(img);
-                    galleryConfig.track.appendChild(slide);
-                }
-            }
+    function calculatePages() {
+      slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
+      pages = [];
+      for (let i = 0; i < slides.length; i += slidesPerPage) {
+        pages.push(i);
+      }
+    }
 
-            function updateImageWidth() {
-                const slides = document.querySelectorAll('.gallery-slide');
-                if (slides.length > 0) {
-                    galleryConfig.imageWidth = slides[0].getBoundingClientRect().width;
-                }
-                
-                if (window.innerWidth <= 480) {
-                    galleryConfig.visibleImages = 1;
-                } else if (window.innerWidth <= 768) {
-                    galleryConfig.visibleImages = 2;
-                } else {
-                    galleryConfig.visibleImages = 3;
-                }
-            }
-            
-            function createPagerDots() {
-                const totalPages = Math.ceil(galleryConfig.totalImages / galleryConfig.visibleImages);
-                galleryConfig.totalPagesElement.textContent = totalPages;
-                
-                galleryConfig.pagerDots.innerHTML = '';
-                
-                for (let i = 0; i < totalPages; i++) {
-                    const dot = document.createElement('div');
-                    dot.className = 'pager-dot';
-                    if (i === 0) dot.classList.add('active');
-                    
-                    dot.addEventListener('click', function() {
-                        goToPage(i);
-                    });
-                    
-                    galleryConfig.pagerDots.appendChild(dot);
-                }
-            }
+    function renderPager() {
+      pager.innerHTML = '';
+      const pageNumber = document.createElement('span');
+      pageNumber.id = 'page-number';
+      pageNumber.textContent = `${currentPage + 1} / ${pages.length}`;
+      pager.appendChild(pageNumber);
 
-            function addEventListeners() {
-                document.querySelector('.gallery-nav.prev').addEventListener('click', prevSlide);
-                document.querySelector('.gallery-nav.next').addEventListener('click', nextSlide);
-                
-                window.addEventListener('resize', function() {
-                    updateImageWidth();
-                    createPagerDots();
-                    updateGallery();
-                });
-            }
+      pages.forEach((_, i) => {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        if (i === currentPage) dot.classList.add('active');
+        dot.addEventListener('click', () => goToPage(i));
+        pager.appendChild(dot);
+      });
+    }
 
-            function prevSlide() {
-                if (galleryConfig.currentPosition > 0) {
-                    galleryConfig.currentPosition--;
-                    updateGallery();
-                }
-            }
+    function goToPage(page) {
+      currentPage = page;
+      const shiftPercent = (pages[page] / slides.length) * 100;
+      const maxShift = ((slides.length - slidesPerPage) / slides.length) * 100;
+      const shift = Math.min(shiftPercent, maxShift);
+      track.style.transform = `translateX(-${shift}%)`;
+      renderPager();
+    }
 
-            function nextSlide() {
-                const maxPosition = galleryConfig.totalImages - galleryConfig.visibleImages;
-                if (galleryConfig.currentPosition < maxPosition) {
-                    galleryConfig.currentPosition++;
-                    updateGallery();
-                }
-            }
+    prevBtn.addEventListener('click', () => {
+      currentPage = currentPage > 0 ? currentPage - 1 : pages.length - 1;
+      goToPage(currentPage);
+    });
 
-            function goToPage(pageIndex) {
-                galleryConfig.currentPosition = pageIndex * galleryConfig.visibleImages;
-                updateGallery();
-            }
+    nextBtn.addEventListener('click', () => {
+      currentPage = currentPage < pages.length - 1 ? currentPage + 1 : 0;
+      goToPage(currentPage);
+    });
 
-            function updateGallery() {
-                galleryConfig.track.style.transform = `translateX(-${galleryConfig.currentPosition * galleryConfig.imageWidth}px)`;
-                
-                updatePager();
-            }
+    window.addEventListener('resize', () => {
+      calculatePages();
+      currentPage = 0;
+      track.style.transform = 'translateX(0)';
+      renderPager();
+    });
 
-            function updatePager() {
-                const currentPage = Math.floor(galleryConfig.currentPosition / galleryConfig.visibleImages);
-                const dots = document.querySelectorAll('.pager-dot');
-                
-                dots.forEach((dot, index) => {
-                    if (index === currentPage) {
-                        dot.classList.add('active');
-                    } else {
-                        dot.classList.remove('active');
-                    }
-                });
-                
-                galleryConfig.currentPageElement.textContent = currentPage + 1;
-            }
-            initGallery();
-        });
-    </script>
+    calculatePages();
+    goToPage(0);
+  </script>
 </body>
 </html>
