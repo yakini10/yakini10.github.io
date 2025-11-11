@@ -1,191 +1,31 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Galerie de fleurs</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    h1 {
-      margin-bottom: 20px;
-      color: #333;
-    }
-
-    .slider {
-      position: relative;
-      width: 80%;
-      max-width: 900px;
-      overflow: hidden;
-      border-radius: 12px;
-      background: white;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    .slider-track {
-      display: flex;
-      transition: transform 0.6s ease;
-    }
-
-    .slide {
-      min-width: calc(100% / 3);
-      height: 300px;
-      background-size: cover;
-      background-position: center;
-    }
-
-    @media (max-width: 768px) {
-      .slide {
-        min-width: 100%;
-      }
-    }
-
-    .arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0, 0, 0, 0.5);
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      cursor: pointer;
-      font-size: 22px;
-      border-radius: 50%;
-      transition: background 0.3s;
-    }
-
-    .arrow:hover {
-      background: rgba(0, 0, 0, 0.8);
-    }
-
-    .arrow.prev { left: 10px; }
-    .arrow.next { right: 10px; }
-
-    .pager {
-      text-align: center;
-      margin-top: 15px;
-      font-size: 16px;
-    }
-
-    .dot {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      margin: 0 5px;
-      background: #ccc;
-      border-radius: 50%;
-      cursor: pointer;
-    }
-
-    .dot.active {
-      background: #0078ff;
-    }
-
-    #page-number {
-      margin-right: 10px;
-      font-weight: bold;
-      color: #333;
-    }
-  </style>
+  <title>Галерея цветов</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Galerie de fleurs</h1>
+  <h1>Галерея цветов</h1>
 
   <div class="slider">
     <button class="arrow prev">&#10094;</button>
     <div class="slider-track" id="track">
-      <div class="slide" style="background-image:url('images/image1.jpg');"></div>
-      <div class="slide" style="background-image:url('images/image2.jpg');"></div>
-      <div class="slide" style="background-image:url('images/image3.jpg');"></div>
-      <div class="slide" style="background-image:url('images/image4.jpg');"></div>
-      <div class="slide" style="background-image:url('images/image5.jpg');"></div>
-      <div class="slide" style="background-image:url('images/image6.jpg');"></div>
-      <div class="slide" style="background-image:url('images/image7.jpg');"></div>
-      <div class="slide" style="background-image:url('images/image8.jpg');"></div>
+      <div class="slide" style="background-image:url('image1.png');"></div>
+      <div class="slide" style="background-image:url('image2.png');"></div>
+      <div class="slide" style="background-image:url('image3.png');"></div>
+      <div class="slide" style="background-image:url('image4.png');"></div>
+      <div class="slide" style="background-image:url('image5.png');"></div>
+      <div class="slide" style="background-image:url('image6.png');"></div>
+      <div class="slide" style="background-image:url('image7.png');"></div>
+      <div class="slide" style="background-image:url('image8.png');"></div>
     </div>
     <button class="arrow next">&#10095;</button>
   </div>
 
   <div class="pager" id="pager"></div>
 
-  <script>
-    const track = document.getElementById('track');
-    const slides = document.querySelectorAll('.slide');
-    const pager = document.getElementById('pager');
-    const prevBtn = document.querySelector('.prev');
-    const nextBtn = document.querySelector('.next');
-
-    let slidesPerPage = 3;
-    let pages = [];
-    let currentPage = 0;
-
-    function calculatePages() {
-      slidesPerPage = window.innerWidth <= 768 ? 1 : 3;
-      pages = [];
-      for (let i = 0; i < slides.length; i += slidesPerPage) {
-        pages.push(i);
-      }
-    }
-
-    function renderPager() {
-      pager.innerHTML = '';
-      const pageNumber = document.createElement('span');
-      pageNumber.id = 'page-number';
-      pageNumber.textContent = `${currentPage + 1} / ${pages.length}`;
-      pager.appendChild(pageNumber);
-
-      pages.forEach((_, i) => {
-        const dot = document.createElement('span');
-        dot.classList.add('dot');
-        if (i === currentPage) dot.classList.add('active');
-        dot.addEventListener('click', () => goToPage(i));
-        pager.appendChild(dot);
-      });
-    }
-
-    function goToPage(page) {
-      currentPage = page;
-      const shiftPercent = (pages[page] / slides.length) * 100;
-      const maxShift = ((slides.length - slidesPerPage) / slides.length) * 100;
-      const shift = Math.min(shiftPercent, maxShift);
-      track.style.transform = `translateX(-${shift}%)`;
-      renderPager();
-    }
-
-    prevBtn.addEventListener('click', () => {
-      currentPage = currentPage > 0 ? currentPage - 1 : pages.length - 1;
-      goToPage(currentPage);
-    });
-
-    nextBtn.addEventListener('click', () => {
-      currentPage = currentPage < pages.length - 1 ? currentPage + 1 : 0;
-      goToPage(currentPage);
-    });
-
-    window.addEventListener('resize', () => {
-      calculatePages();
-      currentPage = 0;
-      track.style.transform = 'translateX(0)';
-      renderPager();
-    });
-
-    calculatePages();
-    goToPage(0);
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
