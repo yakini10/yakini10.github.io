@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulaire Contact - Exercice</title>
+
+<style>
+body { font-family: Arial, sans-serif; margin:0; padding:0; }
+
+/* Bouton ouvrir */
+#openFormBtn {
+    margin: 20px;
+    padding: 12px 20px;
+    font-size: 16px;
+}
+
+/* Fond pop-up */
+#modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+/* Conteneur formulaire */
+#contactFormContainer {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 8px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Mobile = plein écran */
+@media (max-width: 600px) {
+    #contactFormContainer {
+        width: 100%;
+        height: 100%;
+        max-width: none;
+        max-height: none;
+        border-radius: 0;
+    }
+}
+
+input, textarea {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 8px;
+}
+</style>
+</head>
+<body>
+
+<button id="openFormBtn">Ouvrir le formulaire</button>
+
+<!-- POPUP -->
+<div id="modalOverlay">
+    <div id="contactFormContainer">
+        <h2>Formulaire de contact</h2>
+
+        <form id="contactForm">
+            <input type="text" name="fullname" placeholder="Nom complet" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="tel" name="phone" placeholder="Téléphone">
+            <input type="text" name="organization" placeholder="Organisation">
+            <textarea name="message" placeholder="Message" rows="4" required></textarea>
+
+            <label>
+                <input type="checkbox" name="consent" required>
+                J’accepte la politique de traitement des données.
+            </label>
+
+            <button type="submit">Envoyer</button>
+        </form>
+
+        <button id="closeFormBtn">Fermer</button>
+
+        <p id="statusMsg"></p>
+    </div>
+</div>
+
+<script>
+// --- Elements ---
+const openBtn = document.getElementById("openFormBtn");
+const closeBtn = document.getElementById("closeFormBtn");
+const overlay = document.getElementById("modalOverlay");
+const form = document.getElementById("contactForm");
+const statusMsg = document.getElementById("statusMsg");
+
+// --- Ouvrir formulaire ---
+function openForm() {
+    overlay.style.display = "flex";
+    history.pushState({formOpen:true}, "", "#contact");
+}
+openBtn.onclick = openForm;
+
+// --- Fermer formulaire ---
+function closeForm() {
+    overlay.style.display = "none";
+    if (location.hash === "#contact") history.back();
+}
+closeBtn.onclick = closeForm;
+
+// --- Gérer le bouton retour navigateur ---
+window.onpopstate = (e) => {
+    if (!e.state || !e.state.formOpen) {
+        overlay.style.display = "none";
+    }
+};
+
+// --- Sauvegarde LocalStorage ---
+form.addEventListener("input", () => {
+    const data = Object.fromEntries(new FormData(form));
+    localStorage.setItem("savedForm", JSON.stringify(data));
+});
+
+// --- Restauration LocalStorage ---
+window.onload = () => {
+    const data = JSON.parse(localStorage.getItem("savedForm") || "{}");
+    for (let field in data) {
+        if (form[field]) {
+            if (form[field].type === "checkbox") {
+                form[field].checked = data[field] === "on";
+            } else {
+                form[field].value = data[field];
+            }
+        }
+    }
+};
+
+// --- Envoi AJAX vers Formcarry ---
+form.onsubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    statusMsg.textContent = "Envoi en cours...";
+
+    try {
+        const res = await fetch("https://formcarry.com/s/LvZFpDJW8NI", {
+            method: "POST",
+            body: formData
+        });
+
+        if (res.ok) {
+            statusMsg.textContent = "Message envoyé avec succès !";
+            localStorage.removeItem("savedForm");
+            form.reset();
+        } else {
+            statusMsg.textContent = "Erreur lors de l’envoi.";
+        }
+    } catch {
+        statusMsg.textContent = "Connexion impossible.";
+    }
+};
+</script>
+
+</body>
+</html>
