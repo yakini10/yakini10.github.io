@@ -3,17 +3,55 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Задание 8</title>
+<title>Мой сайт - Контакт</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
-body { font-family: Arial, sans-serif; margin:0; padding:0; }
-
-#openFormBtn {
-    margin: 20px;
-    padding: 12px 20px;
-    font-size: 16px;
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+    color: #333;
 }
 
+/* HEADER HERO */
+header {
+    text-align: center;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #6C63FF, #C06C84);
+    color: white;
+}
+
+header h1 {
+    font-size: 3rem;
+    margin-bottom: 15px;
+}
+
+header p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+}
+
+#openFormBtn {
+    padding: 14px 28px;
+    font-size: 1.1rem;
+    background: white;
+    color: #6C63FF;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s, background 0.3s;
+}
+
+#openFormBtn:hover {
+    transform: scale(1.05);
+    background: #f0f0f0;
+}
+
+/* POPUP FORMULAIRE */
 #modalOverlay {
     position: fixed;
     inset: 0;
@@ -28,10 +66,11 @@ body { font-family: Arial, sans-serif; margin:0; padding:0; }
     background: white;
     width: 90%;
     max-width: 500px;
-    padding: 20px;
-    border-radius: 8px;
+    padding: 30px 20px;
+    border-radius: 12px;
     max-height: 90vh;
     overflow-y: auto;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
 }
 
 @media (max-width: 600px) {
@@ -44,75 +83,119 @@ body { font-family: Arial, sans-serif; margin:0; padding:0; }
     }
 }
 
+#contactFormContainer h2 {
+    margin-top: 0;
+    text-align: center;
+    color: #6C63FF;
+}
+
 input, textarea {
     width: 100%;
     margin-bottom: 12px;
-    padding: 8px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1rem;
 }
 
 button[type="submit"] {
-    padding: 10px 20px;
-    font-size: 16px;
+    width: 100%;
+    padding: 12px;
+    font-size: 1.1rem;
+    background: #6C63FF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+}
+
+button[type="submit"]:hover {
+    background: #574bc8;
+    transform: scale(1.02);
+}
+
+#closeFormBtn {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    background: #ccc;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#statusMsg {
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
 }
 </style>
 </head>
 <body>
 
-<button id="openFormBtn">Открыть форму</button>
+<header>
+    <h1>Добро пожаловать на наш сайт</h1>
+    <p>Свяжитесь с нами через форму обратной связи</p>
+    <button id="openFormBtn">Открыть форму</button>
+</header>
 
+<!-- POPUP FORMULAIRE -->
 <div id="modalOverlay">
     <div id="contactFormContainer">
-        <h2>Форма Контакта</h2>
-
+        <h2>Форма обратной связи</h2>
         <form id="contactForm">
-            <input type="text" name="fullname" placeholder="Полное имя" required>
-            <input type="email" name="email" placeholder="Электронная почта" required>
+            <input type="text" name="fullname" placeholder="ФИО" required>
+            <input type="email" name="email" placeholder="Email" required>
             <input type="tel" name="phone" placeholder="Телефон">
             <input type="text" name="organization" placeholder="Организация">
             <textarea name="message" placeholder="Сообщение" rows="4" required></textarea>
 
             <label>
                 <input type="checkbox" name="consent" required>
-                Я согласен с политикой обработки данных.
+                Я согласен с политикой обработки персональных данных.
             </label>
 
             <button type="submit">Отправить</button>
         </form>
-
         <button id="closeFormBtn">Закрыть</button>
-
         <p id="statusMsg"></p>
     </div>
 </div>
 
 <script>
+// --- Elements ---
 const openBtn = document.getElementById("openFormBtn");
 const closeBtn = document.getElementById("closeFormBtn");
 const overlay = document.getElementById("modalOverlay");
 const form = document.getElementById("contactForm");
 const statusMsg = document.getElementById("statusMsg");
 
+// --- Ouvrir formulaire ---
 openBtn.onclick = () => {
     overlay.style.display = "flex";
     history.pushState({formOpen:true}, "", "#contact");
 };
 
+// --- Fermer formulaire ---
 closeBtn.onclick = () => {
     overlay.style.display = "none";
     if (location.hash === "#contact") history.back();
 };
 
+// --- Gestion bouton retour ---
 window.onpopstate = (e) => {
-    if (!e.state || !e.state.formOpen) {
-        overlay.style.display = "none";
-    }
+    if (!e.state || !e.state.formOpen) overlay.style.display = "none";
 };
 
+// --- Sauvegarde LocalStorage ---
 form.addEventListener("input", () => {
     const data = Object.fromEntries(new FormData(form));
     localStorage.setItem("savedForm", JSON.stringify(data));
 });
 
+// --- Restauration LocalStorage ---
 window.onload = () => {
     const data = JSON.parse(localStorage.getItem("savedForm") || "{}");
     for (let field in data) {
@@ -126,6 +209,7 @@ window.onload = () => {
     }
 };
 
+// --- Envoi AJAX vers Formcarry ---
 form.onsubmit = async (e) => {
     e.preventDefault();
 
