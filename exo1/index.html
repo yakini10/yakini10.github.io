@@ -1,38 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Photos capture1 à capture8</title>
+    <title>Afficher des photos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .photo-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .photo {
+            width: 300px;
+            border: 2px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .photo img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
 </head>
 <body>
-    <h2>Télécharger les photos:</h2>
+    <h1>Mes Photos</h1>
     
-    <form>
-        <p><b>capture1.jpg</b><br>
-        <input type="capture1.jpg" accept="image/*"></p>
+    <div class="photo-container">
+        <!-- Photo 1 -->
+        <div class="photo">
+            <img src="capture1.jpg" alt="Capture 1">
+            <p>capture1.jpg</p>
+        </div>
         
-        <p><b>capture2.jpg</b><br>
-        <input type="capture2.jpg" accept="image/*"></p>
+        <!-- Photo 2 -->
+        <div class="photo">
+            <img src="capture2.jpg" alt="Capture 2">
+            <p>capture2.jpg</p>
+        </div>
         
-        <p><b>capture3.jpg</b><br>
-        <input type="capture3.jpg" accept="image/*"></p>
+        <!-- Photo 3 -->
+        <div class="photo">
+            <img src="capture3.jpg" alt="Capture 3">
+            <p>capture3.jpg</p>
+        </div>
         
-        <p><b>capture4.jpg</b><br>
-        <input type="capture4.jpg" accept="image/*"></p>
+        <!-- Photo 4 -->
+        <div class="photo">
+            <img src="capture4.jpg" alt="Capture 4">
+            <p>capture4.jpg</p>
+        </div>
         
-        <p><b>capture5.jpg</b><br>
-        <input type="capture5.jpg" accept="image/*"></p>
+        <!-- Photo 5 -->
+        <div class="photo">
+            <img src="capture5.jpg" alt="Capture 5">
+            <p>capture5.jpg</p>
+        </div>
         
-        <p><b>capture6.jpg</b><br>
-        <input type="capture6.jpg" accept="image/*"></p>
+        <!-- Photo 6 -->
+        <div class="photo">
+            <img src="capture6.jpg" alt="Capture 6">
+            <p>capture6.jpg</p>
+        </div>
         
-        <p><b>capture7.jpg</b><br>
-        <input type="capture7.jpg" accept="image/*"></p>
+        <!-- Photo 7 -->
+        <div class="photo">
+            <img src="capture7.jpg" alt="Capture 7">
+            <p>capture7.jpg</p>
+        </div>
         
-        <p><b>capture8.jpg</b><br>
-        <input type="capture8.jpg" accept="image/*"></p>
-        
-        <button type="button">Envoyer les photos</button>
-    </form>
+        <!-- Photo 8 -->
+        <div class="photo">
+            <img src="capture8.jpg" alt="Capture 8">
+            <p>capture8.jpg</p>
+        </div>
+    </div>
 </body>
 </html>
