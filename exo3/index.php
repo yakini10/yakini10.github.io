@@ -25,20 +25,41 @@ if (empty($_POST['fio'])) {
   $errors = TRUE;
 }
 
-if (empty($_POST['year']) || !is_numeric($_POST['year']) || !preg_match('/^\d+$/', $_POST['year'])) {
-  print('Заполните год.<br/>');
-  $errors = TRUE;
+if (empty($_POST['phone'])) {
+  $errors = 'Заполните телефон';
 }
-
+if (empty($_POST['email'])) {
+  $errors = 'Заполните email';
+} elseif (!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){
+  $errors[]='Некорректный email';
+}
+if (empty($_POST['birthdate'])) {
+  $errors = 'Заполните дату рождения';
+}
+if (empty($_POST['gender'])) {
+  $errors = 'Выберите пол';
+}
+if (empty($_POST['languages']) || !is_array($_POST['languages'])) {
+  $errors = 'Выберите хотя бы один язык программирования';
+}
+if (empty($_POST['bio'])) {
+  $errors = 'Заполните биографию';
+}
+if (empty($_POST['contract'])) {
+  $errors = 'Необходимо подверждение для заключение контракта';
+}
+if (!empty($errors)) {
+  foreach ($errors as $error){
+    print($error . "<br>");
+  }
+  include('form.php');
+  exit();
+}
 
 // *************
 // Тут необходимо проверить правильность заполнения всех остальных полей.
 // *************
 
-if ($errors) {
-  // При наличии ошибок завершаем работу скрипта.
-  exit();
-}
 
 // Сохранение в базу данных.
 
@@ -49,32 +70,27 @@ $db = new PDO('mysql:host=localhost;dbname=u82383', $user, $pass,
 
 // Подготовленный запрос. Не именованные метки.
 try {
-  $stmt = $db->prepare("INSERT INTO application (fio,year,ability_god,ability_fly,ability_idclip,ability_fireball)VALUES(?,?,0,0,0,0)");
-  $stmt->execute([$_POST['fio'], $_POST['year']]);
+  $stmt = $db->prepare("INSERT INTO application_languages (fio, phone, email, birthdate, gender, bio, contract) VALUES (?,?,?,?,?,?,?)");
+  $stmt ->execute([
+    $_POST['fio'], 
+    $_POST['phone'],
+    $_POST['email'],
+    $_POST['birthdate'],
+    $_POST['gender'],
+    $_POST['bio'],
+    isset($_POST['contract'])? 1 : 0
+    ]);
+    $application_id = $db -> lastInsertId();
+    $stmt = $db->prepare("INSERT INTO application_languages(application_id,language_id)VALUES(?,?)");
+    foreach($_POST['languages'] as $lang_id) {
+      $stmt->execute([$application_id,$lang_id]);
+    }
+    header('location: ?save=1');
+    exit();
+
 }
 catch(PDOException $e){
   print('Error : ' . $e->getMessage());
   exit();
 }
-
-//  stmt - это "дескриптор состояния".
- 
-//  Именованные метки.
-//$stmt = $db->prepare("INSERT INTO test (label,color) VALUES (:label,:color)");
-//$stmt -> execute(['label'=>'perfect', 'color'=>'green']);
- 
-//Еще вариант
-/*$stmt = $db->prepare("INSERT INTO users (firstname, lastname, email) VALUES (:firstname, :lastname, :email)");
-$stmt->bindParam(':firstname', $firstname);
-$stmt->bindParam(':lastname', $lastname);
-$stmt->bindParam(':email', $email);
-$firstname = "John";
-$lastname = "Smith";
-$email = "john@test.com";
-$stmt->execute();
-*/
-
-// Делаем перенаправление.
-// Если запись не сохраняется, но ошибок не видно, то можно закомментировать эту строку чтобы увидеть ошибку.
-// Если ошибок при этом не видно, то необходимо настроить параметр display_errors для PHP.
-header('Location: ?save=1');
+?>
