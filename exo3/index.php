@@ -70,7 +70,7 @@ $db = new PDO('mysql:host=localhost;dbname=u82383', $user, $pass,
 
 // Подготовленный запрос. Не именованные метки.
 try {
-  $stmt = $db->prepare("INSERT INTO application_languages (fio, phone, email, birthdate, gender, bio, contract) VALUES (?,?,?,?,?,?,?)");
+  $stmt = $db->prepare("INSERT INTO application (fio, phone, email, birthdate, gender, bio, contract) VALUES (?,?,?,?,?,?,?)");
   $stmt ->execute([
     $_POST['fio'], 
     $_POST['phone'],
