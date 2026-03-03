@@ -33,7 +33,7 @@ if (empty($_POST['email'])) {
 } elseif (!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){
   $errors[]='Некорректный email';
 }
-if (empty($_POST['birthdate'])) {
+if (empty($_POST['birth_date'])) {
   $errors = 'Заполните дату рождения';
 }
 if (empty($_POST['gender'])) {
@@ -42,10 +42,10 @@ if (empty($_POST['gender'])) {
 if (empty($_POST['languages']) || !is_array($_POST['languages'])) {
   $errors = 'Выберите хотя бы один язык программирования';
 }
-if (empty($_POST['bio'])) {
+if (empty($_POST['biography'])) {
   $errors = 'Заполните биографию';
 }
-if (empty($_POST['contract'])) {
+if (empty($_POST['contract_accepted'])) {
   $errors = 'Необходимо подверждение для заключение контракта';
 }
 if (!empty($errors)) {
@@ -75,10 +75,10 @@ try {
     $_POST['fio'], 
     $_POST['phone'],
     $_POST['email'],
-    $_POST['birthdate'],
+    $_POST['birth_date'],
     $_POST['gender'],
-    $_POST['bio'],
-    isset($_POST['contract'])? 1 : 0
+    $_POST['biography'],
+    isset($_POST['contract_accepted'])? 1 : 0
     ]);
     $application_id = $db -> lastInsertId();
     $stmt = $db->prepare("INSERT INTO application_languages(application_id,language_id)VALUES(?,?)");
