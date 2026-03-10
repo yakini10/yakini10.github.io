@@ -75,7 +75,7 @@ if (!empty($errors)) {
 
   // Подготовленный запрос. Не именованные метки.
   try {
-    $stmt = $db->prepare("INSERT INTO application (fio, phone, email, birth_date, gender, biography, contract) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt = $db->prepare("INSERT INTO application (fio, phone, email, birth_date, gender, biography, contract_accepted) VALUES (?, ?, ?, ?, ?, ?, ?)");
     $stmt->execute([
       $_POST['fio'], 
       $_POST['phone'],
