@@ -19,10 +19,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 // Иначе, если запрос был методом POST, т.е. нужно проверить данные и сохранить их в БД.
 
 // Проверяем ошибки.
-$errors = FALSE;
+$errors = [];
 if (empty($_POST['fio'])) {
   print('Заполните имя.<br/>');
-  $errors = TRUE;
+  //$errors = TRUE;
 }
 
 if (empty($_POST['phone'])) {
