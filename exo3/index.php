@@ -21,32 +21,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 // Проверяем ошибки.
 $errors = [];
 if (empty($_POST['fio'])) {
-  print('Заполните имя.<br/>');
-  //$errors = TRUE;
+  $errors [] ='Заполните имя.';
 }
 
 if (empty($_POST['phone'])) {
-  $errors = 'Заполните телефон';
+  $errors[] = 'Заполните телефон';
 }
 if (empty($_POST['email'])) {
-  $errors = 'Заполните email';
+  $errors[] = 'Заполните email';
 } elseif (!filter_var($_POST['email'],FILTER_VALIDATE_EMAIL)){
   $errors[]='Некорректный email';
 }
 if (empty($_POST['birth_date'])) {
-  $errors = 'Заполните дату рождения';
+  $errors[] = 'Заполните дату рождения';
 }
 if (empty($_POST['gender'])) {
-  $errors = 'Выберите пол';
+  $errors[] = 'Выберите пол';
 }
 if (empty($_POST['languages']) || !is_array($_POST['languages'])) {
-  $errors = 'Выберите хотя бы один язык программирования';
+  $errors[] = 'Выберите хотя бы один язык программирования';
 }
 if (empty($_POST['biography'])) {
-  $errors = 'Заполните биографию';
+  $errors[] = 'Заполните биографию';
 }
 if (empty($_POST['contract_accepted'])) {
-  $errors = 'Необходимо подверждение для заключение контракта';
+  $errors []= 'Необходимо подверждение для заключение контракта';
 }
 if (!empty($errors)) {
   foreach ($errors as $error){
