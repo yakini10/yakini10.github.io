@@ -32,7 +32,7 @@
   <!-- 6) Любимый язык программирования -->
   <label>Любимый язык программирования:</label><br>
   <select name="languages[]" multiple size="6" required>
-    <option value="1">Pascal">Pascal</option>
+    <option value="1">Pascal</option>
     <option value="2">C</option>
     <option value="3">C++</option>
     <option value="4">JavaScript</option>
