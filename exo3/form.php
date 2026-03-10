@@ -22,7 +22,7 @@
 
   <!-- 4) Дата рождения -->
   <label>Дата рождения:</label><br>
-  <input type="date" name="birthdate" required><br><br>
+  <input type="date" name="birth_date" required><br><br>
 
   <!-- 5) Пол -->
   <label>Пол:</label><br>
@@ -48,10 +48,10 @@
 
   <!-- 7) Биография -->
   <label>Биография:</label><br>
-  <textarea name="bio" rows="5" cols="40" required></textarea><br><br>
+  <textarea name="biography" rows="5" cols="40" required></textarea><br><br>
 
   <!-- 8) С контрактом ознакомлен(а) -->
-  <input type="checkbox" name="contract" value="yes" required>
+  <input type="checkbox" name="contract_accepted" value="yes" required>
   С контрактом ознакомлен(а)<br><br>
 
   <!-- 9) Кнопка сохранить -->
