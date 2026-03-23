@@ -1,94 +1,94 @@
 <?php
 /**
- * Formulaire d'application avec validation côté serveur
- * Utilisation de cookies pour la persistance des données
+ * Форма заявки с валидацией на стороне сервера
+ * Использование cookies для сохранения данных
  */
 
 header('Content-Type: text/html; charset=UTF-8');
 
-// Fonction de validation avec expressions régulières
+// Функции валидации с регулярными выражениями
 function validateFIO($fio) {
-    // Lettres, espaces, tirets, apostrophes (cyrillique et latin)
-    if (empty($fio)) return 'Le nom est obligatoire.';
+    // Буквы, пробелы, дефисы, апострофы (кириллица и латиница)
+    if (empty($fio)) return 'Заполните имя.';
     if (!preg_match('/^[a-zA-Zа-яА-ЯёЁ\s\-\']+$/u', $fio)) {
-        return 'Le nom ne doit contenir que des lettres, espaces, tirets et apostrophes.';
+        return 'Имя должно содержать только буквы, пробелы, дефисы и апострофы.';
     }
     return null;
 }
 
 function validatePhone($phone) {
-    if (empty($phone)) return 'Le téléphone est obligatoire.';
-    // Format: +7XXXXXXXXXX, 8XXXXXXXXXX, ou XXXXXXXXXX (10-15 chiffres)
+    if (empty($phone)) return 'Заполните телефон.';
+    // Формат: +7XXXXXXXXXX, 8XXXXXXXXXX, или XXXXXXXXXX (10-15 цифр)
     if (!preg_match('/^[\+]?[0-9\s\-\(\)]{10,20}$/', $phone)) {
-        return 'Format de téléphone invalide. Utilisez uniquement des chiffres, espaces, tirets et parenthèses.';
+        return 'Неверный формат телефона. Используйте только цифры, пробелы, дефисы и скобки.';
     }
     return null;
 }
 
 function validateEmail($email) {
-    if (empty($email)) return 'L\'email est obligatoire.';
+    if (empty($email)) return 'Заполните email.';
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        return 'Format d\'email invalide (exemple: nom@domaine.com).';
+        return 'Неверный формат email (пример: name@domain.com).';
     }
     return null;
 }
 
 function validateBirthDate($birth_date) {
-    if (empty($birth_date)) return 'La date de naissance est obligatoire.';
+    if (empty($birth_date)) return 'Заполните дату рождения.';
     if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $birth_date)) {
-        return 'Format de date invalide (AAAA-MM-JJ).';
+        return 'Неверный формат даты (ГГГГ-ММ-ДД).';
     }
     $date = DateTime::createFromFormat('Y-m-d', $birth_date);
     if (!$date || $date->format('Y-m-d') !== $birth_date) {
-        return 'Date invalide.';
+        return 'Неверная дата.';
     }
     $min_date = new DateTime('1900-01-01');
     $max_date = new DateTime('today');
     if ($date < $min_date || $date > $max_date) {
-        return 'Date de naissance invalide (entre 1900 et aujourd\'hui).';
+        return 'Неверная дата рождения (между 1900 и сегодняшним днем).';
     }
     return null;
 }
 
 function validateGender($gender) {
-    if (empty($gender)) return 'Le sexe est obligatoire.';
+    if (empty($gender)) return 'Выберите пол.';
     if (!in_array($gender, ['male', 'female'])) {
-        return 'Sexe invalide.';
+        return 'Неверное значение пола.';
     }
     return null;
 }
 
 function validateLanguages($languages) {
     if (empty($languages) || !is_array($languages)) {
-        return 'Sélectionnez au moins un langage de programmation.';
+        return 'Выберите хотя бы один язык программирования.';
     }
     $valid_langs = range(1, 12);
     foreach ($languages as $lang) {
         if (!in_array((int)$lang, $valid_langs)) {
-            return 'Langage de programmation invalide.';
+            return 'Неверный язык программирования.';
         }
     }
     return null;
 }
 
 function validateBiography($biography) {
-    if (empty($biography)) return 'La biographie est obligatoire.';
-    // 3-1000 caractères, caractères de base autorisés
+    if (empty($biography)) return 'Заполните биографию.';
+    // 3-1000 символов, разрешены основные символы
     if (strlen($biography) < 3 || strlen($biography) > 1000) {
-        return 'La biographie doit contenir entre 3 et 1000 caractères.';
+        return 'Биография должна содержать от 3 до 1000 символов.';
     }
     if (!preg_match('/^[a-zA-Zа-яА-ЯёЁ0-9\s\-\.,!?\'"\(\):;]+$/u', $biography)) {
-        return 'La biographie contient des caractères non autorisés.';
+        return 'Биография содержит недопустимые символы.';
     }
     return null;
 }
 
 function validateContract($contract) {
-    if (empty($contract)) return 'Vous devez accepter le contrat.';
+    if (empty($contract)) return 'Необходимо подтверждение для заключения контракта.';
     return null;
 }
 
-// Gestion des cookies pour les valeurs par défaut
+// Получение значения из cookie
 function getCookieValue($name, $default = '') {
     return isset($_COOKIE[$name]) ? $_COOKIE[$name] : $default;
 }
@@ -98,13 +98,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $errors = [];
     $values = [];
 
-    // Récupérer les messages de succès
+    // Получаем сообщение об успешном сохранении
     if (!empty($_COOKIE['save'])) {
         setcookie('save', '', time() - 3600);
-        $messages[] = '<div class="success">Merci, les résultats ont été sauvegardés.</div>';
+        $messages[] = '<div class="success">Спасибо, результаты сохранены.</div>';
     }
 
-    // Récupérer les erreurs des cookies
+    // Получаем ошибки из cookies
     $error_fields = ['fio', 'phone', 'email', 'birth_date', 'gender', 'languages', 'biography', 'contract_accepted'];
     foreach ($error_fields as $field) {
         if (!empty($_COOKIE[$field . '_error'])) {
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     }
 
-    // Récupérer les valeurs sauvegardées
+    // Получаем сохраненные значения
     $values['fio'] = getCookieValue('fio_value');
     $values['phone'] = getCookieValue('phone_value');
     $values['email'] = getCookieValue('email_value');
@@ -124,11 +124,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $values['biography'] = getCookieValue('biography_value');
     $values['contract_accepted'] = getCookieValue('contract_accepted_value') == 'yes';
     
-    // Pour les langues (multiple)
+    // Для языков (множественный выбор)
     $saved_languages = getCookieValue('languages_value');
     $values['languages'] = !empty($saved_languages) ? explode(',', $saved_languages) : [];
 
-    // Inclure le formulaire
+    // Включаем форму
     include('form.php');
     exit();
 } 
@@ -136,7 +136,7 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $has_errors = false;
     $error_messages = [];
 
-    // Valider chaque champ
+    // Валидация каждого поля
     $fio_error = validateFIO($_POST['fio'] ?? '');
     if ($fio_error) {
         $has_errors = true;
@@ -216,14 +216,14 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    // Supprimer tous les cookies d'erreur
+    // Удаляем все cookies с ошибками
     $error_fields = ['fio', 'phone', 'email', 'birth_date', 'gender', 'languages', 'biography', 'contract_accepted'];
     foreach ($error_fields as $field) {
         setcookie($field . '_error', '', time() - 3600);
         setcookie($field . '_error_msg', '', time() - 3600);
     }
 
-    // Connexion à la base de données
+    // Подключение к базе данных
     $user = 'u82383';
     $pass = 'dt54#FDrt';
     try {
@@ -259,7 +259,7 @@ else if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     } catch (PDOException $e) {
         $db->rollBack();
         error_log('Database error: ' . $e->getMessage());
-        $messages[] = '<div class="error">Une erreur est survenue lors de l\'enregistrement.</div>';
+        $messages[] = '<div class="error">Произошла ошибка при сохранении данных.</div>';
         include('form.php');
         exit();
     }
