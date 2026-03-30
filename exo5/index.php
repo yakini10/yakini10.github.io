@@ -1,99 +1,213 @@
 <?php
-/**
- * Реализовать возможность входа с паролем и логином с использованием
- * сессии для изменения отправленных данных в предыдущей задаче,
- * пароль и логин генерируются автоматически при первоначальной отправке формы.
- */
-
-// Отправляем браузеру правильную кодировку,
-// файл index.php должен быть в кодировке UTF-8 без BOM.
+session_start();
 header('Content-Type: text/html; charset=UTF-8');
 
-// В суперглобальном массиве $_SERVER PHP сохраняет некторые заголовки запроса HTTP
-// и другие сведения о клиненте и сервере, например метод текущего запроса $_SERVER['REQUEST_METHOD'].
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-  // Массив для временного хранения сообщений пользователю.
-  $messages = array();
+$user = 'u82383';
+$pass = 'dt54#FDrt';
 
-  // В суперглобальном массиве $_COOKIE PHP хранит все имена и значения куки текущего запроса.
-  // Выдаем сообщение об успешном сохранении.
-  if (!empty($_COOKIE['save'])) {
-    // Удаляем куку, указывая время устаревания в прошлом.
-    setcookie('save', '', 100000);
-    setcookie('login', '', 100000);
-    setcookie('pass', '', 100000);
-    // Выводим сообщение пользователю.
-    $messages[] = 'Спасибо, результаты сохранены.';
-    // Если в куках есть пароль, то выводим сообщение.
-    if (!empty($_COOKIE['pass'])) {
-      $messages[] = sprintf('Вы можете <a href="login.php">войти</a> с логином <strong>%s</strong>
-        и паролем <strong>%s</strong> для изменения данных.',
-        strip_tags($_COOKIE['login']),
-        strip_tags($_COOKIE['pass']));
+try {
+    $db = new PDO('mysql:host=localhost;dbname=u82383', $user, $pass,
+        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+} catch (PDOException $e) {
+    die("Ошибка БД");
+}
+
+$messages = [];
+$errors = [];
+$values = [];
+
+// ================= LOGIN =================
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['auth'])) {
+
+    $stmt = $db->prepare("SELECT * FROM users WHERE login=?");
+    $stmt->execute([$_POST['login']]);
+    $userData = $stmt->fetch();
+
+    if ($userData && password_verify($_POST['password'], $userData['password_hash'])) {
+        $_SESSION['user_id'] = $userData['id'];
+        $_SESSION['application_id'] = $userData['application_id'];
+        header('Location: index.php');
+        exit();
+    } else {
+        $messages[] = "<div class='error'>Неверный логин или пароль</div>";
     }
-  }
+}
 
-  // Складываем признак ошибок в массив.
-  $errors = array();
-  $errors['fio'] = !empty($_COOKIE['fio_error']);\
-  $values['phone'] = !empty($_COOKIE['phone_error']);
-  $values['email'] = !empty($_COOKIE['email_error']);
-  $values['birth_date'] = !empty($_COOKIE['birth_date_error']);
-  $values['gender'] = !empty($_COOKIE['gender_error']);
-  $values['biography'] = !empty($_COOKIE['biography_error']);
-  $values['contract_accepted'] = !empty($_COOKIE['contract_accepted_error']);
+// ================= GET =================
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-  // TODO: аналогично все поля.
+    // SUCCESS
+    if (!empty($_COOKIE['save'])) {
+        setcookie('save', '', time() - 3600);
+        $messages[] = '<div class="success">Спасибо, результаты сохранены.</div>';
+    }
 
-  // Выдаем сообщения об ошибках.
-  if (!empty($errors['fio'])) {
-    setcookie('fio_error', '', 100000);
-    $messages[] = '<div class="error">Заполните имя.</div>';
-  }
-  if (!empty($errors['phone'])) {
-    setcookie('phone_error', '', 100000);
-    $messages[] = '<div class="error">Заполните телефон.</div>';
-  }
-  if (!empty($errors['email'])) {
-    setcookie('email_error', '', 100000);
-    $messages[] = '<div class="error">Заполните email.</div>';
-  }
-  if (!empty($errors['birth_date'])) {
-    setcookie('birth_date_error', '', 100000);
-    $messages[] = '<div class="error">Заполните дату рождения.</div>';
-  }
-  if (!empty($errors['gender'])) {
-    setcookie('gender_error', '', 100000);
-    $messages[] = '<div class="error">Выберите пол.</div>';
-  }
-  if (!empty($errors['biography'])) {
-    setcookie('biography_error', '', 100000);
-    $messages[] = '<div class="error">Заполните биографию.</div>';
-  }
-  if (!empty($errors['contract_accepted'])) {
-    setcookie('contract_accepted_error', '', 100000);
-    $messages[] = '<div class="error">Необходимо подтверждение для заключения контракта.</div>';
-  }
+    // LOGIN/PASSWORD SHOW ONCE
+    if (!empty($_COOKIE['login'])) {
+        $messages[] = "<div class='success'>
+            Логин: " . htmlspecialchars($_COOKIE['login']) . "<br>
+            Пароль: " . htmlspecialchars($_COOKIE['password']) . "
+        </div>";
 
-  // TODO: тут выдать сообщения об ошибках в других полях.
+        setcookie('login', '', time() - 3600);
+        setcookie('password', '', time() - 3600);
+    }
 
-  // Складываем предыдущие значения полей в массив, если есть.
-  // При этом санитизуем все данные для безопасного отображения в браузере.
-  $values = array();
-  $values['fio'] = empty($_COOKIE['fio_value']) ? '' : strip_tags($_COOKIE['fio_value']);
-  $values['phone'] = empty($_COOKIE['phone_value']) ? '' : strip_tags($_COOKIE['phone_value']);
-  $values['fio'] = empty($_COOKIE['email_value']) ? '' : strip_tags($_COOKIE['email_value']);
-  $values['fio'] = empty($_COOKIE['birth_date_value']) ? '' : strip_tags($_COOKIE['birth_date_value']);
-  $values['fio'] = empty($_COOKIE['gender_value']) ? '' : strip_tags($_COOKIE['gender_value']);
-  $values['fio'] = empty($_COOKIE['biography_value']) ? '' : strip_tags($_COOKIE['biography_value']);
-  $values['fio'] = empty($_COOKIE['contract_accepted_value']) ? '' : strip_tags($_COOKIE['contract_accepted_value']);
-  // TODO: аналогично все поля.
+    // ERRORS (cookies)
+    $error_fields = ['fio','phone','email','birth_date','gender','languages','biography','contract_accepted'];
 
-  // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
-  // ранее в сессию записан факт успешного логина.
-  if (empty($errors) && !empty($_COOKIE[session_name()]) &&
-      session_start() && !empty($_SESSION['login'])) {
-        $stmt = $db->prepare("INSERT INTO application (fio, phone, email, birth_date, gender, biography, contract_accepted) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    foreach ($error_fields as $field) {
+        if (!empty($_COOKIE[$field . '_error'])) {
+            $errors[$field] = true;
+
+            $messages[] = '<div class="error">' .
+                htmlspecialchars($_COOKIE[$field . '_error_msg']) .
+                '</div>';
+
+            setcookie($field . '_error', '', time() - 3600);
+            setcookie($field . '_error_msg', '', time() - 3600);
+        }
+    }
+
+    // VALUES FROM COOKIES
+    $values['fio'] = $_COOKIE['fio_value'] ?? '';
+    $values['phone'] = $_COOKIE['phone_value'] ?? '';
+    $values['email'] = $_COOKIE['email_value'] ?? '';
+    $values['birth_date'] = $_COOKIE['birth_date_value'] ?? '';
+    $values['gender'] = $_COOKIE['gender_value'] ?? '';
+    $values['biography'] = $_COOKIE['biography_value'] ?? '';
+    $values['contract_accepted'] = ($_COOKIE['contract_accepted_value'] ?? '') === 'yes';
+
+    $values['languages'] = !empty($_COOKIE['languages_value'])
+        ? explode(',', $_COOKIE['languages_value'])
+        : [];
+
+    // IF AUTHORIZED → DB PRIORITY
+    if (!empty($_SESSION['application_id'])) {
+
+        $stmt = $db->prepare("SELECT * FROM application WHERE id=?");
+        $stmt->execute([$_SESSION['application_id']]);
+        $values = $stmt->fetch();
+
+        $stmt = $db->prepare("SELECT language_id FROM application_languages WHERE application_id=?");
+        $stmt->execute([$_SESSION['application_id']]);
+        $values['languages'] = $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    include('form.php');
+    exit();
+}
+
+// ================= POST =================
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
+
+    $has_errors = false;
+
+    // ===== VALIDATION + COOKIES =====
+
+    function setError($field, $msg) {
+        setcookie($field.'_error', '1', time()+3600);
+        setcookie($field.'_error_msg', $msg, time()+3600);
+    }
+
+    // FIO
+    if (empty($_POST['fio'])) {
+        $has_errors = true;
+        setError('fio','Введите ФИО');
+    }
+    setcookie('fio_value', $_POST['fio'] ?? '', time()+365*24*3600);
+
+    // PHONE
+    if (empty($_POST['phone'])) {
+        $has_errors = true;
+        setError('phone','Введите телефон');
+    }
+    setcookie('phone_value', $_POST['phone'] ?? '', time()+365*24*3600);
+
+    // EMAIL
+    if (empty($_POST['email'])) {
+        $has_errors = true;
+        setError('email','Введите email');
+    }
+    setcookie('email_value', $_POST['email'] ?? '', time()+365*24*3600);
+
+    // DATE
+    if (empty($_POST['birth_date'])) {
+        $has_errors = true;
+        setError('birth_date','Введите дату');
+    }
+    setcookie('birth_date_value', $_POST['birth_date'] ?? '', time()+365*24*3600);
+
+    // GENDER
+    if (empty($_POST['gender'])) {
+        $has_errors = true;
+        setError('gender','Выберите пол');
+    }
+    setcookie('gender_value', $_POST['gender'] ?? '', time()+365*24*3600);
+
+    // LANGUAGES
+    if (empty($_POST['languages'])) {
+        $has_errors = true;
+        setError('languages','Выберите язык');
+    }
+    setcookie('languages_value', implode(',', $_POST['languages'] ?? []), time()+365*24*3600);
+
+    // BIO
+    if (empty($_POST['biography'])) {
+        $has_errors = true;
+        setError('biography','Введите биографию');
+    }
+    setcookie('biography_value', $_POST['biography'] ?? '', time()+365*24*3600);
+
+    // CONTRACT
+    if (empty($_POST['contract_accepted'])) {
+        $has_errors = true;
+        setError('contract_accepted','Подтвердите контракт');
+    }
+    setcookie('contract_accepted_value', isset($_POST['contract_accepted']) ? 'yes' : '', time()+365*24*3600);
+
+    if ($has_errors) {
+        header('Location: index.php');
+        exit();
+    }
+
+    // CLEAN ERRORS
+    $fields = ['fio','phone','email','birth_date','gender','languages','biography','contract_accepted'];
+    foreach ($fields as $f) {
+        setcookie($f.'_error','',time()-3600);
+        setcookie($f.'_error_msg','',time()-3600);
+    }
+
+    // ================= DB =================
+    $db->beginTransaction();
+
+    if (!empty($_SESSION['application_id'])) {
+
+        // UPDATE
+        $stmt = $db->prepare("UPDATE application SET fio=?, phone=?, email=?, birth_date=?, gender=?, biography=?, contract_accepted=? WHERE id=?");
+        $stmt->execute([
+            $_POST['fio'],
+            $_POST['phone'],
+            $_POST['email'],
+            $_POST['birth_date'],
+            $_POST['gender'],
+            $_POST['biography'],
+            1,
+            $_SESSION['application_id']
+        ]);
+
+        $stmt = $db->prepare("DELETE FROM application_languages WHERE application_id=?");
+        $stmt->execute([$_SESSION['application_id']]);
+
+        foreach ($_POST['languages'] as $lang) {
+            $stmt = $db->prepare("INSERT INTO application_languages VALUES (?,?)");
+            $stmt->execute([$_SESSION['application_id'], $lang]);
+        }
+
+    } else {
+
+        // INSERT
+        $stmt = $db->prepare("INSERT INTO application (fio, phone, email, birth_date, gender, biography, contract_accepted) VALUES (?,?,?,?,?,?,?)");
         $stmt->execute([
             $_POST['fio'],
             $_POST['phone'],
@@ -103,101 +217,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $_POST['biography'],
             1
         ]);
-    // TODO: загрузить данные пользователя из БД
-    // и заполнить переменную $values,
-    // предварительно санитизовав.
-    // Для загрузки данных из БД делаем запрос SELECT и вызываем метод PDO fetchArray(), fetchObject() или fetchAll() 
-    // См. https://www.php.net/manual/en/pdostatement.fetchall.php
-    printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
-  }
 
-  // Включаем содержимое файла form.php.
-  // В нем будут доступны переменные $messages, $errors и $values для вывода 
-  // сообщений, полей с ранее заполненными данными и признаками ошибок.
-  include('form.php');
-}
-// Иначе, если запрос был методом POST, т.е. нужно проверить данные и сохранить их в базе данных.
-else {
-  // Проверяем ошибки.
-  $errors = FALSE;
-  if (empty($_POST['fio'])) {
-    // Выдаем куку на день с флажком об ошибке в поле fio.
-    setcookie('fio_error', '1', time() + 24 * 60 * 60);
-    $errors = TRUE;
-  }
-  else {
-    setcookie('fio_value', $_POST['fio'], time() + 30 * 24 * 60 * 60);
-  }
-    $errors = FALSE;
-  if (empty($_POST['phone'])) {
-    setcookie('phone_error', '1', time() + 24 * 60 * 60);
-    $errors = TRUE;
-  }
-  else {
-    setcookie('phone_value', $_POST['phone'], time() + 30 * 24 * 60 * 60);
-  }
-    $errors = FALSE;
-  if (empty($_POST['email'])) {
-    setcookie('email_error', '1', time() + 24 * 60 * 60);
-    $errors = TRUE;
-  }
-  else {
-    setcookie('gender_value', $_POST['gender'], time() + 30 * 24 * 60 * 60);
-  }
-  if (empty($_POST['gender'])) {
-    setcookie('gender_error', '1', time() + 24 * 60 * 60);
-    $errors = TRUE;
-  }
-  else {
-    setcookie('gender_value', $_POST['gender'], time() + 30 * 24 * 60 * 60);
-  }
-  if (empty($_POST['biography'])) {
-    setcookie('biography_error', '1', time() + 24 * 60 * 60);
-    $errors = TRUE;
-  }
-  else {
-    setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
-  }
+        $app_id = $db->lastInsertId();
 
-// *************
-// TODO: тут необходимо проверить правильность заполнения всех остальных полей.
-// Сохранить в Cookie признаки ошибок и значения полей.
-// *************
+        foreach ($_POST['languages'] as $lang) {
+            $stmt = $db->prepare("INSERT INTO application_languages VALUES (?,?)");
+            $stmt->execute([$app_id, $lang]);
+        }
 
-  if ($errors) {
-    // При наличии ошибок перезагружаем страницу и завершаем работу скрипта.
+        // ===== GENERATE LOGIN =====
+        $login = 'user'.rand(1000,9999);
+        $password = bin2hex(random_bytes(4));
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+
+        $stmt = $db->prepare("INSERT INTO users (login, password_hash, application_id) VALUES (?,?,?)");
+        $stmt->execute([$login, $hash, $app_id]);
+
+        setcookie('login', $login, time()+3600);
+        setcookie('password', $password, time()+3600);
+    }
+
+    $db->commit();
+
+    setcookie('save','1', time()+3600);
     header('Location: index.php');
-    exit();
-  }
-  else {
-    // Удаляем Cookies с признаками ошибок.
-    setcookie('fio_error', '', 100000);
-    // TODO: тут необходимо удалить остальные Cookies.
-  }
-
-  // Проверяем меняются ли ранее сохраненные данные или отправляются новые.
-  if (!empty($_COOKIE[session_name()]) &&
-      session_start() && !empty($_SESSION['login'])) {
-    // TODO: перезаписать данные в БД новыми данными,
-    // кроме логина и пароля.
-  }
-  else {
-    // Генерируем уникальный логин и пароль.
-    // TODO: сделать механизм генерации, например функциями rand(), uniquid(), md5(), substr().
-    $login = '123';
-    $pass = '123';
-    // Сохраняем в Cookies.
-    setcookie('login', $login);
-    setcookie('pass', $pass);
-
-    // TODO: Сохранение данных формы, логина и хеш md5() пароля в базу данных.
-    // ...
-  }
-
-  // Сохраняем куку с признаком успешного сохранения.
-  setcookie('save', '1');
-
-  // Делаем перенаправление.
-  header('Location: ./');
 }
-
