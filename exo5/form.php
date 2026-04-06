@@ -268,14 +268,14 @@
     <div class="auth-header">
         <?php if (!empty($_SESSION['user_id'])): ?>
             <span class="auth-status">✓ Вы авторизованы</span>
-            <a href="index.php?logout=1" class="logout-btn">🚪 Выйти</a>
+            <a href="index.php?logout=1" class="logout-btn">Выйти</a>
         <?php else: ?>
             <span class="auth-status" style="background: #ff9800;">◯ Гость</span>
-            <a href="login.php" class="logout-btn" style="background: #667eea;">🔑 Войти</a>
+            <a href="login.php" class="logout-btn" style="background: #667eea;">Войти</a>
         <?php endif; ?>
     </div>
 
-    <h1>📝 Анкета</h1>
+    <h1> Анкета</h1>
 
     <!-- Affichage des messages -->
     <?php if (!empty($messages)): ?>
@@ -313,8 +313,8 @@
         <div class="form-group <?php echo isset($errors['gender']) ? 'error-group' : ''; ?>">
             <label class="required">Пол</label>
             <div class="radio-group">
-                <label><input type="radio" name="gender" value="male" <?php echo (($values['gender'] ?? '') == 'male') ? 'checked' : ''; ?>> 👨 Мужской</label>
-                <label><input type="radio" name="gender" value="female" <?php echo (($values['gender'] ?? '') == 'female') ? 'checked' : ''; ?>> 👩 Женский</label>
+                <label><input type="radio" name="gender" value="male" <?php echo (($values['gender'] ?? '') == 'male') ? 'checked' : ''; ?>> Мужской</label>
+                <label><input type="radio" name="gender" value="female" <?php echo (($values['gender'] ?? '') == 'female') ? 'checked' : ''; ?>> Женский</label>
             </div>
         </div>
 
@@ -350,7 +350,7 @@
             </div>
         </div>
 
-        <button type="submit">💾 Сохранить</button>
+        <button type="submit"> Сохранить</button>
     </form>
 </div>
 </body>
