@@ -312,8 +312,8 @@
         <div class="form-group <?php echo isset($errors['gender']) ? 'error-group' : ''; ?>">
             <label class="required">Пол</label>
             <div class="radio-group">
-                <label><input type="radio" name="gender" value="male" <?php echo (($values['gender'] ?? '') == 'male') ? 'checked' : ''; ?>> 👨 Мужской</label>
-                <label><input type="radio" name="gender" value="female" <?php echo (($values['gender'] ?? '') == 'female') ? 'checked' : ''; ?>> 👩 Женский</label>
+                <label><input type="radio" name="gender" value="male" <?php echo (($values['gender'] ?? '') == 'male') ? 'checked' : ''; ?>> Мужской</label>
+                <label><input type="radio" name="gender" value="female" <?php echo (($values['gender'] ?? '') == 'female') ? 'checked' : ''; ?>> Женский</label>
             </div>
         </div>
 
@@ -349,7 +349,7 @@
             </div>
         </div>
 
-        <button type="submit">💾 Сохранить</button>
+        <button type="submit"> Сохранить</button>
     </form>
 </div>
 </body>
