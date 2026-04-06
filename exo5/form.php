@@ -263,17 +263,14 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Header avec statut d'autorisation -->
-    <div class="auth-header">
-        <?php if (!empty($_SESSION['user_id'])): ?>
-            <span class="auth-status">✓ Вы авторизованы</span>
-            <a href="index.php?logout=1" class="logout-btn">Выйти</a>
-        <?php else: ?>
-            <span class="auth-status" style="background: #ff9800;">◯ Гость</span>
-            <a href="login.php" class="logout-btn" style="background: #667eea;">Войти</a>
-        <?php endif; ?>
-    </div>
+<div class="auth-header">
+    <?php if (!empty($_SESSION['user_id'])): ?>
+        <span class="auth-status">✓ Вы авторизованы</span>
+        <a href="index.php?logout=1" class="logout-btn"> Выйти</a>
+    <?php else: ?>
+        <a href="login.php" class="logout-btn" style="background: #667eea;"> Войти</a>
+    <?php endif; ?>
+</div>
 
     <h1> Анкета</h1>
 
