@@ -16,6 +16,13 @@ $messages = [];
 $errors = [];
 $values = [];
 
+// ================= LOGOUT =================
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header('Location: login.php');
+    exit();
+}
+
 // ================= LOGIN =================
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['auth'])) {
 
@@ -30,6 +37,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['auth'])) {
         exit();
     } else {
         $messages[] = "<div class='error'>Неверный логин или пароль</div>";
+        include('login.php');
+        exit();
     }
 }
 
@@ -42,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $messages[] = '<div class="success">Спасибо, результаты сохранены.</div>';
     }
 
-    // LOGIN/PASSWORD SHOW ONCE
-    if (!empty($_COOKIE['login'])) {
+    // LOGIN/PASSWORD SHOW ONCE (только если не авторизован)
+    if (!empty($_COOKIE['login']) && empty($_SESSION['user_id'])) {
         $messages[] = "<div class='success'>
             Логин: " . htmlspecialchars($_COOKIE['login']) . "<br>
             Пароль: " . htmlspecialchars($_COOKIE['password']) . "
@@ -69,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     }
 
-    // VALUES FROM COOKIES
+    // VALUES FROM COOKIES (значения по умолчанию)
     $values['fio'] = $_COOKIE['fio_value'] ?? '';
     $values['phone'] = $_COOKIE['phone_value'] ?? '';
     $values['email'] = $_COOKIE['email_value'] ?? '';
@@ -77,17 +86,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $values['gender'] = $_COOKIE['gender_value'] ?? '';
     $values['biography'] = $_COOKIE['biography_value'] ?? '';
     $values['contract_accepted'] = ($_COOKIE['contract_accepted_value'] ?? '') === 'yes';
-
     $values['languages'] = !empty($_COOKIE['languages_value'])
         ? explode(',', $_COOKIE['languages_value'])
         : [];
 
-    // IF AUTHORIZED → DB PRIORITY
+    // IF AUTHORIZED → DB PRIORITY (приоритет базы данных)
     if (!empty($_SESSION['application_id'])) {
-
         $stmt = $db->prepare("SELECT * FROM application WHERE id=?");
         $stmt->execute([$_SESSION['application_id']]);
-        $values = $stmt->fetch();
+        $dbValues = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($dbValues) {
+            // Объединяем: данные из БД имеют приоритет
+            $values = array_merge($values, $dbValues);
+        }
 
         $stmt = $db->prepare("SELECT language_id FROM application_languages WHERE application_id=?");
         $stmt->execute([$_SESSION['application_id']]);
@@ -183,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
 
     if (!empty($_SESSION['application_id'])) {
 
-        // UPDATE
+        // UPDATE существующей записи
         $stmt = $db->prepare("UPDATE application SET fio=?, phone=?, email=?, birth_date=?, gender=?, biography=?, contract_accepted=? WHERE id=?");
         $stmt->execute([
             $_POST['fio'],
@@ -206,7 +218,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
 
     } else {
 
-        // INSERT
+        // INSERT новой записи
         $stmt = $db->prepare("INSERT INTO application (fio, phone, email, birth_date, gender, biography, contract_accepted) VALUES (?,?,?,?,?,?,?)");
         $stmt->execute([
             $_POST['fio'],
@@ -226,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
         }
 
         // ===== GENERATE LOGIN =====
-        $login = 'user'.rand(1000,9999);
+        $login = 'user' . rand(1000, 9999);
         $password = bin2hex(random_bytes(4));
         $hash = password_hash($password, PASSWORD_DEFAULT);
 
@@ -239,6 +251,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
 
     $db->commit();
 
-    setcookie('save','1', time()+3600);
+    setcookie('save', '1', time()+3600);
     header('Location: index.php');
+    exit();
 }
+?>
