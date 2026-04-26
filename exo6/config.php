@@ -1,8 +1,5 @@
 <?php
-/**
- * db_config.php - Configuration BDD et fonctions communes
- * Respecte les principes DRY et KISS
- */
+
 
 // Identifiants BDD
 define('DB_HOST', 'localhost');
@@ -36,10 +33,7 @@ function getDB() {
     return $db;
 }
 
-/**
- * Retourne la liste des langages de programmation
- * @return array
- */
+
 function getLanguagesList() {
     return [
         1 => 'Pascal',
@@ -57,11 +51,7 @@ function getLanguagesList() {
     ];
 }
 
-/**
- * Valide les données du formulaire
- * @param array $data Données à valider
- * @return array Erreurs trouvées
- */
+
 function validateFormData($data) {
     $errors = [];
     
