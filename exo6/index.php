@@ -4,7 +4,7 @@
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
 
-require_once 'db_config.php';
+require_once 'config.php';
 
 $db = getDB();
 $messages = [];
