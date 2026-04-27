@@ -126,7 +126,7 @@ $messages = [];
 </head>
 <body>
     <div class="login-container">
-        <h1>🔐 Connexion</h1>
+        <h1> Connexion</h1>
 
         <?php if (!empty($messages)): ?>
             <?php foreach ($messages as $msg): ?>
