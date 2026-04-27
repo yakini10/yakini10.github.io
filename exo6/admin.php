@@ -1,6 +1,6 @@
 <?php
 
-require_once 'db_config.php';
+require_once 'config.php';
 $db = getDB();
 
 // CRÉATION DE LA TABLE ADMIN 
@@ -356,7 +356,7 @@ $langs_list = [
     <div class="header">
         <h1> Administration - Gestion des inscriptions</h1>
         <div>
-            <a href="index.php">📝 Formulaire d'inscription</a>
+            <a href="index.php"> Formulaire d'inscription</a>
             <a href="login.php" style="margin-left: 10px; background: #6c757d;"> Connexion utilisateur</a>
         </div>
     </div>
@@ -370,7 +370,7 @@ $langs_list = [
     
     <!-- STATISTIQUES (1 point) -->
     <div class="stats">
-        <h2>📊 Statistiques : Langages de programmation préférés</h2>
+        <h2> Statistiques : Langages de programmation préférés</h2>
         <div class="stats-grid">
             <?php foreach ($statistiques as $stat): ?>
                 <div class="stat-item">
@@ -385,7 +385,7 @@ $langs_list = [
     <?php if ($action === 'edit' && isset($edit_data)): ?>
         <!-- FORMULAIRE D'ÉDITION (2 points) -->
         <div class="form-edit">
-            <h2>✏️ Modifier les données (ID: <?= $id ?>)</h2>
+            <h2> Modifier les données (ID: <?= $id ?>)</h2>
             <form method="POST">
                 <div class="form-group">
                     <label>Nom complet *</label>
@@ -431,7 +431,7 @@ $langs_list = [
                     </label>
                 </div>
                 <button type="submit">💾 Enregistrer</button>
-                <a href="admin.php" class="btn-cancel">❌ Annuler</a>
+                <a href="admin.php" class="btn-cancel"> Annuler</a>
             </form>
         </div>
     <?php else: ?>
@@ -447,7 +447,7 @@ $langs_list = [
                 </thead>
                 <tbody>
                     <?php if (empty($applications)): ?>
-                        <tr><td colspan="8" style="text-align: center; padding: 40px;">📭 Aucune inscription pour le moment</td></tr>
+                        <tr><td colspan="8" style="text-align: center; padding: 40px;"> Aucune inscription pour le moment</td></tr>
                     <?php else: ?>
                         <?php foreach ($applications as $app): ?>
                             <tr>
