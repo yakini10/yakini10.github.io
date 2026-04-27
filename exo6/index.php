@@ -1,7 +1,5 @@
 <?php
-/**
- * index.php - Traitement du formulaire d'inscription
- */
+
 
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
@@ -13,14 +11,14 @@ $messages = [];
 $errors = [];
 $values = [];
 
-// ================= LOGOUT =================
+//  LOGOUT 
 if (isset($_GET['logout'])) {
     session_destroy();
     header('Location: login.php');
     exit();
 }
 
-// ================= TRAITEMENT LOGIN =================
+//  TRAITEMENT LOGIN 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['auth'])) {
     $stmt = $db->prepare("SELECT * FROM users WHERE login = ?");
     $stmt->execute([$_POST['login']]);
@@ -38,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['auth'])) {
     }
 }
 
-// ================= AFFICHAGE GET =================
+//  AFFICHAGE GET 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     
     // Message de succès
@@ -103,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     exit();
 }
 
-// ================= TRAITEMENT POST =================
+//  TRAITEMENT POST 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
     
     $has_errors = false;
@@ -185,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
         setcookie($f . '_error_msg', '', time() - 3600);
     }
     
-    // ================= ENREGISTREMENT EN BDD =================
+    //  ENREGISTREMENT EN BDD 
     $db->beginTransaction();
     
     if (!empty($_SESSION['application_id'])) {
