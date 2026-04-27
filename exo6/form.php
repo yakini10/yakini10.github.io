@@ -283,18 +283,18 @@
         <?php if (!empty($_SESSION['user_id'])): ?>
             <span class="auth-status">✓ Connecté(e)</span>
             <div style="display: flex; gap: 10px;">
-                <a href="admin.php" class="admin-link">🔐 Administration</a>
-                <a href="index.php?logout=1" class="logout-btn">🚪 Se déconnecter</a>
+                <a href="admin.php" class="admin-link"> Administration</a>
+                <a href="index.php?logout=1" class="logout-btn"> Se déconnecter</a>
             </div>
         <?php else: ?>
             <div style="display: flex; gap: 10px; width: 100%; justify-content: flex-end;">
-                <a href="admin.php" class="admin-link">🔐 Administration</a>
-                <a href="login.php" class="logout-btn" style="background: #667eea;">🔑 Se connecter</a>
+                <a href="admin.php" class="admin-link"> Administration</a>
+                <a href="login.php" class="logout-btn" style="background: #667eea;"> Se connecter</a>
             </div>
         <?php endif; ?>
     </div>
 
-    <h1>📝 Formulaire d'inscription</h1>
+    <h1> Formulaire d'inscription</h1>
 
     <?php if (!empty($messages)): ?>
         <?php foreach ($messages as $message): ?>
@@ -361,7 +361,7 @@
             </div>
         </div>
 
-        <button type="submit">💾 Enregistrer</button>
+        <button type="submit"> Enregistrer</button>
     </form>
 </div>
 </body>
