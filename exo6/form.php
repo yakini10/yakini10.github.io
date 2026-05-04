@@ -357,7 +357,7 @@
         <div class="form-group <?php echo isset($errors['contract_accepted']) ? 'error-group' : ''; ?>">
             <div class="checkbox-group">
                 <input type="checkbox" id="contract_accepted" name="contract_accepted" value="yes" <?php echo ($values['contract_accepted'] ?? false) ? 'checked' : ''; ?>>
-                <label for="contract_accepted" class="required">Я принимаю условия договора</label>
+                <label for="contract_accepted" class="required">С контрактом ознакомлен(а)</label>
             </div>
         </div>
 
