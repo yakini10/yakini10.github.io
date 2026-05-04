@@ -1,14 +1,13 @@
 <?php
 
-
-// Identifiants BDD
+// Данные для подключения к БД
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'u82383');
 define('DB_USER', 'u82383');
 define('DB_PASS', 'dt54#FDrt');
 
 /**
- * Retourne une connexion PDO à la base de données
+ * Возвращает PDO подключение к базе данных
  * @return PDO
  */
 function getDB() {
@@ -26,14 +25,17 @@ function getDB() {
                 ]
             );
         } catch (PDOException $e) {
-            die('Erreur de connexion à la base de données');
+            die('Ошибка подключения к базе данных');
         }
     }
     
     return $db;
 }
 
-
+/**
+ * Возвращает список языков программирования
+ * @return array
+ */
 function getLanguagesList() {
     return [
         1 => 'Pascal',
@@ -51,18 +53,17 @@ function getLanguagesList() {
     ];
 }
 
-
 function validateFormData($data) {
     $errors = [];
     
-    if (empty($data['fio'])) $errors['fio'] = 'Veuillez saisir votre nom complet';
-    if (empty($data['phone'])) $errors['phone'] = 'Veuillez saisir votre téléphone';
-    if (empty($data['email'])) $errors['email'] = 'Veuillez saisir votre email';
-    if (empty($data['birth_date'])) $errors['birth_date'] = 'Veuillez saisir votre date de naissance';
-    if (empty($data['gender'])) $errors['gender'] = 'Veuillez sélectionner votre sexe';
-    if (empty($data['languages']) || count($data['languages']) == 0) $errors['languages'] = 'Veuillez sélectionner au moins un langage';
-    if (empty($data['biography'])) $errors['biography'] = 'Veuillez saisir votre biographie';
-    if (empty($data['contract_accepted'])) $errors['contract_accepted'] = 'Veuillez accepter le contrat';
+    if (empty($data['fio'])) $errors['fio'] = 'Пожалуйста, введите ваше полное имя';
+    if (empty($data['phone'])) $errors['phone'] = 'Пожалуйста, введите ваш телефон';
+    if (empty($data['email'])) $errors['email'] = 'Пожалуйста, введите ваш email';
+    if (empty($data['birth_date'])) $errors['birth_date'] = 'Пожалуйста, введите вашу дату рождения';
+    if (empty($data['gender'])) $errors['gender'] = 'Пожалуйста, выберите ваш пол';
+    if (empty($data['languages']) || count($data['languages']) == 0) $errors['languages'] = 'Пожалуйста, выберите хотя бы один язык';
+    if (empty($data['biography'])) $errors['biography'] = 'Пожалуйста, введите вашу биографию';
+    if (empty($data['contract_accepted'])) $errors['contract_accepted'] = 'Пожалуйста, примите условия договора';
     
     return $errors;
 }
