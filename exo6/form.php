@@ -332,7 +332,7 @@
         </div>
 
         <div class="form-group <?php echo isset($errors['languages']) ? 'error-group' : ''; ?>">
-            <label for="languages" class="required">Предпочитаемый(е) язык(и) программирования</label>
+            <label for="languages" class="required">Любимый язык программирования</label>
             <select name="languages[]" id="languages" multiple size="6" class="<?php echo isset($errors['languages']) ? 'error' : ''; ?>">
                 <?php
                 $langs = [
