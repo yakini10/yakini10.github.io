@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Redirection si déjà connecté
+// Перенаправление, если уже авторизован
 if (!empty($_SESSION['user_id'])) {
     header('Location: index.php');
     exit();
@@ -11,10 +11,10 @@ $messages = [];
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Connexion</title>
+    <title>Вход</title>
     <style>
         * {
             margin: 0;
@@ -126,7 +126,7 @@ $messages = [];
 </head>
 <body>
     <div class="login-container">
-        <h1> Connexion</h1>
+        <h1> Вход</h1>
 
         <?php if (!empty($messages)): ?>
             <?php foreach ($messages as $msg): ?>
@@ -136,23 +136,23 @@ $messages = [];
 
         <form action="index.php" method="POST">
             <div class="form-group">
-                <label for="login">Login</label>
-                <input type="text" id="login" name="login" placeholder="Votre identifiant" required autofocus>
+                <label for="login">Логин</label>
+                <input type="text" id="login" name="login" placeholder="Ваш логин" required autofocus>
             </div>
             
             <div class="form-group">
-                <label for="password">Mot de passe</label>
-                <input type="password" id="password" name="password" placeholder="Votre mot de passe" required>
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" placeholder="Ваш пароль" required>
             </div>
             
             <input type="hidden" name="auth" value="1">
             
-            <button type="submit">Se connecter</button>
+            <button type="submit">Войти</button>
         </form>
         
         <div class="info">
-            <p>Après inscription, vous recevrez vos identifiants par courriel.<br>
-            <a href="index.php">← Retour au formulaire d'inscription</a></p>
+            <p>После регистрации вы получите ваши идентификационные данные по электронной почте.<br>
+            <a href="index.php">← Назад к форме регистрации</a></p>
         </div>
     </div>
 </body>
