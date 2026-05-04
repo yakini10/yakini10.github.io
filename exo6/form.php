@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire d'inscription</title>
+    <title>Форма регистрации</title>
     <style>
         * {
             margin: 0;
@@ -281,20 +281,20 @@
 <div class="container">
     <div class="auth-header">
         <?php if (!empty($_SESSION['user_id'])): ?>
-            <span class="auth-status">✓ Connecté(e)</span>
+            <span class="auth-status">✓ Вы вошли</span>
             <div style="display: flex; gap: 10px;">
-                <a href="admin.php" class="admin-link"> Administration</a>
-                <a href="index.php?logout=1" class="logout-btn"> Se déconnecter</a>
+                <a href="admin.php" class="admin-link"> Администрирование</a>
+                <a href="index.php?logout=1" class="logout-btn"> Выйти</a>
             </div>
         <?php else: ?>
             <div style="display: flex; gap: 10px; width: 100%; justify-content: flex-end;">
-                <a href="admin.php" class="admin-link"> Administration</a>
-                <a href="login.php" class="logout-btn" style="background: #667eea;"> Se connecter</a>
+                <a href="admin.php" class="admin-link"> Администрирование</a>
+                <a href="login.php" class="logout-btn" style="background: #667eea;"> Войти</a>
             </div>
         <?php endif; ?>
     </div>
 
-    <h1> Formulaire d'inscription</h1>
+    <h1> Форма регистрации</h1>
 
     <?php if (!empty($messages)): ?>
         <?php foreach ($messages as $message): ?>
@@ -304,35 +304,35 @@
 
     <form action="index.php" method="POST">
         <div class="form-group <?php echo isset($errors['fio']) ? 'error-group' : ''; ?>">
-            <label for="fio" class="required">Nom complet</label>
-            <input type="text" id="fio" name="fio" value="<?php echo htmlspecialchars($values['fio'] ?? ''); ?>" placeholder="Dupont Jean Pierre" class="<?php echo isset($errors['fio']) ? 'error' : ''; ?>">
+            <label for="fio" class="required">Полное имя</label>
+            <input type="text" id="fio" name="fio" value="<?php echo htmlspecialchars($values['fio'] ?? ''); ?>" placeholder="Иванов Иван Иванович" class="<?php echo isset($errors['fio']) ? 'error' : ''; ?>">
         </div>
 
         <div class="form-group <?php echo isset($errors['phone']) ? 'error-group' : ''; ?>">
-            <label for="phone" class="required">Téléphone</label>
-            <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($values['phone'] ?? ''); ?>" placeholder="+33 6 XX XX XX XX" class="<?php echo isset($errors['phone']) ? 'error' : ''; ?>">
+            <label for="phone" class="required">Телефон</label>
+            <input type="tel" id="phone" name="phone" value="<?php echo htmlspecialchars($values['phone'] ?? ''); ?>" placeholder="+7 XXX XXX XX XX" class="<?php echo isset($errors['phone']) ? 'error' : ''; ?>">
         </div>
 
         <div class="form-group <?php echo isset($errors['email']) ? 'error-group' : ''; ?>">
             <label for="email" class="required">E-mail</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($values['email'] ?? ''); ?>" placeholder="exemple@domaine.com" class="<?php echo isset($errors['email']) ? 'error' : ''; ?>">
+            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($values['email'] ?? ''); ?>" placeholder="example@domain.com" class="<?php echo isset($errors['email']) ? 'error' : ''; ?>">
         </div>
 
         <div class="form-group <?php echo isset($errors['birth_date']) ? 'error-group' : ''; ?>">
-            <label for="birth_date" class="required">Date de naissance</label>
+            <label for="birth_date" class="required">Дата рождения</label>
             <input type="date" id="birth_date" name="birth_date" value="<?php echo htmlspecialchars($values['birth_date'] ?? ''); ?>" class="<?php echo isset($errors['birth_date']) ? 'error' : ''; ?>">
         </div>
 
         <div class="form-group <?php echo isset($errors['gender']) ? 'error-group' : ''; ?>">
-            <label class="required">Sexe</label>
+            <label class="required">Пол</label>
             <div class="radio-group">
-                <label><input type="radio" name="gender" value="male" <?php echo (($values['gender'] ?? '') == 'male') ? 'checked' : ''; ?>> Homme</label>
-                <label><input type="radio" name="gender" value="female" <?php echo (($values['gender'] ?? '') == 'female') ? 'checked' : ''; ?>> Femme</label>
+                <label><input type="radio" name="gender" value="male" <?php echo (($values['gender'] ?? '') == 'male') ? 'checked' : ''; ?>> Мужчина</label>
+                <label><input type="radio" name="gender" value="female" <?php echo (($values['gender'] ?? '') == 'female') ? 'checked' : ''; ?>> Женщина</label>
             </div>
         </div>
 
         <div class="form-group <?php echo isset($errors['languages']) ? 'error-group' : ''; ?>">
-            <label for="languages" class="required">Langage(s) de programmation préféré(s)</label>
+            <label for="languages" class="required">Предпочитаемый(е) язык(и) программирования</label>
             <select name="languages[]" id="languages" multiple size="6" class="<?php echo isset($errors['languages']) ? 'error' : ''; ?>">
                 <?php
                 $langs = [
@@ -346,22 +346,22 @@
                 }
                 ?>
             </select>
-            <small>Maintenez Ctrl (ou Cmd) pour sélectionner plusieurs options</small>
+            <small>Удерживайте Ctrl (или Cmd) для выбора нескольких вариантов</small>
         </div>
 
         <div class="form-group <?php echo isset($errors['biography']) ? 'error-group' : ''; ?>">
-            <label for="biography" class="required">Biographie</label>
-            <textarea id="biography" name="biography" rows="5" placeholder="Parlez-nous un peu de vous..." class="<?php echo isset($errors['biography']) ? 'error' : ''; ?>"><?php echo htmlspecialchars($values['biography'] ?? ''); ?></textarea>
+            <label for="biography" class="required">Биография</label>
+            <textarea id="biography" name="biography" rows="5" placeholder="Расскажите немного о себе..." class="<?php echo isset($errors['biography']) ? 'error' : ''; ?>"><?php echo htmlspecialchars($values['biography'] ?? ''); ?></textarea>
         </div>
 
         <div class="form-group <?php echo isset($errors['contract_accepted']) ? 'error-group' : ''; ?>">
             <div class="checkbox-group">
                 <input type="checkbox" id="contract_accepted" name="contract_accepted" value="yes" <?php echo ($values['contract_accepted'] ?? false) ? 'checked' : ''; ?>>
-                <label for="contract_accepted" class="required">J'accepte les conditions du contrat</label>
+                <label for="contract_accepted" class="required">Я принимаю условия договора</label>
             </div>
         </div>
 
-        <button type="submit"> Enregistrer</button>
+        <button type="submit"> Сохранить</button>
     </form>
 </div>
 </body>
