@@ -1,6 +1,5 @@
 <?php
 
-
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
 
@@ -11,14 +10,14 @@ $messages = [];
 $errors = [];
 $values = [];
 
-//  LOGOUT 
+// ВЫХОД
 if (isset($_GET['logout'])) {
     session_destroy();
     header('Location: login.php');
     exit();
 }
 
-//  TRAITEMENT LOGIN 
+// ОБРАБОТКА ВХОДА
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['auth'])) {
     $stmt = $db->prepare("SELECT * FROM users WHERE login = ?");
     $stmt->execute([$_POST['login']]);
@@ -30,35 +29,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['auth'])) {
         header('Location: index.php');
         exit();
     } else {
-        $messages[] = "<div class='error'>Identifiants incorrects</div>";
+        $messages[] = "<div class='error'>Неверные идентификационные данные</div>";
         include('login.php');
         exit();
     }
 }
 
-//  AFFICHAGE GET 
+// ОТОБРАЖЕНИЕ GET
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     
-    // Message de succès
+    // Сообщение об успехе
     if (!empty($_COOKIE['save'])) {
         setcookie('save', '', time() - 3600);
-        $messages[] = '<div class="success">Merci, vos informations ont été enregistrées.</div>';
+        $messages[] = '<div class="success">Спасибо, ваши данные сохранены.</div>';
     }
     
-    // Affichage des identifiants générés (première connexion)
+    // Отображение сгенерированных идентификаторов (первое подключение)
     if (!empty($_COOKIE['login']) && empty($_SESSION['user_id'])) {
         $messages[] = "<div class='success'>
-            Vos identifiants de connexion :<br>
-            <strong>Login :</strong> " . htmlspecialchars($_COOKIE['login']) . "<br>
-            <strong>Mot de passe :</strong> " . htmlspecialchars($_COOKIE['password']) . "<br>
-            <em>Conservez-les précieusement pour vous connecter plus tard.</em>
+            Ваши идентификационные данные для входа:<br>
+            <strong>Логин :</strong> " . htmlspecialchars($_COOKIE['login']) . "<br>
+            <strong>Пароль :</strong> " . htmlspecialchars($_COOKIE['password']) . "<br>
+            <em>Сохраните их для последующих входов.</em>
         </div>";
         
         setcookie('login', '', time() - 3600);
         setcookie('password', '', time() - 3600);
     }
     
-    // Récupération des erreurs depuis cookies
+    // Получение ошибок из cookies
     $error_fields = ['fio', 'phone', 'email', 'birth_date', 'gender', 'languages', 'biography', 'contract_accepted'];
     
     foreach ($error_fields as $field) {
@@ -70,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
     }
     
-    // Récupération des valeurs saisies
+    // Получение введённых значений
     $values['fio'] = $_COOKIE['fio_value'] ?? '';
     $values['phone'] = $_COOKIE['phone_value'] ?? '';
     $values['email'] = $_COOKIE['email_value'] ?? '';
@@ -82,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         ? explode(',', $_COOKIE['languages_value']) 
         : [];
     
-    // Si utilisateur connecté, on donne la priorité aux données BDD
+    // Если пользователь авторизован, приоритет у данных из БД
     if (!empty($_SESSION['application_id'])) {
         $stmt = $db->prepare("SELECT * FROM application WHERE id = ?");
         $stmt->execute([$_SESSION['application_id']]);
@@ -101,73 +100,73 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     exit();
 }
 
-//  TRAITEMENT POST 
+// ОБРАБОТКА POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
     
     $has_errors = false;
     
-    // Fonction pour enregistrer les erreurs en cookie
+    // Функция для сохранения ошибок в cookie
     function setError($field, $msg) {
         setcookie($field . '_error', '1', time() + 3600);
         setcookie($field . '_error_msg', $msg, time() + 3600);
     }
     
-    // Validation FIO
+    // Валидация ФИО
     if (empty($_POST['fio'])) {
         $has_errors = true;
-        setError('fio', 'Veuillez saisir votre nom complet');
+        setError('fio', 'Пожалуйста, введите ваше полное имя');
     }
     setcookie('fio_value', $_POST['fio'] ?? '', time() + 365 * 24 * 3600);
     
-    // Validation Téléphone
+    // Валидация Телефона
     if (empty($_POST['phone'])) {
         $has_errors = true;
-        setError('phone', 'Veuillez saisir votre numéro de téléphone');
+        setError('phone', 'Пожалуйста, введите ваш номер телефона');
     }
     setcookie('phone_value', $_POST['phone'] ?? '', time() + 365 * 24 * 3600);
     
-    // Validation Email
+    // Валидация Email
     if (empty($_POST['email'])) {
         $has_errors = true;
-        setError('email', 'Veuillez saisir votre adresse email');
+        setError('email', 'Пожалуйста, введите ваш адрес email');
     } elseif (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
         $has_errors = true;
-        setError('email', 'Veuillez saisir une adresse email valide');
+        setError('email', 'Пожалуйста, введите действительный адрес email');
     }
     setcookie('email_value', $_POST['email'] ?? '', time() + 365 * 24 * 3600);
     
-    // Validation Date de naissance
+    // Валидация Даты рождения
     if (empty($_POST['birth_date'])) {
         $has_errors = true;
-        setError('birth_date', 'Veuillez saisir votre date de naissance');
+        setError('birth_date', 'Пожалуйста, введите вашу дату рождения');
     }
     setcookie('birth_date_value', $_POST['birth_date'] ?? '', time() + 365 * 24 * 3600);
     
-    // Validation Genre
+    // Валидация Полa
     if (empty($_POST['gender'])) {
         $has_errors = true;
-        setError('gender', 'Veuillez sélectionner votre sexe');
+        setError('gender', 'Пожалуйста, выберите ваш пол');
     }
     setcookie('gender_value', $_POST['gender'] ?? '', time() + 365 * 24 * 3600);
     
-    // Validation Langages
+    // Валидация Языков
     if (empty($_POST['languages'])) {
         $has_errors = true;
-        setError('languages', 'Veuillez sélectionner au moins un langage de programmation');
+        setError('languages', 'Пожалуйста, выберите хотя бы один язык программирования');
     }
     setcookie('languages_value', implode(',', $_POST['languages'] ?? []), time() + 365 * 24 * 3600);
     
-    // Validation Biographie
+    // Валидация Биографии
     if (empty($_POST['biography'])) {
         $has_errors = true;
-        setError('biography', 'Veuillez saisir votre biographie');
+        setError('biography', 'Пожалуйста, введите вашу биографию');
     }
     setcookie('biography_value', $_POST['biography'] ?? '', time() + 365 * 24 * 3600);
     
-    // Validation Contrat
+    // Валидация Договора
     if (empty($_POST['contract_accepted'])) {
         $has_errors = true;
-        setError('contract_accepted', 'Veuillez accepter les conditions du contrat');
+        setError('contract_accepted', 'Пожалуйста, примите условия договора');
     }
     setcookie('contract_accepted_value', isset($_POST['contract_accepted']) ? 'yes' : '', time() + 365 * 24 * 3600);
     
@@ -176,18 +175,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
         exit();
     }
     
-    // Suppression des erreurs
+    // Удаление ошибок
     $fields = ['fio', 'phone', 'email', 'birth_date', 'gender', 'languages', 'biography', 'contract_accepted'];
     foreach ($fields as $f) {
         setcookie($f . '_error', '', time() - 3600);
         setcookie($f . '_error_msg', '', time() - 3600);
     }
     
-    //  ENREGISTREMENT EN BDD 
+    // СОХРАНЕНИЕ В БД
     $db->beginTransaction();
     
     if (!empty($_SESSION['application_id'])) {
-        // MISE À JOUR
+        // ОБНОВЛЕНИЕ
         $stmt = $db->prepare("UPDATE application SET 
             fio = ?, phone = ?, email = ?, birth_date = ?, 
             gender = ?, biography = ?, contract_accepted = ? 
@@ -203,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
             $_SESSION['application_id']
         ]);
         
-        // Mise à jour des langages
+        // Обновление языков
         $stmt = $db->prepare("DELETE FROM application_languages WHERE application_id = ?");
         $stmt->execute([$_SESSION['application_id']]);
         
@@ -213,7 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
         }
         
     } else {
-        // NOUVELLE INSCRIPTION
+        // НОВАЯ РЕГИСТРАЦИЯ
         $stmt = $db->prepare("INSERT INTO application (fio, phone, email, birth_date, gender, biography, contract_accepted) 
                                VALUES (?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([
@@ -228,13 +227,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !isset($_POST['auth'])) {
         
         $app_id = $db->lastInsertId();
         
-        // Enregistrement des langages
+        // Сохранение языков
         foreach ($_POST['languages'] as $lang) {
             $stmt = $db->prepare("INSERT INTO application_languages VALUES (?, ?)");
             $stmt->execute([$app_id, $lang]);
         }
         
-        // Génération des identifiants
+        // Генерация идентификаторов
         $login = 'user' . rand(1000, 9999);
         $password = bin2hex(random_bytes(4));
         $hash = password_hash($password, PASSWORD_DEFAULT);
