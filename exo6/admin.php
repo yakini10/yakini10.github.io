@@ -3,7 +3,7 @@
 require_once 'config.php';
 $db = getDB();
 
-// CRÉATION DE LA TABLE ADMIN 
+// СОЗДАНИЕ ТАБЛИЦЫ ADMIN
 $db->exec("
     CREATE TABLE IF NOT EXISTS admin (
         id INT PRIMARY KEY AUTO_INCREMENT,
@@ -13,26 +13,26 @@ $db->exec("
     )
 ");
 
-// Création d'un admin par défaut si la table est vide
+// Создание администратора по умолчанию, если таблица пуста
 $stmt = $db->query("SELECT COUNT(*) FROM admin");
 if ($stmt->fetchColumn() == 0) {
-    // Mot de passe par défaut : 123 (comme dans l'exemple du prof)
+    // Пароль по умолчанию: 123 (как в примере преподавателя)
     $hash = password_hash('123', PASSWORD_DEFAULT);
     $stmt = $db->prepare("INSERT INTO admin (login, password_hash) VALUES (?, ?)");
     $stmt->execute(['admin', $hash]);
 }
 
-// HTTP AUTHENTIFICATION 
-// Logique identique à l'exemple du professeur, mais avec vérification BDD
+// HTTP АУТЕНТИФИКАЦИЯ
+// Логика идентична примеру преподавателя, но с проверкой через БД
 if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
     header('HTTP/1.1 401 Unauthorized');
     header('WWW-Authenticate: Basic realm="My site"');
-    echo '<h1>401 Authentification requise</h1>';
-    echo '<p>Veuillez entrer vos identifiants administrateur.<br>Login par défaut: admin / 123</p>';
+    echo '<h1>401 Требуется аутентификация</h1>';
+    echo '<p>Пожалуйста, введите ваши административные данные.<br>Логин по умолчанию: admin / 123</p>';
     exit();
 }
 
-// Vérification dans la base de données
+// Проверка в базе данных
 $stmt = $db->prepare("SELECT password_hash FROM admin WHERE login = ?");
 $stmt->execute([$_SERVER['PHP_AUTH_USER']]);
 $admin = $stmt->fetch();
@@ -40,17 +40,17 @@ $admin = $stmt->fetch();
 if (!$admin || !password_verify($_SERVER['PHP_AUTH_PW'], $admin['password_hash'])) {
     header('HTTP/1.1 401 Unauthorized');
     header('WWW-Authenticate: Basic realm="My site"');
-    echo '<h1>401 Accès refusé</h1>';
-    echo '<p>Identifiants administrateur incorrects.</p>';
+    echo '<h1>401 Доступ запрещён</h1>';
+    echo '<p>Неверные административные данные.</p>';
     exit();
 }
 
-// TRAITEMENT DES ACTIONS 
+// ОБРАБОТКА ДЕЙСТВИЙ
 $action = $_GET['action'] ?? 'list';
 $message = null;
 $error = null;
 
-// SUPPRESSION 
+// УДАЛЕНИЕ
 if ($action === 'delete' && isset($_GET['id'])) {
     $id = (int)$_GET['id'];
     
@@ -67,14 +67,14 @@ if ($action === 'delete' && isset($_GET['id'])) {
         $stmt->execute([$id]);
         
         $db->commit();
-        $message = " Données supprimées avec succès.";
+        $message = " Данные успешно удалены.";
     } catch (Exception $e) {
         $db->rollBack();
-        $error = " Erreur lors de la suppression.";
+        $error = " Ошибка при удалении.";
     }
 }
 
-// MODIFICATION 
+// РЕДАКТИРОВАНИЕ
 if ($action === 'edit' && isset($_GET['id'])) {
     $id = (int)$_GET['id'];
     
@@ -109,23 +109,23 @@ if ($action === 'edit' && isset($_GET['id'])) {
             }
             
             $db->commit();
-            $message = " Données modifiées avec succès.";
+            $message = " Данные успешно изменены.";
             header('Location: admin.php');
             exit();
             
         } catch (Exception $e) {
             $db->rollBack();
-            $error = " Erreur lors de la modification.";
+            $error = " Ошибка при изменении.";
         }
     }
     
-    // Récupération des données
+    // Получение данных
     $stmt = $db->prepare("SELECT * FROM application WHERE id = ?");
     $stmt->execute([$id]);
     $edit_data = $stmt->fetch();
     
     if (!$edit_data) {
-        $error = "Données non trouvées";
+        $error = "Данные не найдены";
         $action = 'list';
     } else {
         $stmt = $db->prepare("SELECT language_id FROM application_languages WHERE application_id = ?");
@@ -134,7 +134,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
     }
 }
 
-// ================= AFFICHAGE DES DONNÉES (1 point) =================
+// ================= ОТОБРАЖЕНИЕ ДАННЫХ (1 балл) =================
 $stmt = $db->query("
     SELECT a.*, u.login 
     FROM application a 
@@ -143,7 +143,7 @@ $stmt = $db->query("
 ");
 $applications = $stmt->fetchAll();
 
-// ================= STATISTIQUES (1 point) =================
+// ================= СТАТИСТИКА (1 балл) =================
 $stmt = $db->query("
     SELECT l.id, l.name, COUNT(al.application_id) as nb
     FROM languages l
@@ -161,10 +161,10 @@ $langs_list = [
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Administration - Gestion des inscriptions</title>
+    <title>Администрирование - Управление заявками</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -354,10 +354,10 @@ $langs_list = [
 <body>
 <div class="container">
     <div class="header">
-        <h1> Administration - Gestion des inscriptions</h1>
+        <h1> Администрирование - Управление заявками</h1>
         <div>
-            <a href="index.php"> Formulaire d'inscription</a>
-            <a href="login.php" style="margin-left: 10px; background: #6c757d;"> Connexion utilisateur</a>
+            <a href="index.php"> Форма регистрации</a>
+            <a href="login.php" style="margin-left: 10px; background: #6c757d;"> Вход пользователя</a>
         </div>
     </div>
     
@@ -368,31 +368,31 @@ $langs_list = [
         <div class="error"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
     
-    <!-- STATISTIQUES (1 point) -->
+    <!-- СТАТИСТИКА (1 балл) -->
     <div class="stats">
-        <h2> Statistiques : Langages de programmation préférés</h2>
+        <h2> Статистика: Предпочитаемые языки программирования</h2>
         <div class="stats-grid">
             <?php foreach ($statistiques as $stat): ?>
                 <div class="stat-item">
                     <div class="lang"><?= htmlspecialchars($stat['name']) ?></div>
                     <div class="count"><?= $stat['nb'] ?></div>
-                    <div class="lang"><?= $stat['nb'] == 1 ? 'personne' : 'personnes' ?></div>
+                    <div class="lang"><?= $stat['nb'] == 1 ? 'человек' : 'человек' ?></div>
                 </div>
             <?php endforeach; ?>
         </div>
     </div>
     
     <?php if ($action === 'edit' && isset($edit_data)): ?>
-        <!-- FORMULAIRE D'ÉDITION (2 points) -->
+        <!-- ФОРМА РЕДАКТИРОВАНИЯ (2 балла) -->
         <div class="form-edit">
-            <h2> Modifier les données (ID: <?= $id ?>)</h2>
+            <h2> Редактирование данных (ID: <?= $id ?>)</h2>
             <form method="POST">
                 <div class="form-group">
-                    <label>Nom complet *</label>
+                    <label>Полное имя *</label>
                     <input type="text" name="fio" value="<?= htmlspecialchars($edit_data['fio']) ?>" required>
                 </div>
                 <div class="form-group">
-                    <label>Téléphone *</label>
+                    <label>Телефон *</label>
                     <input type="tel" name="phone" value="<?= htmlspecialchars($edit_data['phone']) ?>" required>
                 </div>
                 <div class="form-group">
@@ -400,18 +400,18 @@ $langs_list = [
                     <input type="email" name="email" value="<?= htmlspecialchars($edit_data['email']) ?>" required>
                 </div>
                 <div class="form-group">
-                    <label>Date de naissance</label>
+                    <label>Дата рождения</label>
                     <input type="date" name="birth_date" value="<?= htmlspecialchars($edit_data['birth_date']) ?>">
                 </div>
                 <div class="form-group">
-                    <label>Genre</label>
+                    <label>Пол</label>
                     <select name="gender">
-                        <option value="male" <?= $edit_data['gender'] == 'male' ? 'selected' : '' ?>>Homme</option>
-                        <option value="female" <?= $edit_data['gender'] == 'female' ? 'selected' : '' ?>>Femme</option>
+                        <option value="male" <?= $edit_data['gender'] == 'male' ? 'selected' : '' ?>>Мужчина</option>
+                        <option value="female" <?= $edit_data['gender'] == 'female' ? 'selected' : '' ?>>Женщина</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Langages préférés (Ctrl+clic)</label>
+                    <label>Предпочитаемые языки (Ctrl+клик)</label>
                     <select name="languages[]" multiple size="6">
                         <?php foreach ($langs_list as $id_lang => $name): ?>
                             <option value="<?= $id_lang ?>" <?= in_array($id_lang, $edit_languages) ? 'selected' : '' ?>>
@@ -421,33 +421,33 @@ $langs_list = [
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Biographie</label>
+                    <label>Биография</label>
                     <textarea name="biography" rows="4"><?= htmlspecialchars($edit_data['biography']) ?></textarea>
                 </div>
                 <div class="form-group">
                     <label>
                         <input type="checkbox" name="contract_accepted" value="1" <?= $edit_data['contract_accepted'] ? 'checked' : '' ?>>
-                        J'accepte les conditions du contrat
+                        Я принимаю условия договора
                     </label>
                 </div>
-                <button type="submit">💾 Enregistrer</button>
-                <a href="admin.php" class="btn-cancel"> Annuler</a>
+                <button type="submit">💾 Сохранить</button>
+                <a href="admin.php" class="btn-cancel"> Отмена</a>
             </form>
         </div>
     <?php else: ?>
-        <!-- TABLEAU DES DONNÉES (1 point) -->
+        <!-- ТАБЛИЦА ДАННЫХ (1 балл) -->
         <div class="table-wrapper">
             <table>
                 <thead>
                     <tr>
-                        <th>ID</th><th>Nom complet</th><th>Email</th><th>Téléphone</th>
-                        <th>Date naissance</th><th>Genre</th><th>Login</th>
-                        <th>Actions</th>
+                        <th>ID</th><th>Полное имя</th><th>Email</th><th>Телефон</th>
+                        <th>Дата рождения</th><th>Пол</th><th>Логин</th>
+                        <th>Действия</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($applications)): ?>
-                        <tr><td colspan="8" style="text-align: center; padding: 40px;"> Aucune inscription pour le moment</td></tr>
+                        <tr><td colspan="8" style="text-align: center; padding: 40px;"> Нет ни одной заявки на данный момент</td></tr>
                     <?php else: ?>
                         <?php foreach ($applications as $app): ?>
                             <tr>
@@ -456,13 +456,13 @@ $langs_list = [
                                 <td><?= htmlspecialchars($app['email']) ?></td>
                                 <td><?= htmlspecialchars($app['phone']) ?></td>
                                 <td><?= htmlspecialchars($app['birth_date']) ?></td>
-                                <td><?= $app['gender'] == 'male' ? ' Homme' : ' Femme' ?></td>
+                                <td><?= $app['gender'] == 'male' ? ' Мужчина' : ' Женщина' ?></td>
                                 <td><?= htmlspecialchars($app['login'] ?? '—') ?></td>
                                 <td>
-                                    <a href="admin.php?action=edit&id=<?= $app['id'] ?>" class="btn btn-edit"> Modifier</a>
+                                    <a href="admin.php?action=edit&id=<?= $app['id'] ?>" class="btn btn-edit"> Редактировать</a>
                                     <a href="admin.php?action=delete&id=<?= $app['id'] ?>" 
                                        class="btn btn-delete" 
-                                       onclick="return confirm(' Supprimer définitivement cette inscription ?')"> Supprimer</a>
+                                       onclick="return confirm(' Удалить эту заявку навсегда?')"> Удалить</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -471,8 +471,8 @@ $langs_list = [
             </table>
         </div>
         <div class="footer-note">
-            Total : <?= count($applications) ?> inscription(s) • 
-            Connecté en tant que : <strong><?= htmlspecialchars($_SERVER['PHP_AUTH_USER']) ?></strong>
+            Всего: <?= count($applications) ?> заявка(и) • 
+            Вы вошли как: <strong><?= htmlspecialchars($_SERVER['PHP_AUTH_USER']) ?></strong>
         </div>
     <?php endif; ?>
 </div>
