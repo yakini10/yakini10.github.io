@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Форма регистрации</title>
+    <title>Анкета</title>
     <style>
         * {
             margin: 0;
@@ -281,7 +281,7 @@
 <div class="container">
     <div class="auth-header">
         <?php if (!empty($_SESSION['user_id'])): ?>
-            <span class="auth-status">✓ Вы вошли</span>
+            <span class="auth-status"> Вы вошли</span>
             <div style="display: flex; gap: 10px;">
                 <a href="admin.php" class="admin-link"> Администрирование</a>
                 <a href="index.php?logout=1" class="logout-btn"> Выйти</a>
@@ -294,7 +294,7 @@
         <?php endif; ?>
     </div>
 
-    <h1> Форма регистрации</h1>
+    <h1> Анкета</h1>
 
     <?php if (!empty($messages)): ?>
         <?php foreach ($messages as $message): ?>
@@ -304,7 +304,7 @@
 
     <form action="index.php" method="POST">
         <div class="form-group <?php echo isset($errors['fio']) ? 'error-group' : ''; ?>">
-            <label for="fio" class="required">Полное имя</label>
+            <label for="fio" class="required">ФИО</label>
             <input type="text" id="fio" name="fio" value="<?php echo htmlspecialchars($values['fio'] ?? ''); ?>" placeholder="Иванов Иван Иванович" class="<?php echo isset($errors['fio']) ? 'error' : ''; ?>">
         </div>
 
@@ -326,8 +326,8 @@
         <div class="form-group <?php echo isset($errors['gender']) ? 'error-group' : ''; ?>">
             <label class="required">Пол</label>
             <div class="radio-group">
-                <label><input type="radio" name="gender" value="male" <?php echo (($values['gender'] ?? '') == 'male') ? 'checked' : ''; ?>> Мужчина</label>
-                <label><input type="radio" name="gender" value="female" <?php echo (($values['gender'] ?? '') == 'female') ? 'checked' : ''; ?>> Женщина</label>
+                <label><input type="radio" name="gender" value="male" <?php echo (($values['gender'] ?? '') == 'male') ? 'checked' : ''; ?>> Мужской</label>
+                <label><input type="radio" name="gender" value="female" <?php echo (($values['gender'] ?? '') == 'female') ? 'checked' : ''; ?>> Женский</label>
             </div>
         </div>
 
