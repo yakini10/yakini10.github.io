@@ -22,7 +22,7 @@ if ($stmt->fetchColumn() == 0) {
     $stmt->execute(['admin', $hash]);
 }
 
-// ==================== AUTHENTIFICATION PAR SESSION ====================
+// AUTHENTIFICATION PAR SESSION 
 $admin_logged_in = !empty($_SESSION['admin_logged_in']);
 
 // Déconnexion
@@ -104,7 +104,7 @@ if (!$admin_logged_in) {
     </head>
     <body>
         <div class="login-form">
-            <h1>🔐 Администрирование</h1>
+            <h1> Администрирование</h1>
             <?php if (isset($auth_error)): ?>
                 <div class="error"><?= htmlspecialchars($auth_error) ?></div>
             <?php endif; ?>
@@ -130,7 +130,7 @@ if (!$admin_logged_in) {
     exit();
 }
 
-// ==================== SUITE DU CODE ADMIN (si authentifié) ====================
+
 // ОБРАБОТКА ДЕЙСТВИЙ
 $action = $_GET['action'] ?? 'list';
 $message = null;
