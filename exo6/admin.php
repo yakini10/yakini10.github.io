@@ -187,11 +187,46 @@ $langs_list = getLanguagesList();
 <?php if ($action === 'edit' && $edit_data): ?>
 
 <h2>Редактирование</h2>
+<h2>Редактирование</h2>
+
 <form method="POST">
-<input name="fio" value="<?= htmlspecialchars($edit_data['fio']) ?>">
-<input name="phone" value="<?= htmlspecialchars($edit_data['phone']) ?>">
-<input name="email" value="<?= htmlspecialchars($edit_data['email']) ?>">
-<button>Сохранить</button>
+
+    <input name="fio" value="<?= htmlspecialchars($edit_data['fio'] ?? '') ?>" placeholder="ФИО">
+
+    <input name="phone" value="<?= htmlspecialchars($edit_data['phone'] ?? '') ?>" placeholder="Téléphone">
+
+    <input name="email" value="<?= htmlspecialchars($edit_data['email'] ?? '') ?>" placeholder="Email">
+
+    <br><br>
+
+    <label>Date de naissance</label>
+    <input type="date" name="birth_date"
+           value="<?= htmlspecialchars($edit_data['birth_date'] ?? '') ?>">
+
+    <br><br>
+
+    <label>Genre</label>
+    <select name="gender">
+        <option value="male" <?= ($edit_data['gender'] ?? '') === 'male' ? 'selected' : '' ?>>Homme</option>
+        <option value="female" <?= ($edit_data['gender'] ?? '') === 'female' ? 'selected' : '' ?>>Femme</option>
+    </select>
+
+    <br><br>
+
+    <label>Biographie</label><br>
+    <textarea name="biography" rows="5"><?= htmlspecialchars($edit_data['biography'] ?? '') ?></textarea>
+
+    <br><br>
+
+    <label>
+        <input type="checkbox" name="contract_accepted"
+            <?= !empty($edit_data['contract_accepted']) ? 'checked' : '' ?>>
+        Contrat accepté
+    </label>
+
+    <br><br>
+
+    <button>Сохранить</button>
 </form>
 
 <?php else: ?>
