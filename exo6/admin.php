@@ -85,24 +85,34 @@ if ($action === 'edit' && isset($_GET['id'])) {
 
             $db->prepare("
                 UPDATE application SET 
-                fio=?, phone=?, email=?, birth_date=?, gender=?, biography=?, contract_accepted=?
-                WHERE id=?
+                    fio = ?,
+                    phone = ?,
+                    email = ?,
+                    birth_date = ?,
+                    gender = ?,
+                    biography = ?,
+                    contract_accepted = ?
+                WHERE id = ?
             ")->execute([
-                $_POST['fio'],
-                $_POST['phone'],
-                $_POST['email'],
-                $_POST['birth_date'],
-                $_POST['gender'],
-                $_POST['biography'],
+                $_POST['fio'] ?? '',
+                $_POST['phone'] ?? '',
+                $_POST['email'] ?? '',
+                $_POST['birth_date'] ?? null,
+                $_POST['gender'] ?? null,
+                $_POST['biography'] ?? null,
                 isset($_POST['contract_accepted']) ? 1 : 0,
                 $id
             ]);
 
+            // LANGUAGES RESET
             $db->prepare("DELETE FROM application_languages WHERE application_id=?")->execute([$id]);
 
-            if (!empty($_POST['languages'])) {
+            if (!empty($_POST['languages']) && is_array($_POST['languages'])) {
                 foreach ($_POST['languages'] as $lang) {
-                    $db->prepare("INSERT INTO application_languages VALUES (?, ?)")->execute([$id, $lang]);
+                    $db->prepare("
+                        INSERT INTO application_languages (application_id, language_id)
+                        VALUES (?, ?)
+                    ")->execute([$id, $lang]);
                 }
             }
 
