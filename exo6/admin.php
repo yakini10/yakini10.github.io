@@ -1,19 +1,14 @@
 <?php
 
-/**
- * ЗАДАНИЕ 6
- * Административная панель с HTTP-авторизацией
- * Реализованы: просмотр, удаление, редактирование, статистика
- * Хранение логина/хеша администратора в отдельной таблице БД
- */
+
 
 require_once 'config.php';
 
 $db = getDB();
 
-// ============================================
-// 1. СОЗДАНИЕ ТАБЛИЦЫ ADMIN (если не существует)
-// ============================================
+
+//  СОЗДАНИЕ ТАБЛИЦЫ ADMIN 
+
 $db->exec("
     CREATE TABLE IF NOT EXISTS admin (
         id INT PRIMARY KEY AUTO_INCREMENT,
@@ -23,9 +18,7 @@ $db->exec("
     )
 ");
 
-// ============================================
-// 2. СОЗДАНИЕ АДМИНИСТРАТОРА ПО УМОЛЧАНИЮ (если таблица пуста)
-// ============================================
+//  СОЗДАНИЕ АДМИНИСТРАТОРА ПО УМОЛЧАНИЮ 
 $stmt = $db->query("SELECT COUNT(*) FROM admin");
 if ($stmt->fetchColumn() == 0) {
     $hash = password_hash('123', PASSWORD_DEFAULT);
@@ -33,9 +26,9 @@ if ($stmt->fetchColumn() == 0) {
     $stmt->execute(['admin', $hash]);
 }
 
-// ============================================
-// 3. HTTP-АВТОРИЗАЦИЯ (проверка из таблицы БД)
-// ============================================
+
+// HTTP-АВТОРИЗАЦИЯ (проверка из таблицы БД)
+
 $auth_required = true;
 
 if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
@@ -58,16 +51,13 @@ if ($auth_required) {
     exit();
 }
 
-// ============================================
-// 4. ОБРАБОТКА ДЕЙСТВИЙ (удаление, редактирование)
-// ============================================
+//  ОБРАБОТКА ДЕЙСТВИЙ (удаление, редактирование)
 $action = $_GET['action'] ?? 'list';
 $message = null;
 $error = null;
 
-// -----------------------------------------------------------------
-// УДАЛЕНИЕ данных (1 балл)
-// -----------------------------------------------------------------
+
+// УДАЛЕНИЕ данных 
 if ($action === 'delete' && isset($_GET['id'])) {
     $id = (int)$_GET['id'];
     
@@ -87,16 +77,16 @@ if ($action === 'delete' && isset($_GET['id'])) {
         $stmt->execute([$id]);
         
         $db->commit();
-        $message = "✅ Данные успешно удалены.";
+        $message = " Данные успешно удалены.";
     } catch (Exception $e) {
         $db->rollBack();
-        $error = "❌ Ошибка при удалении.";
+        $error = " Ошибка при удалении.";
     }
 }
 
-// -----------------------------------------------------------------
-// РЕДАКТИРОВАНИЕ данных (2 балла)
-// -----------------------------------------------------------------
+
+// РЕДАКТИРОВАНИЕ данных 
+
 $edit_data = null;
 $edit_languages = [];
 
@@ -142,13 +132,13 @@ if ($action === 'edit' && isset($_GET['id'])) {
             }
             
             $db->commit();
-            $message = "✅ Данные успешно изменены.";
+            $message = " Данные успешно изменены.";
             header('Location: admin.php');
             exit();
             
         } catch (Exception $e) {
             $db->rollBack();
-            $error = "❌ Ошибка при изменении.";
+            $error = " Ошибка при изменении.";
         }
     }
     
@@ -158,7 +148,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
     $edit_data = $stmt->fetch();
     
     if (!$edit_data) {
-        $error = "❌ Данные не найдены";
+        $error = " Данные не найдены";
         $action = 'list';
     } else {
         // Получаем выбранные языки
@@ -168,9 +158,9 @@ if ($action === 'edit' && isset($_GET['id'])) {
     }
 }
 
-// ============================================
-// 5. ПОЛУЧЕНИЕ ВСЕХ ДАННЫХ ДЛЯ ОТОБРАЖЕНИЯ (1 балл)
-// ============================================
+
+// ПОЛУЧЕНИЕ ВСЕХ ДАННЫХ ДЛЯ ОТОБРАЖЕНИЯ 
+
 $stmt = $db->query("
     SELECT a.*, u.login 
     FROM application a 
@@ -179,9 +169,8 @@ $stmt = $db->query("
 ");
 $applications = $stmt->fetchAll();
 
-// ============================================
-// 6. СТАТИСТИКА по языкам программирования (1 балл)
-// ============================================
+//  СТАТИСТИКА по языкам программирования 
+
 $stmt = $db->query("
     SELECT l.id, l.name, COUNT(al.application_id) as count 
     FROM languages l
@@ -398,10 +387,10 @@ $langs_list = [
 <body>
 <div class="container">
     <div class="header">
-        <h1>🔐 Администрирование - Управление заявками</h1>
+        <h1>Администрирование </h1>
         <div>
-            <a href="index.php">📝 Форма регистрации</a>
-            <a href="login.php" style="margin-left: 10px; background: #6c757d;">👤 Вход пользователя</a>
+            <a href="index.php"> Анкета </a>
+            <a href="login.php" style="margin-left: 10px; background: #6c757d;"> Вход</a>
         </div>
     </div>
     
@@ -412,9 +401,9 @@ $langs_list = [
         <div class="error"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
     
-    <!-- СТАТИСТИКА (1 балл) -->
+    <!-- СТАТИСТИКА -->
     <div class="stats">
-        <h2>📊 Статистика: Предпочитаемые языки программирования</h2>
+        <h2>Статистика: Предпочитаемые языки программирования</h2>
         <div class="stats-grid">
             <?php foreach ($statistics as $stat): ?>
                 <div class="stat-item">
@@ -426,9 +415,9 @@ $langs_list = [
     </div>
     
     <?php if ($action === 'edit' && $edit_data): ?>
-        <!-- ФОРМА РЕДАКТИРОВАНИЯ (2 балла) -->
+        <!-- ФОРМА РЕДАКТИРОВАНИЯ ) -->
         <div class="form-edit">
-            <h2>✏️ Редактирование данных (ID: <?= $id ?>)</h2>
+            <h2> Редактирование данных (ID: <?= $id ?>)</h2>
             <form method="POST">
                 <div class="form-group">
                     <label>Полное имя *</label>
@@ -473,8 +462,8 @@ $langs_list = [
                         Я принимаю условия договора
                     </label>
                 </div>
-                <button type="submit">💾 Сохранить</button>
-                <a href="admin.php" class="btn-cancel">❌ Отмена</a>
+                <button type="submit"> Сохранить</button>
+                <a href="admin.php" class="btn-cancel"> Отмена</a>
             </form>
         </div>
     <?php else: ?>
@@ -497,7 +486,7 @@ $langs_list = [
                     <?php if (empty($applications)): ?>
                         <tr>
                             <td colspan="8" style="text-align: center; padding: 40px;">
-                                📭 Нет ни одной заявки на данный момент
+                                 Нет ни одной заявки на данный момент
                             </td>
                         </tr>
                     <?php else: ?>
@@ -511,10 +500,10 @@ $langs_list = [
                                 <td><?= $app['gender'] == 'male' ? 'Мужской' : 'Женский' ?></td>
                                 <td><?= htmlspecialchars($app['login'] ?? '—') ?></td>
                                 <td>
-                                    <a href="admin.php?action=edit&id=<?= $app['id'] ?>" class="btn btn-edit">✏️ Редактировать</a>
+                                    <a href="admin.php?action=edit&id=<?= $app['id'] ?>" class="btn btn-edit"> Редактировать</a>
                                     <a href="admin.php?action=delete&id=<?= $app['id'] ?>" 
                                        class="btn btn-delete" 
-                                       onclick="return confirm('🗑️ Удалить эту заявку навсегда?')">🗑️ Удалить</a>
+                                       onclick="return confirm(' Удалить эту заявку навсегда?')">Удалить</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -523,7 +512,7 @@ $langs_list = [
             </table>
         </div>
         <div class="footer-note">
-            ✅ Всего: <?= count($applications) ?> заявка(и) • Вы вошли как администратор
+            Всего: <?= count($applications) ?>  Вы вошли как администратор
         </div>
     <?php endif; ?>
 </div>
