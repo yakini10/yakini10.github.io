@@ -31,24 +31,14 @@ if ($stmt->fetchColumn() == 0) {
 
 $auth_required = true;
 
-if (!empty($_SERVER['PHP_AUTH_USER']) && !empty($_SERVER['PHP_AUTH_PW'])) {
-    $stmt = $db->prepare("SELECT password_hash FROM admin WHERE login = ?");
-    $stmt->execute([$_SERVER['PHP_AUTH_USER']]);
-    $admin = $stmt->fetch();
-    
-    if ($admin && password_verify($_SERVER['PHP_AUTH_PW'], $admin['password_hash'])) {
-        $auth_required = false;
-    }
-}
-
-if ($auth_required) {
-    header('HTTP/1.1 401 Unauthorized');
-    header('WWW-Authenticate: Basic realm="Admin Panel"');
-    echo '<h1>401 Требуется авторизация</h1>';
-    echo '<p>Введите логин и пароль администратора.<br>';
-    echo 'Логин по умолчанию: <strong>admin</strong><br>';
-    echo 'Пароль по умолчанию: <strong>123</strong></p>';
-    exit();
+if (empty($_SERVER['PHP_AUTH_USER']) ||
+    empty($_SERVER['PHP_AUTH_PW']) ||
+    $_SERVER['PHP_AUTH_USER'] != 'admin' ||
+    md5($_SERVER['PHP_AUTH_PW']) != md5('123')) {
+  header('HTTP/1.1 401 Unanthorized');
+  header('WWW-Authenticate: Basic realm="My site"');
+  print('<h1>401 Требуется авторизация</h1>');
+  exit();
 }
 
 //  ОБРАБОТКА ДЕЙСТВИЙ (удаление, редактирование)
