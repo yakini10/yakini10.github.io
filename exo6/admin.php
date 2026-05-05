@@ -4,9 +4,7 @@ require_once 'config.php';
 
 $db = getDB();
 
-//
-// 1. TABLE ADMIN + ADMIN PAR DÉFAUT
-//
+// ABLE ADMIN + ADMIN PAR DÉFAUT
 $db->exec("
     CREATE TABLE IF NOT EXISTS admin (
         id INT PRIMARY KEY AUTO_INCREMENT,
@@ -23,9 +21,8 @@ if ($stmt->fetchColumn() == 0) {
     $stmt->execute(['admin', $hash]);
 }
 
-//
-// 2. HTTP AUTH (OBLIGATOIRE)
-//
+
+// HTTP AUTH 
 if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
     header('HTTP/1.1 401 Unauthorized');
     header('WWW-Authenticate: Basic realm="Admin panel"');
@@ -42,16 +39,12 @@ if (!$admin || !password_verify($_SERVER['PHP_AUTH_PW'], $admin['password_hash']
     exit('Неверные данные');
 }
 
-//
-// 3. ACTIONS
-//
+// ACTIONS
 $action = $_GET['action'] ?? 'list';
 $message = null;
 $error = null;
 
-//
 // DELETE
-//
 if ($action === 'delete' && isset($_GET['id'])) {
     $id = (int)$_GET['id'];
 
@@ -69,10 +62,7 @@ if ($action === 'delete' && isset($_GET['id'])) {
         $error = "Ошибка удаления.";
     }
 }
-
-//
 // EDIT
-//
 $edit_data = null;
 $edit_languages = [];
 
@@ -140,9 +130,7 @@ if ($action === 'edit' && isset($_GET['id'])) {
     }
 }
 
-//
-// 4. DATA
-//
+// DATA
 $applications = $db->query("
     SELECT a.*, u.login 
     FROM application a
@@ -150,9 +138,7 @@ $applications = $db->query("
     ORDER BY a.id DESC
 ")->fetchAll();
 
-//
-// 5. STATS
-//
+//  STATS
 $statistiques = $db->query("
     SELECT l.name, COUNT(al.application_id) as nb
     FROM programming_languages l
@@ -186,7 +172,6 @@ $langs_list = getLanguagesList();
 
 <?php if ($action === 'edit' && $edit_data): ?>
 
-<h2>Редактирование</h2>
 <h2>Редактирование</h2>
 
 <form method="POST">
