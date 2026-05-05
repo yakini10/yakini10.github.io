@@ -33,22 +33,18 @@ if (isset($_GET['logout_admin'])) {
 }
 
 // Traitement du formulaire de connexion
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admin_login'])) {
-    $stmt = $db->prepare("SELECT password_hash FROM admin WHERE login = ?");
-    $stmt->execute([$_POST['login']]);
-    $admin = $stmt->fetch();
-    
-    if ($admin && password_verify($_POST['password'], $admin['password_hash'])) {
-        $_SESSION['admin_logged_in'] = true;
-        header('Location: admin.php');
-        exit();
-    } else {
-        $auth_error = "Неверные логин или пароль";
-    }
+if (empty($_SERVER['PHP_AUTH_USER']) ||
+    empty($_SERVER['PHP_AUTH_PW']) ||
+    $_SERVER['PHP_AUTH_USER'] != 'admin' ||
+    md5($_SERVER['PHP_AUTH_PW']) != md5('123')) {
+  header('HTTP/1.1 401 Unanthorized');
+  header('WWW-Authenticate: Basic realm="My site"');
+  print('<h1>401 Требуется авторизация</h1>');
+  exit();
 }
 
 // Formulaire de connexion si non authentifié
-if (!$admin_logged_in) {
+
     ?>
     <!DOCTYPE html>
     <html lang="ru">
@@ -128,7 +124,7 @@ if (!$admin_logged_in) {
     </html>
     <?php
     exit();
-}
+
 
 
 // ОБРАБОТКА ДЕЙСТВИЙ
