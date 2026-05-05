@@ -145,9 +145,10 @@ $applications = $db->query("
 //
 $statistiques = $db->query("
     SELECT l.name, COUNT(al.application_id) as nb
-    FROM languages l
+    FROM programming_languages l
     LEFT JOIN application_languages al ON l.id = al.language_id
     GROUP BY l.id
+    ORDER BY nb DESC
 ")->fetchAll();
 
 $langs_list = getLanguagesList();
