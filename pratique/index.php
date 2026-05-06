@@ -183,7 +183,7 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
                 </div>
                 <div class="action-buttons">
                     <a href="form.php?modifier_id=<?= $animal['id'] ?>" class="btn btn-small btn-warning"> Изменить</a>
-                    <a href="supprimer.php?id=<?= $animal['id'] ?>" class="btn btn-small btn-danger" onclick="return confirm('Удалить <?= htmlspecialchars($animal['nom']) ?> ?')">🗑️ Удалить</a>
+                    <a href="supprimer.php?id=<?= $animal['id'] ?>" class="btn btn-small btn-danger" onclick="return confirm('Удалить <?= htmlspecialchars($animal['nom']) ?> ?')"> Удалить</a>
                 </div>
             </div>
             <?php endforeach; ?>
@@ -256,7 +256,7 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
     <div class="row">
         <div class="col">
             <div class="card">
-                <h2>👥 Владельцы</h2>
+                <h2> Владельцы</h2>
                 <ul>
                     <?php foreach($proprietaires as $p): ?>
                         <li><?= htmlspecialchars($p['prenom'] . ' ' . $p['nom']) ?> - <?= $p['telephone'] ?></li>
