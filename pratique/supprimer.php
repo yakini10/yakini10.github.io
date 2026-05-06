@@ -5,7 +5,7 @@ $id = $_GET['id'];
 $stmt = $pdo->prepare("DELETE FROM animaux WHERE id = ?");
 $stmt->execute([$id]);
 
-$_SESSION['message'] = "Animal supprimé !";
+$_SESSION['message'] = "Животное удалено!";
 header('Location: index.php');
 exit();
 ?>
