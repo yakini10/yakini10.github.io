@@ -291,7 +291,7 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
                     <td>
                         <?= $p['nombre_animaux'] ?>
                         <?php if($p['nombre_animaux'] > 0): ?>
-                            <span style="font-size: 11px; color: #2e7d32;"> 🐕</span>
+                            <span style="font-size: 11px; color: #2e7d32;"> </span>
                         <?php endif; ?>
                     </td>
                 </tr>
