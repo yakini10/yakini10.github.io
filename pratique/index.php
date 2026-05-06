@@ -252,18 +252,54 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
         <?php endif; ?>
     </div>
 
-    <!-- БЫСТРЫЕ СПИСКИ -->
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <h2> Владельцы</h2>
-                <ul>
-                    <?php foreach($proprietaires as $p): ?>
-                        <li><?= htmlspecialchars($p['prenom'] . ' ' . $p['nom']) ?> - <?= $p['telephone'] ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            </div>
-        </div>
+<!-- Список владельцев -->
+<div class="card" id="proprietaires">
+    <h2> Список владельцев</h2>
+    <?php
+    $proprietaires_list = $pdo->query("
+        SELECT p.*, 
+               COUNT(a.id) as nombre_animaux
+        FROM proprietaires p
+        LEFT JOIN animaux a ON p.id = a.id_proprietaire
+        GROUP BY p.id
+        ORDER BY p.nom
+    ")->fetchAll();
+    ?>
+    
+    <?php if(empty($proprietaires_list)): ?>
+        <p style="color: #999;">Нет зарегистрированных владельцев</p>
+    <?php else: ?>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Телефон</th>
+                    <th>Email</th>
+                    <th>Животных</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach($proprietaires_list as $p): ?>
+                <tr>
+                    <td><?= $p['id'] ?></td>
+                    <td><?= htmlspecialchars($p['prenom']) ?></td>
+                    <td><?= htmlspecialchars($p['nom']) ?></td>
+                    <td><?= htmlspecialchars($p['telephone']) ?></td>
+                    <td><?= htmlspecialchars($p['email']) ?></td>
+                    <td>
+                        <?= $p['nombre_animaux'] ?>
+                        <?php if($p['nombre_animaux'] > 0): ?>
+                            <span style="font-size: 11px; color: #2e7d32;"> 🐕</span>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</div>
         <div class="col">
             <div class="card">
                 <h2> Список болезней</h2>
