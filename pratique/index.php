@@ -92,7 +92,7 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
             <a href="#animaux">🐕 Animaux</a>
             <a href="#visites">📅 Visites</a>
             <a href="#filtrer">🔍 Filtrer</a>
-            <a href="ajouter.php">➕ Ajouter</a>
+            <a href="form.php">➕ Ajouter</a>
         </div>
     </div>
 
@@ -115,9 +115,9 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
                     <td><?= $animal['age'] ?> ans</td>
                     <td><?= htmlspecialchars($animal['couleur']) ?></td>
                     <td><?= htmlspecialchars($animal['prenom'] . ' ' . $animal['proprietaire_nom']) ?></td>
-                    <td>
-                        <a href="modifier.php?id=<?= $animal['id'] ?>" class="btn btn-small btn-warning">✏️</a>
-                        <a href="supprimer.php?id=<?= $animal['id'] ?>" class="btn btn-small btn-danger" onclick="return confirm('Supprimer ?')">🗑️</a>
+                    <tr>
+                        <a href="form.php?modifier_id=<?= $animal['id'] ?>" class="btn btn-small btn-warning">✏️ Modifier</a>
+                        <a href="supprimer.php?id=<?= $animal['id'] ?>" class="btn btn-small btn-danger" onclick="return confirm('Supprimer ?')">🗑️ Supprimer</a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
