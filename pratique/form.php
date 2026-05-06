@@ -150,7 +150,7 @@ $textBouton = $isModification ? " Сохранить изменения" : " Д�
             <label>Фамилия владельца *</label>
             <input type="text" name="proprietaire_nom" value="<?= $animal ? htmlspecialchars($animal['nom'] ?? '') : '' ?>" required>
             
-            <label>Телефон владельца</label>
+            <label>Телефон владельца *</label>
             <input type="text" name="proprietaire_telephone" value="<?= $animal ? htmlspecialchars($animal['telephone'] ?? '') : '' ?>">
             
             <label>Email владельца</label>
