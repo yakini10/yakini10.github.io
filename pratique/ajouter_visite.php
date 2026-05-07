@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     textarea { min-height: 80px; }
     button { background: #2e7d32; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
     button:hover { background: #1b5e20; }
-    .btn { background: #2e7d32; text-decoration: none; color: white; padding: 10px 20px; display: inline-block; border-radius: 5px; }
+    .btn { background: #666; text-decoration: none; color: white; padding: 10px 20px; display: inline-block; border-radius: 5px; }
     .btn:hover { background: #1b5e20; }
     h1 { color: #2e7d32; text-align: center; }
     label { font-weight: bold; display: block; margin-top: 10px; }
