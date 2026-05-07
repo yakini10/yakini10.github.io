@@ -89,7 +89,7 @@ $textBouton = $isModification ? " Сохранить изменения" : " Д�
     <meta charset="UTF-8">
     <title><?= $titre ?></title>
     <style>
-        body { font-family: 'Segoe UI', Arial; background: #f0f8f0; padding: 20px; }
+        body { font-family: 'Segoe UI', Arial; background: #2e7d32; padding: 20px; }
         .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         input, select { width: 100%; padding: 8px; margin: 5px 0 15px; border: 1px solid #ddd; border-radius: 5px; }
         button { background: <?= $couleurBouton ?>; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
