@@ -8,9 +8,31 @@ $isModification = false;
 // Проверяем, есть ли ID в URL (режим редактирования)
 if (isset($_GET['modifier_id'])) {
     $isModification = true;
-    $stmt = $pdo->prepare("SELECT * FROM animaux WHERE id = ?");
-    $stmt->execute([$_GET['modifier_id']]);
-    $animal = $stmt->fetch();
+// Au lieu de :
+// $stmt = $pdo->prepare("SELECT * FROM animaux WHERE id = ?");
+
+// Utilisez ceci :
+$stmt = $pdo->prepare("
+    SELECT a.*, 
+           p.prenom as proprietaire_prenom, 
+           p.nom as proprietaire_nom, 
+           p.telephone as proprietaire_telephone, 
+           p.email as proprietaire_email,
+           v.date_visite, 
+           v.symptomes, 
+           v.traitement
+    FROM animaux a
+    LEFT JOIN proprietaires p ON a.id_proprietaire = p.id
+    LEFT JOIN (
+        SELECT * FROM visites 
+        WHERE id_animal = ? 
+        ORDER BY date_visite DESC 
+        LIMIT 1
+    ) v ON a.id = v.id_animal
+    WHERE a.id = ?
+");
+$stmt->execute([$_GET['modifier_id'], $_GET['modifier_id']]);
+$animal = $stmt->fetch();
     
     // Если животное не найдено, возвращаемся на главную
     if (!$animal) {
