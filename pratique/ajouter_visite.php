@@ -28,16 +28,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Добавить визит</title>
-    <style>
-        body { font-family: 'Segoe UI', Arial; background: #f0f8f0; padding: 20px; }
-        .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; }
-        input, select, textarea { width: 100%; padding: 8px; margin: 5px 0 15px; border: 1px solid #ddd; border-radius: 5px; }
-        textarea { min-height: 80px; }
-        button { background: #17a2b8; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-        .btn { background: #666; text-decoration: none; color: white; padding: 10px 20px; display: inline-block; border-radius: 5px; }
-        h1 { color: #17a2b8; text-align: center; }
-        label { font-weight: bold; display: block; margin-top: 10px; }
-    </style>
+   <style>
+    body { font-family: 'Segoe UI', Arial; background: #f0f8f0; padding: 20px; }
+    .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; }
+    input, select, textarea { width: 100%; padding: 8px; margin: 5px 0 15px; border: 1px solid #ddd; border-radius: 5px; }
+    textarea { min-height: 80px; }
+    button { background: #2e7d32; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+    button:hover { background: #1b5e20; }
+    .btn { background: #2e7d32; text-decoration: none; color: white; padding: 10px 20px; display: inline-block; border-radius: 5px; }
+    .btn:hover { background: #1b5e20; }
+    h1 { color: #2e7d32; text-align: center; }
+    label { font-weight: bold; display: block; margin-top: 10px; }
+</style>
 </head>
 <body>
 <div class="container">
