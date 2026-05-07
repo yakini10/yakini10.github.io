@@ -149,12 +149,6 @@ $textBouton = $isModification ? " Сохранить изменения" : " Д�
         </div>
     </form>
     
-    <?php if($isModification && $animal): ?>
-        <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; text-align: center;">
-            <p> <strong>Хотите добавить новый визит для этого животного?</strong></p>
-            <a href="visite_ajouter.php?animal_id=<?= $animal['id'] ?>&animal_nom=<?= urlencode($animal['nom']) ?>" class="btn" style="background: #2e7d32;"> Добавить визит</a>
-        </div>
-    <?php endif; ?>
 </div>
 </body>
 </html>
