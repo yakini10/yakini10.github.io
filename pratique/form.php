@@ -163,37 +163,20 @@ $textBouton = $isModification ? " Сохранить изменения" : " Д�
         </div>
         
         <!-- БЛОК: ИНФОРМАЦИЯ О ВЛАДЕЛЬЦЕ -->
-        <div class="section">
-            <h3> ИНФОРМАЦИЯ О ВЛАДЕЛЬЦЕ</h3>
-            
-            <label>Имя владельца *</label>
-            <input type="text" name="proprietaire_prenom" value="<?= $animal ? htmlspecialchars($animal['prenom'] ?? '') : '' ?>" required>
-            
-            <label>Фамилия владельца *</label>
-            <input type="text" name="proprietaire_nom" value="<?= $animal ? htmlspecialchars($animal['nom'] ?? '') : '' ?>" required>
-            
-            <label>Телефон владельца *</label>
-            <input type="text" name="proprietaire_telephone" value="<?= $animal ? htmlspecialchars($animal['telephone'] ?? '') : '' ?>">
-            
-            <label>Email владельца</label>
-            <input type="email" name="proprietaire_email" value="<?= $animal ? htmlspecialchars($animal['email'] ?? '') : '' ?>">
-        </div>
-        
+            <input type="text" name="proprietaire_prenom" value="<?= $animal ? htmlspecialchars($animal['proprietaire_prenom'] ?? '') : '' ?>" required>
+
+            <input type="text" name="proprietaire_nom" value="<?= $animal ? htmlspecialchars($animal['proprietaire_nom'] ?? '') : '' ?>" required>
+
+            <input type="text" name="proprietaire_telephone" value="<?= $animal ? htmlspecialchars($animal['proprietaire_telephone'] ?? '') : '' ?>">
+
+            <input type="email" name="proprietaire_email" value="<?= $animal ? htmlspecialchars($animal['proprietaire_email'] ?? '') : '' ?>">
+
         <!-- БЛОК: ИНФОРМАЦИЯ О ВИЗИТЕ -->
-        <div class="section">
-            <h3> ИНФОРМАЦИЯ О ВИЗИТЕ</h3>
-            
-            <label>Дата визита</label>
-            <input type="date" name="visite_date" value="<?= date('Y-m-d') ?>">
-            
-            <label>Симптомы (жалобы)</label>
-            <textarea name="visite_symptomes" placeholder="Опишите симптомы животного..."></textarea>
-            
-            <label>Назначенное лечение</label>
-            <textarea name="visite_traitement" placeholder="Какое лечение назначено?"></textarea>
-            
-            <p style="font-size: 12px; color: #666; margin-top: 5px;"> Если визит уже был, вы сможете добавить его позже отдельно.</p>
-        </div>
+            <input type="date" name="visite_date" value="<?= $animal && $animal['date_visite'] ? $animal['date_visite'] : date('Y-m-d') ?>">
+
+            <textarea name="visite_symptomes" placeholder="Опишите симптомы животного..."><?= $animal ? htmlspecialchars($animal['symptomes'] ?? '') : '' ?></textarea>
+
+            <textarea name="visite_traitement" placeholder="Какое лечение назначено?"><?= $animal ? htmlspecialchars($animal['traitement'] ?? '') : '' ?></textarea>
         
         <div style="text-align: center; margin-top: 20px;">
             <button type="submit"><?= $textBouton ?></button>
