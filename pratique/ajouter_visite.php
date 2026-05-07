@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 <div class="container">
-    <h1>📅 Добавить новый визит</h1>
+    <h1> Добавить новый визит</h1>
     
     <form method="POST">
         <label>Животное *</label>
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <textarea name="traitement" placeholder="Какое лечение назначено?"></textarea>
         
         <div style="text-align: center; margin-top: 20px;">
-            <button type="submit">💾 Добавить визит</button>
+            <button type="submit"> Добавить визит</button>
             <a href="index.php" class="btn">Отмена</a>
         </div>
     </form>
