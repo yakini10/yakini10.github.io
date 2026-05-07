@@ -158,7 +158,8 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
             <a href="#animaux"> Животные</a>
             <a href="#visites"> Визиты</a>
             <a href="#filtrer"> Фильтр</a>
-            <a href="form.php"> Добавить</a>
+            <a href="form.php"> Добавить животное</a>
+            <a href="visite_ajouter.php" style="background: #17a2b8;"> Добавить визит</a>
         </div>
     </div>
 
