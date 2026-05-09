@@ -238,7 +238,7 @@ $proprietaires_list = $pdo->query("
 
 <div class="nav-fixed">
     <div class="container">
-        <h1>Ветеринарная клиника</h1>
+        <h1>🐾 Ветеринарная клиника</h1>
         <div class="nav">
             <a href="#animaux">Животные</a>
             <a href="#visites">Визиты</a>
