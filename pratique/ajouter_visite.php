@@ -8,18 +8,33 @@ $animaux = $pdo->query("SELECT a.id, a.nom, p.prenom, p.nom as nom_famille
 
 $maladies = $pdo->query("SELECT * FROM maladies ORDER BY nom_maladie")->fetchAll();
 
+$erreurs = [];
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $stmt = $pdo->prepare("INSERT INTO visites (id_animal, date_visite, symptomes, id_maladie, traitement) VALUES (?, ?, ?, ?, ?)");
-    $stmt->execute([
-        $_POST['id_animal'],
-        $_POST['date_visite'],
-        $_POST['symptomes'],
-        $_POST['id_maladie'],
-        $_POST['traitement']
-    ]);
-    $_SESSION['message'] = "Визит успешно добавлен!";
-    header('Location: index.php');
-    exit();
+    if (empty($_POST['id_animal'])) {
+        $erreurs[] = " Пожалуйста, выберите животное!";
+    }
+    
+    if (empty($_POST['date_visite'])) {
+        $erreurs[] = " Пожалуйста, укажите дату визита!";
+    }
+    
+    if (empty($erreurs)) {
+        // Convertir la maladie vide en NULL
+        $id_maladie = !empty($_POST['id_maladie']) ? $_POST['id_maladie'] : NULL;
+        
+        $stmt = $pdo->prepare("INSERT INTO visites (id_animal, date_visite, symptomes, id_maladie, traitement) VALUES (?, ?, ?, ?, ?)");
+        $stmt->execute([
+            $_POST['id_animal'],
+            $_POST['date_visite'],
+            $_POST['symptomes'],
+            $id_maladie,
+            $_POST['traitement']
+        ]);
+        $_SESSION['message'] = " Визит успешно добавлен!";
+        header('Location: index.php');
+        exit();
+    }
 }
 ?>
 
@@ -28,22 +43,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Добавить визит</title>
-   <style>
-    body { font-family: 'Segoe UI', Arial; background: #f0f8f0; padding: 20px; }
-    .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; }
-    input, select, textarea { width: 100%; padding: 8px; margin: 5px 0 15px; border: 1px solid #ddd; border-radius: 5px; }
-    textarea { min-height: 80px; }
-    button { background: #2e7d32; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-    button:hover { background: #1b5e20; }
-    .btn { background: #666; text-decoration: none; color: white; padding: 10px 20px; display: inline-block; border-radius: 5px; }
-    .btn:hover { background: #1b5e20; }
-    h1 { color: #2e7d32; text-align: center; }
-    label { font-weight: bold; display: block; margin-top: 10px; }
-</style>
+    <style>
+        body { font-family: 'Segoe UI', Arial; background: #f0f8f0; padding: 20px; }
+        .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; }
+        input, select, textarea { width: 100%; padding: 8px; margin: 5px 0 15px; border: 1px solid #ddd; border-radius: 5px; }
+        textarea { min-height: 80px; }
+        button { background: #2e7d32; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #1b5e20; }
+        .btn { background: #2e7d32; text-decoration: none; color: white; padding: 10px 20px; display: inline-block; border-radius: 5px; }
+        .btn:hover { background: #1b5e20; }
+        h1 { color: #2e7d32; text-align: center; }
+        label { font-weight: bold; display: block; margin-top: 10px; }
+        .error { color: #c62828; background: #ffebee; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
+    </style>
 </head>
 <body>
 <div class="container">
     <h1> Добавить новый визит</h1>
+    
+    <?php if (!empty($erreurs)): ?>
+        <div class="error">
+            <?php foreach($erreurs as $err): ?>
+                <?= $err ?><br>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
     
     <form method="POST">
         <label>Животное *</label>
