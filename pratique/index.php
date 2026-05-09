@@ -1,6 +1,6 @@
 <?php
 require_once 'config.php';
-
+$pdo->exec("DELETE FROM proprietaires WHERE id NOT IN (SELECT IFNULL(id_proprietaire, 0) FROM animaux)");
 // Получить всех животных
 $animaux = $pdo->query("
     SELECT a.*, p.nom as proprietaire_nom, p.prenom 
@@ -280,7 +280,7 @@ $proprietaires_list = $pdo->query("
                             <span><?= htmlspecialchars($animal['type']) ?></span>
                             <span><?= $animal['age'] ?> лет</span>
                             <span><?= htmlspecialchars($animal['couleur']) ?></span>
-                            <span>👤 <?= htmlspecialchars($animal['prenom'] . ' ' . $animal['proprietaire_nom']) ?></span>
+                            <span> <?= htmlspecialchars($animal['prenom'] . ' ' . $animal['proprietaire_nom']) ?></span>
                         </div>
                     </div>
                     <div class="action-buttons">
@@ -371,7 +371,6 @@ $proprietaires_list = $pdo->query("
             <!-- Кнопка очистки владельцев без животных -->
             <div style="margin-bottom: 15px; text-align: right;">
                 <a href="nettoyer_proprietaires.php" class="btn btn-small btn-clean" onclick="return confirm(' Удалить всех владельцев, у которых нет животных?')">
-                     Очистить владельцев без животных
                 </a>
             </div>
             
