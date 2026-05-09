@@ -155,6 +155,8 @@ $proprietaires_list = $pdo->query("
                 padding: 6px 12px;
             }
         }
+        .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .card h2 { color: #2e7d32; margin-bottom: 15px; border-bottom: 2px solid #2e7d32; padding-bottom: 10px; }
         
         @media (max-width: 480px) {
             body {
