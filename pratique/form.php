@@ -21,6 +21,7 @@ if (isset($_GET['modifier_id'])) {
     $stmt->execute([$_GET['modifier_id']]);
     $animal = $stmt->fetch();
     
+    // Если животное не найдено, возвращаемся на главную
     if (!$animal) {
         header('Location: index.php');
         exit();
@@ -34,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreurs[] = " Пожалуйста, укажите имя животного!";
     }
     if (empty($_POST['animal_type'])) {
-        $erreurs[] = " Пожалуйста, укажите тид животного!";
+        $erreurs[] = " Пожалуйста, укажите тип животного!";
     }
     if (empty($_POST['proprietaire_prenom'])) {
         $erreurs[] = " Пожалуйста, укажите имя владельца!";
@@ -46,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreurs[] = " Пожалуйста, укажите номер телефона владельца!";
     }
     
+    // Если ошибок нет, продолжаем
     if (empty($erreurs)) {
         // Получаем данные владельца из формы
         $prenom = $_POST['proprietaire_prenom'];
@@ -59,8 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $proprietaire = $stmt->fetch();
         
         if ($proprietaire) {
+            // Владелец существует, используем его ID
             $id_proprietaire = $proprietaire['id'];
         } else {
+            // Создаем нового владельца
             $stmt = $pdo->prepare("INSERT INTO proprietaires (prenom, nom, telephone, email) VALUES (?, ?, ?, ?)");
             $stmt->execute([$prenom, $nom, $telephone, $email]);
             $id_proprietaire = $pdo->lastInsertId();
@@ -97,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Определяем заголовок и цвет кнопки в зависимости от режима
 $titre = $isModification ? " Изменить животное" : " Добавить животное";
 $couleurBouton = $isModification ? "#f57c00" : "#2e7d32";
 $textBouton = $isModification ? " Сохранить изменения" : " Добавить";
@@ -106,27 +111,151 @@ $textBouton = $isModification ? " Сохранить изменения" : " Д�
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title><?= $titre ?></title>
     <style>
-        body { font-family: 'Segoe UI', Arial; background: #f0f8f0; padding: 20px; }
-        .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        input, select { width: 100%; padding: 8px; margin: 5px 0 15px; border: 1px solid #ddd; border-radius: 5px; }
-        button { background: <?= $couleurBouton ?>; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
-        button:hover { background: <?= $isModification ? "#e65100" : "#1b5e20" ?>; }
-        .btn { background: #666; text-decoration: none; color: white; padding: 10px 20px; display: inline-block; border-radius: 5px; margin-left: 10px; }
-        .btn:hover { background: #555; }
-        h1 { color: <?= $couleurBouton ?>; text-align: center; margin-bottom: 25px; }
-        h3 { color: #2e7d32; margin-top: 20px; margin-bottom: 15px; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-        label { font-weight: bold; display: block; margin-top: 10px; }
-        .section { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .required { color: #c62828; }
-        .error { color: #c62828; background: #ffebee; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Segoe UI', Arial; 
+            background: #f0f8f0; 
+            padding: 15px; 
+        }
+
+        .container { 
+            max-width: 500px; 
+            margin: 0 auto; 
+            background: white; 
+            padding: 20px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        input, select, textarea { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 5px 0 12px; 
+            border: 1px solid #ddd; 
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        button { 
+            background: <?= $couleurBouton ?>; 
+            color: white; 
+            padding: 12px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            font-size: 16px;
+            width: 100%;
+        }
+        
+        button:hover { 
+            background: <?= $isModification ? "#e65100" : "#1b5e20" ?>; 
+        }
+        
+        .btn { 
+            background: #666; 
+            text-decoration: none; 
+            color: white; 
+            padding: 12px 20px; 
+            display: inline-block; 
+            border-radius: 5px; 
+            text-align: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+        
+        .btn:hover { 
+            background: #555; 
+        }
+
+        h1 { 
+            color: <?= $couleurBouton ?>; 
+            text-align: center; 
+            margin-bottom: 20px; 
+            font-size: 1.5rem;
+        }
+
+        h3 { 
+            color: #2e7d32; 
+            margin-top: 15px; 
+            margin-bottom: 10px; 
+            border-bottom: 1px solid #ddd; 
+            padding-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        label { 
+            font-weight: bold; 
+            display: block; 
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .section { 
+            background: #f9f9f9; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-bottom: 15px;
+        }
+    
+        .required { 
+            color: #c62828; 
+        }
+
+        .error { 
+            color: #c62828; 
+            background: #ffebee; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-direction: column;
+        }
+
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+            }
+            
+            .section {
+                padding: 12px;
+            }
+            
+            input, select, textarea, button, .btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h1><?= $titre ?></h1>
     
+    <!-- ОТОБРАЖЕНИЕ ОШИБОК ВАЛИДАЦИИ -->
     <?php if (!empty($erreurs)): ?>
         <div class="error">
             <?php foreach($erreurs as $err): ?>
@@ -136,19 +265,20 @@ $textBouton = $isModification ? " Сохранить изменения" : " Д�
     <?php endif; ?>
     
     <form method="POST">
+        <!-- СКРЫТОЕ ПОЛЕ ДЛЯ ID ПРИ РЕДАКТИРОВАНИИ -->
         <?php if($isModification): ?>
             <input type="hidden" name="modifier_id" value="<?= $animal['id'] ?>">
         <?php endif; ?>
         
-        <!-- БЛОК: ИНФОРМАЦИЯ О ЖИВОТНОМ -->
+        <!-- СЕКЦИЯ: ИНФОРМАЦИЯ О ЖИВОТНОМ -->
         <div class="section">
             <h3> ИНФОРМАЦИЯ О ЖИВОТНОМ</h3>
             
             <label>Имя животного <span class="required">*</span></label>
             <input type="text" name="animal_nom" value="<?= $animal ? htmlspecialchars($animal['nom']) : '' ?>" required>
-            
-            <label> Тип (собака, кошка, кролик...) <span class="required">*</span></label>
-            <input type="text" name="animal_type" value="<?= $animal ? htmlspecialchars($animal['type']) : '' ?>" required>
+
+            <label>Тип (собака, кошка, кролик...)</<span class="required">*</span></label>
+            <input type="text" name="animal_type" value="<?= $animal ? htmlspecialchars($animal['type']) : '' ?>"required>
             
             <label>Возраст (лет)</label>
             <input type="number" name="animal_age" value="<?= $animal ? $animal['age'] : '' ?>">
@@ -157,7 +287,7 @@ $textBouton = $isModification ? " Сохранить изменения" : " Д�
             <input type="text" name="animal_couleur" value="<?= $animal ? htmlspecialchars($animal['couleur']) : '' ?>">
         </div>
         
-        <!-- БЛОК: ИНФОРМАЦИЯ О ВЛАДЕЛЬЦЕ -->
+        <!-- СЕКЦИЯ: ИНФОРМАЦИЯ О ВЛАДЕЛЬЦЕ -->
         <div class="section">
             <h3> ИНФОРМАЦИЯ О ВЛАДЕЛЬЦЕ</h3>
             
@@ -174,18 +304,12 @@ $textBouton = $isModification ? " Сохранить изменения" : " Д�
             <input type="email" name="proprietaire_email" value="<?= $animal ? htmlspecialchars($animal['proprietaire_email'] ?? '') : '' ?>">
         </div>
         
-        <div style="text-align: center; margin-top: 20px;">
+        <!-- КНОПКИ ДЕЙСТВИЙ -->
+        <div class="button-group">
             <button type="submit"><?= $textBouton ?></button>
-            <a href="index.php" class="btn">Отмена</a>
+            <a href="index.php" class="btn"> Отмена</a>
         </div>
     </form>
-    
-    <?php if($isModification && $animal): ?>
-        <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 8px; text-align: center;">
-            <p><strong>Хотите добавить новый визит для этого животного?</strong></p>
-            <a href="ajouter_visite.php?animal_id=<?= $animal['id'] ?>&animal_nom=<?= urlencode($animal['nom']) ?>" class="btn" style="background: #2e7d32;"> Добавить визит</a>
-        </div>
-    <?php endif; ?>
 </div>
 </body>
 </html>
