@@ -11,7 +11,7 @@
                 ]);
             }
 
-        } else {
+        else {
 
             $stmt = $db->prepare(
                 "INSERT INTO application
