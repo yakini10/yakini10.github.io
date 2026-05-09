@@ -157,7 +157,6 @@ $proprietaires_list = $pdo->query("
             }
         }
         
-        /* ОЧЕНЬ МАЛЕНЬКИЕ ЭКРАНЫ */
         @media (max-width: 480px) {
             body {
                 padding-top: 130px;
@@ -272,23 +271,16 @@ $proprietaires_list = $pdo->query("
             flex: 1; 
             min-width: 200px; 
         }
-        
         .animaux-liste {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 15px;
         }
-        
+
         .animal-item {
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
         }
         
         .animal-info {
@@ -347,7 +339,7 @@ $proprietaires_list = $pdo->query("
             }
             
             .animal-item {
-                flex-direction: column;
+                flex-direction: column;  /* Passe en colonne sur mobile */
                 align-items: stretch;
             }
             
