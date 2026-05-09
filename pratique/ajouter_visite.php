@@ -19,16 +19,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreurs[] = " Пожалуйста, укажите дату визита!";
     }
     
+    if (empty($_POST['symptomes'])) {
+        $erreurs[] = " Пожалуйста, укажите симптомы!";
+    }
+    
+    if (empty($_POST['traitement'])) {
+        $erreurs[] = " Пожалуйста, укажите лечение!";
+    }
+    
+    if (empty($_POST['id_maladie'])) {
+        $erreurs[] = "Пожалуйста, выберите диагноз (болезнь)!";
+    }
+    
     if (empty($erreurs)) {
-        // Convertir la maladie vide en NULL
-        $id_maladie = !empty($_POST['id_maladie']) ? $_POST['id_maladie'] : NULL;
-        
         $stmt = $pdo->prepare("INSERT INTO visites (id_animal, date_visite, symptomes, id_maladie, traitement) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([
             $_POST['id_animal'],
             $_POST['date_visite'],
             $_POST['symptomes'],
-            $id_maladie,
+            $_POST['id_maladie'],  i
             $_POST['traitement']
         ]);
         $_SESSION['message'] = " Визит успешно добавлен!";
@@ -55,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         h1 { color: #2e7d32; text-align: center; }
         label { font-weight: bold; display: block; margin-top: 10px; }
         .error { color: #c62828; background: #ffebee; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
+        .required { color: #c62828; }
     </style>
 </head>
 <body>
@@ -70,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php endif; ?>
     
     <form method="POST">
-        <label>Животное *</label>
+        <label>Животное <span class="required">*</span></label>
         <select name="id_animal" required>
             <option value="">-- Выберите животное --</option>
             <?php foreach($animaux as $a): ?>
@@ -80,22 +90,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endforeach; ?>
         </select>
         
-        <label>Дата визита *</label>
+        <label>Дата визита <span class="required">*</span></label>
         <input type="date" name="date_visite" value="<?= date('Y-m-d') ?>" required>
         
-        <label>Симптомы (жалобы)</label>
-        <textarea name="symptomes" placeholder="Опишите симптомы животного..."></textarea>
+        <label>Симптомы (жалобы) <span class="required">*</span></label>
+        <textarea name="symptomes" placeholder="Опишите симптомы животного..." required></textarea>
         
-        <label>Диагноз (болезнь)</label>
-        <select name="id_maladie">
-            <option value="">-- Не выбран --</option>
+        <label>Диагноз (болезнь) <span class="required">*</span></label>
+        <select name="id_maladie" required>
+            <option value="">-- Выберите болезнь --</option>
             <?php foreach($maladies as $m): ?>
                 <option value="<?= $m['id'] ?>"><?= htmlspecialchars($m['nom_maladie']) ?></option>
             <?php endforeach; ?>
         </select>
         
-        <label>Назначенное лечение</label>
-        <textarea name="traitement" placeholder="Какое лечение назначено?"></textarea>
+        <label>Назначенное лечение <span class="required">*</span></label>
+        <textarea name="traitement" placeholder="Какое лечение назначено?" required></textarea>
         
         <div style="text-align: center; margin-top: 20px;">
             <button type="submit"> Добавить визит</button>
