@@ -335,4 +335,33 @@
 
         <div class="form-group <?php echo isset($errors['languages']) ? 'error-group' : ''; ?>">
             <label for="languages" class="required">Любимый язык программирования</label>
-            <select name="languages[]" id="languages" multiple size="6" class="<?php echo isset($errors['languages']) ? 'error' :
+            <select name="languages[]" id="languages" multiple size="6" class="<?php echo isset($errors['languages']) ? 'error' : ''; ?>">
+                <?php
+                // MODIFIÉ - Utilisation de getLanguagesList() et htmlspecialchars
+                $langs = getLanguagesList();
+                foreach($langs as $id=>$name){
+                    $sel = in_array($id, $values['languages'] ?? []) ? 'selected' : '';
+                    echo "<option value='" . htmlspecialchars($id) . "' $sel>" . htmlspecialchars($name) . "</option>";
+                }
+                ?>
+            </select>
+            <small>Удерживайте Ctrl (или Cmd) для выбора нескольких вариантов</small>
+        </div>
+
+        <div class="form-group <?php echo isset($errors['biography']) ? 'error-group' : ''; ?>">
+            <label for="biography" class="required">Биография</label>
+            <textarea id="biography" name="biography" rows="5" placeholder="Расскажите немного о себе..." class="<?php echo isset($errors['biography']) ? 'error' : ''; ?>"><?php echo e($values['biography'] ?? ''); ?></textarea>
+        </div>
+
+        <div class="form-group <?php echo isset($errors['contract_accepted']) ? 'error-group' : ''; ?>">
+            <div class="checkbox-group">
+                <input type="checkbox" id="contract_accepted" name="contract_accepted" value="yes" <?php echo ($values['contract_accepted'] ?? false) ? 'checked' : ''; ?>>
+                <label for="contract_accepted" class="required">С контрактом ознакомлен(а)</label>
+            </div>
+        </div>
+
+        <button type="submit">Сохранить</button>
+    </form>
+</div>
+</body>
+</html>
