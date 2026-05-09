@@ -148,7 +148,7 @@ $textBouton = $isModification ? " Сохранить изменения" : " Д�
             <input type="text" name="animal_nom" value="<?= $animal ? htmlspecialchars($animal['nom']) : '' ?>" required>
             
             <label>Тип (собака, кошка, кролик...)</label>
-            <input type="text" name="animal_type" value="<?= $animal ? htmlspecialchars($animal['type']) : '' ?>">
+            <input type="text" name="animal_type" value="<?= $animal ? htmlspecialchars($animal['type']) : '' ?>" required>
             
             <label>Возраст (лет)</label>
             <input type="number" name="animal_age" value="<?= $animal ? $animal['age'] : '' ?>">
