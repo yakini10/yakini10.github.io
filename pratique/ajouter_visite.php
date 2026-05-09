@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_POST['id_animal'],
             $_POST['date_visite'],
             $_POST['symptomes'],
-            $_POST['id_maladie'],  i
+            $_POST['id_maladie'], 
             $_POST['traitement']
         ]);
         $_SESSION['message'] = " Визит успешно добавлен!";
