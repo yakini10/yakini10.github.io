@@ -1,7 +1,6 @@
 <?php
 require_once 'config.php';
 
-// АВТОМАТИЧЕСКАЯ ОЧИСТКА : Удаление владельцев без животных
 $pdo->exec("DELETE FROM proprietaires WHERE id NOT IN (SELECT IFNULL(id_proprietaire, 0) FROM animaux)");
 
 // Получить всех животных
@@ -62,8 +61,7 @@ $proprietaires_list = $pdo->query("
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f8f0; padding: 20px; padding-top: 100px; }
         .container { max-width: 1300px; margin: 0 auto; }
-        
-        /* Navigation fixe */
+
         .nav-fixed {
             position: fixed;
             top: 0;
@@ -154,8 +152,7 @@ $proprietaires_list = $pdo->query("
         .message { background: #c8e6c9; padding: 10px; border-radius: 5px; margin-bottom: 20px; color: #1b5e20; border-left: 4px solid #2e7d32; }
         .row { display: flex; gap: 20px; flex-wrap: wrap; }
         .col { flex: 1; min-width: 250px; }
-        
-        /* AFFICHAGE ORIGINAL DES ANIMAUX (EN COLONNE) */
+
         .animaux-liste {
             display: flex;
             flex-direction: column;
@@ -239,7 +236,6 @@ $proprietaires_list = $pdo->query("
 </head>
 <body>
 
-<!-- NAVIGATION FIXE -->
 <div class="nav-fixed">
     <div class="container">
         <h1>Ветеринарная клиника</h1>
