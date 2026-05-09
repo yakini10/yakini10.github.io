@@ -59,8 +59,12 @@ require_once 'config.php';
             <a href="visites.php">Визиты</a>
             <p>Журнал посещений</p>
         </div>
+        <div class="menu-card">   <!-- NOUVEAU -->
+            <span class="emoji">👥</span>
+            <a href="proprietaires.php">Владельцы</a>
+            <p>Список владельцев</p>
+        </div>
     </div>
-    <div class="footer">Ветеринарная клиника © 2025</div>
 </div>
 </body>
 </html>
