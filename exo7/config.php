@@ -1,5 +1,4 @@
 <?php
-session_start();  // ← AJOUTÉ (nécessaire pour CSRF)
 
 // Désactiver l'affichage des erreurs (Information Disclosure)
 ini_set('display_errors', 0);
