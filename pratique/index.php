@@ -368,12 +368,6 @@ $proprietaires_list = $pdo->query("
         <h2> Список владельцев</h2>
         
         <?php if(count($proprietaires_list) > 0): ?>
-            <!-- Кнопка очистки владельцев без животных -->
-            <div style="margin-bottom: 15px; text-align: right;">
-                <a href="nettoyer_proprietaires.php" class="btn btn-small btn-clean" onclick="return confirm(' Удалить всех владельцев, у которых нет животных?')">
-                </a>
-            </div>
-            
             <table>
                 <thead>
                     <tr>
