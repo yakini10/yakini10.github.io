@@ -1,71 +1,338 @@
 <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анкета</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<form action="index.php" method="POST">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
 
-<input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            padding: 30px;
+        }
 
-<label>FIO</label>
-<input type="text" name="fio"
-value="<?= htmlspecialchars($values['fio'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
 
-<br><br>
+        .auth-header {
+            text-align: right;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-<label>Phone</label>
-<input type="text" name="phone"
-value="<?= htmlspecialchars($values['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        .auth-status {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
 
-<br><br>
+        .logout-btn {
+            background: #f44336;
+            color: white;
+            text-decoration: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
 
-<label>Email</label>
-<input type="email" name="email"
-value="<?= htmlspecialchars($values['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        .logout-btn:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
 
-<br><br>
+        .admin-link {
+            background: #ff9800;
+            color: white;
+            text-decoration: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
 
-<label>Birth date</label>
-<input type="date" name="birth_date"
-value="<?= htmlspecialchars($values['birth_date'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+        .admin-link:hover {
+            background: #f57c00;
+            transform: translateY(-2px);
+        }
 
-<br><br>
+        .form-group {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
 
-<label>Gender</label>
-<select name="gender">
-<option value="male">Male</option>
-<option value="female">Female</option>
-</select>
+        .form-group.error-group {
+            background-color: #fff0f0;
+            border-left: 4px solid #f44336;
+        }
 
-<br><br>
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
 
-<label>Languages</label>
-<select multiple name="languages[]">
-<?php
-foreach(getLanguagesList() as $id => $lang):
-?>
-<option value="<?= $id ?>">
-<?= htmlspecialchars($lang, ENT_QUOTES, 'UTF-8') ?>
-</option>
-<?php endforeach; ?>
-</select>
+        label.required::after {
+            content: " *";
+            color: #f44336;
+        }
 
-<br><br>
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
 
-<label>Biography</label>
-<textarea name="biography">
-<?= htmlspecialchars($values['biography'] ?? '', ENT_QUOTES, 'UTF-8') ?>
-</textarea>
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
 
-<br><br>
+        input.error,
+        textarea.error,
+        select.error {
+            border-color: #f44336;
+            background-color: #fff0f0;
+        }
 
-<label>
-<input type="checkbox" name="contract_accepted">
-Accept contract
-</label>
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-top: 5px;
+            flex-wrap: wrap;
+        }
 
-<br><br>
+        .radio-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: normal;
+            cursor: pointer;
+        }
 
-<button type="submit">Save</button>
+        .radio-group input[type="radio"] {
+            width: auto;
+            cursor: pointer;
+        }
 
-</form>
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-</body>
-</html>
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            margin-bottom: 0;
+            cursor: pointer;
+        }
+
+        .error-message {
+            color: #f44336;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .success {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .error {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        select[multiple] {
+            min-height: 150px;
+        }
+
+        select[multiple] option {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        select[multiple] option:hover {
+            background: #667eea20;
+        }
+
+        small {
+            display: block;
+            margin-top: 5px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .auth-header {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="auth-header">
+        <?php if (!empty($_SESSION['user_id'])): ?>
+            <span class="auth-status">Вы вошли</span>
+            <div style="display: flex; gap: 10px;">
+                <a href="admin.php" class="admin-link">Администрирование</a>
+                <a href="index.php?logout=1" class="logout-btn">Выйти</a>
+            </div>
+        <?php else: ?>
+            <div style="display: flex; gap: 10px; width: 100%; justify-content: flex-end;">
+                <a href="admin.php" class="admin-link">Администрирование</a>
+                <a href="login.php" class="logout-btn" style="background: #667eea;">Войти</a>
+            </div>
+        <?php endif; ?>
+    </div>
+
+    <h1>Анкета</h1>
+
+    <?php if (!empty($messages)): ?>
+        <?php foreach ($messages as $message): ?>
+            <?php echo $message; ?>
+        <?php endforeach; ?>
+    <?php endif; ?>
+
+    <form action="index.php" method="POST">
+        <input type="hidden" name="csrf_token" value="<?= getCSRFToken() ?>">  <!-- AJOUTÉ -->
+
+        <div class="form-group <?php echo isset($errors['fio']) ? 'error-group' : ''; ?>">
+            <label for="fio" class="required">ФИО</label>
+            <input type="text" id="fio" name="fio" value="<?php echo e($values['fio'] ?? ''); ?>" placeholder="Иванов Иван Иванович" class="<?php echo isset($errors['fio']) ? 'error' : ''; ?>">
+        </div>
+
+        <div class="form-group <?php echo isset($errors['phone']) ? 'error-group' : ''; ?>">
+            <label for="phone" class="required">Телефон</label>
+            <input type="tel" id="phone" name="phone" value="<?php echo e($values['phone'] ?? ''); ?>" placeholder="+7 XXX XXX XX XX" class="<?php echo isset($errors['phone']) ? 'error' : ''; ?>">
+        </div>
+
+        <div class="form-group <?php echo isset($errors['email']) ? 'error-group' : ''; ?>">
+            <label for="email" class="required">E-mail</label>
+            <input type="email" id="email" name="email" value="<?php echo e($values['email'] ?? ''); ?>" placeholder="example@domain.com" class="<?php echo isset($errors['email']) ? 'error' : ''; ?>">
+        </div>
+
+        <div class="form-group <?php echo isset($errors['birth_date']) ? 'error-group' : ''; ?>">
+            <label for="birth_date" class="required">Дата рождения</label>
+            <input type="date" id="birth_date" name="birth_date" value="<?php echo e($values['birth_date'] ?? ''); ?>" class="<?php echo isset($errors['birth_date']) ? 'error' : ''; ?>">
+        </div>
+
+        <div class="form-group <?php echo isset($errors['gender']) ? 'error-group' : ''; ?>">
+            <label class="required">Пол</label>
+            <div class="radio-group">
+                <label><input type="radio" name="gender" value="male" <?php echo (($values['gender'] ?? '') == 'male') ? 'checked' : ''; ?>> Мужской</label>
+                <label><input type="radio" name="gender" value="female" <?php echo (($values['gender'] ?? '') == 'female') ? 'checked' : ''; ?>> Женский</label>
+            </div>
+        </div>
+
+        <div class="form-group <?php echo isset($errors['languages']) ? 'error-group' : ''; ?>">
+            <label for="languages" class="required">Любимый язык программирования</label>
+            <select name="languages[]" id="languages" multiple size="6" class="<?php echo isset($errors['languages']) ? 'error' :
