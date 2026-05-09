@@ -33,6 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['animal_nom'])) {
         $erreurs[] = " Пожалуйста, укажите имя животного!";
     }
+    if (empty($_POST['animal_type'])) {
+        $erreurs[] = " Пожалуйста, укажите тид животного!";
+    }
     if (empty($_POST['proprietaire_prenom'])) {
         $erreurs[] = " Пожалуйста, укажите имя владельца!";
     }
