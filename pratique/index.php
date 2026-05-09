@@ -407,7 +407,7 @@ $proprietaires_list = $pdo->query("
                 </tbody>
             </table>
         <?php else: ?>
-            <p style="color: #999; text-align: center;">👥 Нет зарегистрированных владельцев</p>
+            <p style="color: #999; text-align: center;"> Нет зарегистрированных владельцев</p>
         <?php endif; ?>
     </div>
 
@@ -419,7 +419,6 @@ $proprietaires_list = $pdo->query("
                 <?php foreach($maladies as $m): ?>
                     <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
                         <strong> <?= htmlspecialchars($m['nom_maladie']) ?></strong><br>
-                        <span style="color: #666; font-size: 14px;">📝 <?= htmlspecialchars($m['description']) ?></span>
                     </li>
                 <?php endforeach; ?>
             </ul>
