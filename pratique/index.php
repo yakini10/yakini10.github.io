@@ -56,26 +56,14 @@ $proprietaires_list = $pdo->query("
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ветеринарная клиника</title>
     <style>
-
         * { margin: 0; padding: 0; box-sizing: border-box; }
-  
-        body { 
-            font-family: 'Segoe UI', Arial, sans-serif; 
-            background: #f0f8f0; 
-            padding: 20px; 
-            padding-top: 100px;
-        }
-
-        .container { 
-            max-width: 1300px; 
-            margin: 0 auto; 
-            width: 100%;
-        }
-
-        /* СТИЛИ ДЛЯ ФИКСИРОВАННОЙ НАВИГАЦИИ */
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f8f0; padding: 20px; padding-top: 100px; }
+        .container { max-width: 1300px; margin: 0 auto; }
+        
+        /* Navigation fixe */
         .nav-fixed {
             position: fixed;
             top: 0;
@@ -101,7 +89,6 @@ $proprietaires_list = $pdo->query("
             margin: 0;
         }
         
-        /* ССЫЛКИ НАВИГАЦИИ */
         .nav-fixed .nav {
             display: flex;
             gap: 15px;
@@ -115,7 +102,6 @@ $proprietaires_list = $pdo->query("
             background: #1b5e20;
             border-radius: 5px;
             transition: 0.3s;
-            font-size: 14px;
         }
         
         .nav-fixed .nav a:hover {
@@ -126,161 +112,56 @@ $proprietaires_list = $pdo->query("
         @media (max-width: 768px) {
             body {
                 padding-top: 130px;
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-            
-            .nav-fixed {
-                padding: 10px 15px;
-            }
-            
-            .nav-fixed h1 {
-                font-size: 1.2rem;
-                text-align: center;
-                width: 100%;
             }
             
             .nav-fixed .container {
                 flex-direction: column;
-                gap: 10px;
+                text-align: center;
             }
             
             .nav-fixed .nav {
-                width: 100%;
                 justify-content: center;
             }
-            
-            .nav-fixed .nav a {
-                font-size: 12px;
-                padding: 6px 12px;
-            }
         }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
         .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .card h2 { color: #2e7d32; margin-bottom: 15px; border-bottom: 2px solid #2e7d32; padding-bottom: 10px; }
         
-        @media (max-width: 480px) {
-            body {
-                padding-top: 150px;
-            }
-            
-            .nav-fixed .nav {
-                gap: 8px;
-            }
-            
-            .nav-fixed .nav a {
-                font-size: 10px;
-                padding: 5px 8px;
-            }
-        }
+        .form-group { margin-bottom: 15px; }
+        label { font-weight: bold; display: block; margin-bottom: 5px; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
         
-        /* ПЛАВНАЯ ПРОКРУТКА */
-        html {
-            scroll-behavior: smooth;
-            scroll-padding-top: 100px;
-        }
-        
-        /* СТИЛИ ДЛЯ КАРТОЧЕК */
-        .card { 
-            background: white; 
-            border-radius: 10px; 
-            padding: 20px; 
-            margin-bottom: 20px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        /* ЗАГОЛОВКИ КАРТОЧЕК */
-        .card h2 { 
-            color: #2e7d32; 
-            margin-bottom: 15px; 
-            border-bottom: 2px solid #2e7d32; 
-            padding-bottom: 10px; 
-            font-size: 1.4rem;
-        }
-        
-        /* СТИЛИ ДЛЯ КНОПОК */
-        button, .btn { 
-            background: #2e7d32; 
-            color: white; 
-            border: none; 
-            padding: 10px 20px; 
-            border-radius: 5px; 
-            cursor: pointer; 
-            text-decoration: none; 
-            display: inline-block;
-            font-size: 14px;
-            text-align: center;
-        }
-        
+        button, .btn { background: #2e7d32; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; text-decoration: none; display: inline-block; }
         .btn-danger { background: #c62828; }
         .btn-warning { background: #f57c00; }
         .btn-small { padding: 5px 10px; font-size: 12px; margin: 2px; }
         
-        /* СТИЛИ ДЛЯ ТАБЛИЦ */
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 15px; 
-        }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #2e7d32; color: white; }
+        tr:hover { background: #f5f5f5; }
         
-        th, td { 
-            padding: 10px; 
-            text-align: left; 
-            border-bottom: 1px solid #ddd;
-            font-size: 14px;
-        }
-        
-        th { 
-            background: #2e7d32; 
-            color: white;
-        }
-        
-        tr:hover { 
-            background: #f5f5f5; 
-        }
-        
-        .table-wrapper {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        /* КНОПКИ ДЕЙСТВИЙ */
         .action-buttons {
             display: flex;
             gap: 5px;
             flex-wrap: wrap;
         }
         
-        /* СООБЩЕНИЯ */
-        .message { 
-            background: #c8e6c9; 
-            padding: 10px; 
-            border-radius: 5px; 
-            margin-bottom: 20px; 
-            color: #1b5e20; 
-            border-left: 4px solid #2e7d32;
-            font-size: 14px;
-        }
+        .message { background: #c8e6c9; padding: 10px; border-radius: 5px; margin-bottom: 20px; color: #1b5e20; border-left: 4px solid #2e7d32; }
+        .row { display: flex; gap: 20px; flex-wrap: wrap; }
+        .col { flex: 1; min-width: 250px; }
         
-        /* ГРИД ДЛЯ КОЛОНОК */
-        .row { 
-            display: flex; 
-            gap: 20px; 
-            flex-wrap: wrap; 
-        }
-        
-        .col { 
-            flex: 1; 
-            min-width: 250px; 
-        }
-        
-        /* ========== AFFICHAGE DES ANIMAUX (GRILLE) ========== */
+        /* AFFICHAGE ORIGINAL DES ANIMAUX (EN COLONNE) */
         .animaux-liste {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-            gap: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
-        /* CARTE ANIMAL INDIVIDUELLE */
         .animal-item {
             background: #f9f9f9;
             border: 1px solid #ddd;
@@ -289,6 +170,7 @@ $proprietaires_list = $pdo->query("
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
             transition: 0.2s;
         }
         
@@ -297,36 +179,30 @@ $proprietaires_list = $pdo->query("
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         
-        /* INFORMATION SUR L'ANIMAL */
         .animal-info {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 20px;
             align-items: baseline;
         }
         
-        /* NOM DE L'ANIMAL */
         .animal-nom {
             font-size: 18px;
             font-weight: bold;
             color: #2e7d32;
-            min-width: 100px;
+            min-width: 120px;
         }
         
-        /* DÉTAILS DE L'ANIMAL */
         .animal-detail {
             color: #555;
             font-size: 14px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
         }
         
         .animal-detail span {
             background: #e8e8e8;
-            padding: 3px 10px;
+            padding: 3px 8px;
             border-radius: 12px;
-            font-size: 12px;
+            margin-right: 8px;
         }
         
         .badge {
@@ -339,97 +215,31 @@ $proprietaires_list = $pdo->query("
             margin-left: 5px;
         }
         
-        /* ========== VERSION MOBILE ========== */
         @media (max-width: 768px) {
-            .card {
-                padding: 15px;
-            }
-            
-            .card h2 {
-                font-size: 1.2rem;
-            }
-            
-            .col { 
-                flex: 100%; 
-                min-width: auto;
-            }
-            
-            /* Version mobile : chaque animal prend toute la largeur */
-            .animaux-liste {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-            
+            .col { flex: 100%; }
             .animal-item {
                 flex-direction: column;
-                align-items: stretch;
+                align-items: flex-start;
                 gap: 10px;
             }
-            
-            .animal-info {
-                flex-direction: column;
-                gap: 8px;
-            }
-            
-            .animal-nom {
-                font-size: 16px;
-            }
-            
-            .animal-detail {
-                font-size: 12px;
-            }
-            
-            .animal-detail span {
-                font-size: 11px;
-                padding: 2px 8px;
-            }
-            
             .action-buttons {
                 width: 100%;
-                justify-content: stretch;
-            }
-            
-            .action-buttons a {
-                flex: 1;
-                text-align: center;
-            }
-            
-            button, .btn {
-                width: 100%;
-                padding: 10px;
-            }
-            
-            .row {
-                gap: 10px;
-            }
-            
-            /* Tableau responsive */
-            table {
-                min-width: 500px;
-            }
-            
-            th, td {
-                font-size: 12px;
-                padding: 8px;
+                justify-content: flex-start;
             }
         }
         
-        @media (max-width: 480px) {
-            .animal-detail span {
-                font-size: 10px;
-                padding: 2px 6px;
-            }
-            
-            th, td {
-                font-size: 10px;
-                padding: 6px;
-            }
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        
+        table {
+            min-width: 500px;
         }
     </style>
 </head>
 <body>
 
-<!-- ФИКСИРОВАННАЯ НАВИГАЦИЯ -->
+<!-- NAVIGATION FIXE -->
 <div class="nav-fixed">
     <div class="container">
         <h1>Ветеринарная клиника</h1>
@@ -438,76 +248,65 @@ $proprietaires_list = $pdo->query("
             <a href="#visites">Визиты</a>
             <a href="#filtrer">Фильтр</a>
             <a href="#proprietaires">Владельцы</a>
-            <a href="form.php">Добавить</a>
-            <a href="ajouter_visite.php">Визит</a>
+            <a href="form.php">Добавить животное</a>
+            <a href="ajouter_visite.php">Добавить визит</a>
         </div>
     </div>
 </div>
 
 <div class="container">
-    <!-- ОТОБРАЖЕНИЕ СООБЩЕНИЙ СЕССИИ -->
     <?php if(isset($_SESSION['message'])): ?>
         <div class="message"><?= $_SESSION['message']; unset($_SESSION['message']); ?></div>
     <?php endif; ?>
 
-    <!-- БЛОК: СПИСОК ЖИВОТНЫХ -->
+    <!-- СПИСОК ЖИВОТНЫХ -->
     <div class="card" id="animaux">
         <h2>Список животных</h2>
         <div class="animaux-liste">
-            <?php if(count($animaux) > 0): ?>
-                <!-- ЦИКЛ ДЛЯ ОТОБРАЖЕНИЯ ВСЕХ ЖИВОТНЫХ -->
-                <?php foreach($animaux as $animal): ?>
-                <div class="animal-item">
-                    <div class="animal-info">
-                        <div class="animal-nom"><?= htmlspecialchars($animal['nom']) ?></div>
-                        <div class="animal-detail">
-                            <span><?= htmlspecialchars($animal['type']) ?></span>
-                            <span><?= $animal['age'] ?> лет</span>
-                            <span><?= htmlspecialchars($animal['couleur']) ?></span>
-                            <span><?= htmlspecialchars($animal['prenom'] . ' ' . $animal['proprietaire_nom']) ?></span>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <a href="form.php?modifier_id=<?= $animal['id'] ?>" class="btn btn-small btn-warning">Изменить</a>
-                        <a href="supprimer.php?id=<?= $animal['id'] ?>" class="btn btn-small btn-danger" onclick="return confirm('Удалить <?= htmlspecialchars($animal['nom']) ?> ?')">Удалить</a>
+            <?php foreach($animaux as $animal): ?>
+            <div class="animal-item">
+                <div class="animal-info">
+                    <div class="animal-nom"><?= htmlspecialchars($animal['nom']) ?></div>
+                    <div class="animal-detail">
+                        <span><?= htmlspecialchars($animal['type']) ?></span>
+                        <span><?= $animal['age'] ?> лет</span>
+                        <span><?= htmlspecialchars($animal['couleur']) ?></span>
+                        <span><?= htmlspecialchars($animal['prenom'] . ' ' . $animal['proprietaire_nom']) ?></span>
                     </div>
                 </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <p style="color: #999; text-align: center;">Нет зарегистрированных животных</p>
-            <?php endif; ?>
+                <div class="action-buttons">
+                    <a href="form.php?modifier_id=<?= $animal['id'] ?>" class="btn btn-small btn-warning">Изменить</a>
+                    <a href="supprimer.php?id=<?= $animal['id'] ?>" class="btn btn-small btn-danger" onclick="return confirm('Удалить <?= htmlspecialchars($animal['nom']) ?> ?')">Удалить</a>
+                </div>
+            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 
-    <!-- БЛОК: ЖУРНАЛ ВИЗИТОВ -->
+    <!-- ЖУРНАЛ ВИЗИТОВ -->
     <div class="card" id="visites">
         <h2>Журнал визитов</h2>
-        <?php if(count($visites) > 0): ?>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr><th>Дата</th><th>Животное</th><th>Симптомы</th><th>Болезнь</th><th>Лечение</th></tr>
-                    </thead>
-                    <tbody>
-                        <!-- ЦИКЛ ДЛЯ ОТОБРАЖЕНИЯ ВСЕХ ВИЗИТОВ -->
-                        <?php foreach($visites as $v): ?>
-                        <tr>
-                            <td><?= $v['date_visite'] ?></td>
-                            <td><?= htmlspecialchars($v['animal_nom']) ?></td>
-                            <td><?= htmlspecialchars($v['symptomes']) ?></td>
-                            <td><?= htmlspecialchars($v['nom_maladie']) ?></td>
-                            <td><?= htmlspecialchars($v['traitement']) ?></td>
-                        </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        <?php else: ?>
-            <p style="color: #999; text-align: center;">Нет зарегистрированных визитов</p>
-        <?php endif; ?>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr><th>Дата</th><th>Животное</th><th>Симптомы</th><th>Болезнь</th><th>Лечение</th></tr>
+                </thead>
+                <tbody>
+                    <?php foreach($visites as $v): ?>
+                    <tr>
+                        <td><?= $v['date_visite'] ?></td>
+                        <td><?= htmlspecialchars($v['animal_nom']) ?></td>
+                        <td><?= htmlspecialchars($v['symptomes']) ?></td>
+                        <td><?= htmlspecialchars($v['nom_maladie']) ?></td>
+                        <td><?= htmlspecialchars($v['traitement']) ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <!-- БЛОК: ФИЛЬТРАЦИЯ ПО БОЛЕЗНИ -->
+    <!-- ФИЛЬТРАЦИЯ ПО БОЛЕЗНИ -->
     <div class="card" id="filtrer">
         <h2>Фильтр визитов по болезни</h2>
         <form method="POST">
@@ -528,9 +327,8 @@ $proprietaires_list = $pdo->query("
             </div>
         </form>
 
-        <!-- ОТОБРАЖЕНИЕ РЕЗУЛЬТАТОВ ФИЛЬТРАЦИИ -->
         <?php if($visites_filtrees): ?>
-            <h3 style="margin-top: 20px; font-size: 14px;">Результаты (<?= count($visites_filtrees) ?> визит(ов))</h3>
+            <h3 style="margin-top: 20px;">Результаты (<?= count($visites_filtrees) ?> визит(ов))</h3>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -553,12 +351,11 @@ $proprietaires_list = $pdo->query("
         <?php endif; ?>
     </div>
 
-    <!-- БЛОК: СПИСОК ВЛАДЕЛЬЦЕВ -->
+    <!-- СПИСОК ВЛАДЕЛЬЦЕВ -->
     <div class="card" id="proprietaires">
         <h2>Список владельцев</h2>
         
         <?php if(count($proprietaires_list) > 0): ?>
-            
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -572,7 +369,6 @@ $proprietaires_list = $pdo->query("
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- ЦИКЛ ДЛЯ ОТОБРАЖЕНИЯ ВСЕХ ВЛАДЕЛЬЦЕВ -->
                         <?php foreach($proprietaires_list as $p): ?>
                         <tr>
                             <td><?= $p['id'] ?></td>
@@ -583,7 +379,7 @@ $proprietaires_list = $pdo->query("
                             <td>
                                 <?= $p['nombre_animaux'] ?>
                                 <?php if($p['nombre_animaux'] > 0): ?>
-                                    <span class="badge"></span>
+                                    <span class="badge">✓</span>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -596,21 +392,14 @@ $proprietaires_list = $pdo->query("
         <?php endif; ?>
     </div>
 
-    <!-- БЛОК: СПИСОК БОЛЕЗНЕЙ -->
+    <!-- СПИСОК БОЛЕЗНЕЙ -->
     <div class="card">
         <h2>Список болезней</h2>
-        <?php if(count($maladies) > 0): ?>
-            <ul style="list-style: none; padding-left: 0;">
-                <?php foreach($maladies as $m): ?>
-                    <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
-                        <strong><?= htmlspecialchars($m['nom_maladie']) ?></strong><br>
-                        <span style="color: #666; font-size: 12px;"><?= htmlspecialchars($m['description']) ?></span>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php else: ?>
-            <p style="color: #999; text-align: center;">Нет зарегистрированных болезней</p>
-        <?php endif; ?>
+        <ul>
+            <?php foreach($maladies as $m): ?>
+                <li><strong><?= htmlspecialchars($m['nom_maladie']) ?></strong> : <?= htmlspecialchars($m['description']) ?></li>
+            <?php endforeach; ?>
+        </ul>
     </div>
 </div>
 </body>
