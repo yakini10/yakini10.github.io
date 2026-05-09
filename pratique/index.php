@@ -38,7 +38,15 @@ $visites = $pdo->query("
     ORDER BY v.date_visite DESC
 ")->fetchAll();
 
-$proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
+// Получить список владельцев с количеством животных
+$proprietaires_list = $pdo->query("
+    SELECT p.*, 
+           COUNT(a.id) as nombre_animaux
+    FROM proprietaires p
+    LEFT JOIN animaux a ON p.id = a.id_proprietaire
+    GROUP BY p.id
+    ORDER BY p.nom
+")->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -53,11 +61,11 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
             font-family: 'Segoe UI', Arial, sans-serif; 
             background: #f0f8f0; 
             padding: 20px; 
-            padding-top: 100px; /* Espace pour la barre fixe */
+            padding-top: 100px; /* Пространство для фиксированной навигации */
         }
         .container { max-width: 1300px; margin: 0 auto; }
         
-        /* Styles pour la navigation fixe */
+        /* Стили для фиксированной навигации */
         .nav-fixed {
             position: fixed;
             top: 0;
@@ -103,10 +111,10 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
             transform: translateY(-2px);
         }
         
-        /* Ajustement pour les écrans mobiles */
+        /* Адаптация для мобильных устройств */
         @media (max-width: 768px) {
             body {
-                padding-top: 120px;
+                padding-top: 140px;
             }
             
             .nav-fixed .container {
@@ -119,7 +127,13 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
             }
         }
         
-        /* Styles originaux */
+        /* Плавная прокрутка */
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
+        
+        /* Основные стили */
         .card { background: white; border-radius: 10px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .card h2 { color: #2e7d32; margin-bottom: 15px; border-bottom: 2px solid #2e7d32; padding-bottom: 10px; }
         
@@ -143,7 +157,15 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
             flex-wrap: wrap;
         }
         
-        .message { background: #c8e6c9; padding: 10px; border-radius: 5px; margin-bottom: 20px; color: #1b5e20; }
+        .message { 
+            background: #c8e6c9; 
+            padding: 10px; 
+            border-radius: 5px; 
+            margin-bottom: 20px; 
+            color: #1b5e20; 
+            border-left: 4px solid #2e7d32;
+        }
+        
         .row { display: flex; gap: 20px; flex-wrap: wrap; }
         .col { flex: 1; min-width: 250px; }
         
@@ -190,6 +212,25 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
             margin-right: 8px;
         }
         
+        .btn-clean {
+            background: #f57c00;
+            margin-bottom: 15px;
+        }
+        
+        .btn-clean:hover {
+            background: #e65100;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #2e7d32;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-left: 5px;
+        }
+        
         @media (max-width: 768px) {
             .col { flex: 100%; }
             .animal-item {
@@ -202,25 +243,21 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
                 justify-content: flex-start;
             }
         }
-        
-        /* Animation de défilement doux */
-        html {
-            scroll-behavior: smooth;
-        }
     </style>
 </head>
 <body>
 
-<!-- BARRE DE NAVIGATION ÉPINGLÉE (FIXE) -->
+<!-- ФИКСИРОВАННАЯ НАВИГАЦИЯ -->
 <div class="nav-fixed">
     <div class="container">
         <h1>🐾 Ветеринарная клиника</h1>
         <div class="nav">
-            <a href="#animaux">🐕 Животные</a>
-            <a href="#visites">📋 Визиты</a>
-            <a href="#filtrer">🔍 Фильтр</a>
-            <a href="form.php">➕ Добавить животное</a>
-            <a href="ajouter_visite.php">🩺 Добавить визит</a>
+            <a href="#animaux"> Животные</a>
+            <a href="#visites"> Визиты</a>
+            <a href="#filtrer"> Фильтр</a>
+            <a href="#proprietaires"> Владельцы</a>
+            <a href="form.php"> Добавить животное</a>
+            <a href="ajouter_visite.php"> Добавить визит</a>
         </div>
     </div>
 </div>
@@ -230,52 +267,57 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
         <div class="message"><?= $_SESSION['message']; unset($_SESSION['message']); ?></div>
     <?php endif; ?>
 
-    <!-- SPACER pour compenser la barre fixe (optionnel) -->
-    <div style="height: 0;"></div>
-
     <!-- СПИСОК ЖИВОТНЫХ -->
     <div class="card" id="animaux">
-        <h2>🐕 Список животных</h2>
+        <h2> Список животных</h2>
         <div class="animaux-liste">
-            <?php foreach($animaux as $animal): ?>
-            <div class="animal-item">
-                <div class="animal-info">
-                    <div class="animal-nom"><?= htmlspecialchars($animal['nom']) ?></div>
-                    <div class="animal-detail">
-                        <span><?= htmlspecialchars($animal['type']) ?></span>
-                        <span><?= $animal['age'] ?> лет</span>
-                        <span><?= htmlspecialchars($animal['couleur']) ?></span>
-                        <span>👤 <?= htmlspecialchars($animal['prenom'] . ' ' . $animal['proprietaire_nom']) ?></span>
+            <?php if(count($animaux) > 0): ?>
+                <?php foreach($animaux as $animal): ?>
+                <div class="animal-item">
+                    <div class="animal-info">
+                        <div class="animal-nom"><?= htmlspecialchars($animal['nom']) ?></div>
+                        <div class="animal-detail">
+                            <span><?= htmlspecialchars($animal['type']) ?></span>
+                            <span><?= $animal['age'] ?> лет</span>
+                            <span><?= htmlspecialchars($animal['couleur']) ?></span>
+                            <span>👤 <?= htmlspecialchars($animal['prenom'] . ' ' . $animal['proprietaire_nom']) ?></span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <a href="form.php?modifier_id=<?= $animal['id'] ?>" class="btn btn-small btn-warning"> Изменить</a>
+                        <a href="supprimer.php?id=<?= $animal['id'] ?>" class="btn btn-small btn-danger" onclick="return confirm('Удалить <?= htmlspecialchars($animal['nom']) ?> ?')"> Удалить</a>
                     </div>
                 </div>
-                <div class="action-buttons">
-                    <a href="form.php?modifier_id=<?= $animal['id'] ?>" class="btn btn-small btn-warning">✏️ Изменить</a>
-                    <a href="supprimer.php?id=<?= $animal['id'] ?>" class="btn btn-small btn-danger" onclick="return confirm('Удалить <?= htmlspecialchars($animal['nom']) ?> ?')">🗑️ Удалить</a>
-                </div>
-            </div>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <p style="color: #999; text-align: center;"> Нет зарегистрированных животных</p>
+            <?php endif; ?>
         </div>
     </div>
 
     <!-- ЖУРНАЛ ВИЗИТОВ -->
     <div class="card" id="visites">
-        <h2>📋 Журнал визитов</h2>
-         <table>
-            <thead>
-                 <tr><th>📅 Дата</th><th>🐕 Животное</th><th>🤒 Симптомы</th><th>🦠 Болезнь</th><th>💊 Лечение</th></tr>
-            </thead>
-            <tbody>
-                <?php foreach($visites as $v): ?>
-                <tr>
-                    <td><?= $v['date_visite'] ?></td>
-                    <td><?= htmlspecialchars($v['animal_nom']) ?></td>
-                    <td><?= htmlspecialchars($v['symptomes']) ?></td>
-                    <td><?= htmlspecialchars($v['nom_maladie']) ?></td>
-                    <td><?= htmlspecialchars($v['traitement']) ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <h2> Журнал визитов</h2>
+        <?php if(count($visites) > 0): ?>
+            <table>
+                <thead>
+                    <tr><th> Дата</th><th> Животное</th><th> Симптомы</th><th> Болезнь</th><th> Лечение</th></tr>
+                </thead>
+                <tbody>
+                    <?php foreach($visites as $v): ?>
+                    <tr>
+                        <td><?= $v['date_visite'] ?></td>
+                        <td><?= htmlspecialchars($v['animal_nom']) ?></td>
+                        <td><?= htmlspecialchars($v['symptomes']) ?></td>
+                        <td><?= htmlspecialchars($v['nom_maladie']) ?></td>
+                        <td><?= htmlspecialchars($v['traitement']) ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p style="color: #999; text-align: center;"> Нет зарегистрированных визитов</p>
+        <?php endif; ?>
     </div>
 
     <!-- ФИЛЬТРАЦИЯ ПО БОЛЕЗНИ -->
@@ -294,15 +336,17 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
                     </select>
                 </div>
                 <div class="col">
-                    <button type="submit" name="filtrer">🔍 Показать</button>
+                    <button type="submit" name="filtrer"> Показать</button>
                 </div>
             </div>
         </form>
 
         <?php if($visites_filtrees): ?>
-            <h3 style="margin-top: 20px;">📊 Résultats (<?= count($visites_filtrees) ?> визит(ов))</h3>
+            <h3 style="margin-top: 20px;"> Результаты (<?= count($visites_filtrees) ?> визит(ов))</h3>
             <table>
-                <thead><tr><th>📅 Дата</th><th>🐕 Животное</th><th>🤒 Симптомы</th><th>💊 Лечение</th></tr></thead>
+                <thead>
+                    <tr><th> Дата</th><th> Животное</th><th> Симптомы</th><th> Лечение</th></tr>
+                </thead>
                 <tbody>
                     <?php foreach($visites_filtrees as $vf): ?>
                     <tr>
@@ -315,36 +359,31 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
                 </tbody>
             </table>
         <?php elseif($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
-            <p style="color: #c62828; margin-top: 15px;">⚠️ Визитов по этой болезни не найдено.</p>
+            <p style="color: #c62828; margin-top: 15px;"> Визитов по этой болезни не найдено.</p>
         <?php endif; ?>
     </div>
 
-    <!-- Список владельцев -->
+    <!-- СПИСОК ВЛАДЕЛЬЦЕВ -->
     <div class="card" id="proprietaires">
-        <h2>👥 Список владельцев</h2>
-        <?php
-        $proprietaires_list = $pdo->query("
-            SELECT p.*, 
-                   COUNT(a.id) as nombre_animaux
-            FROM proprietaires p
-            LEFT JOIN animaux a ON p.id = a.id_proprietaire
-            GROUP BY p.id
-            ORDER BY p.nom
-        ")->fetchAll();
-        ?>
+        <h2> Список владельцев</h2>
         
-        <?php if(empty($proprietaires_list)): ?>
-            <p style="color: #999;">Нет зарегистрированных владельцев</p>
-        <?php else: ?>
+        <?php if(count($proprietaires_list) > 0): ?>
+            <!-- Кнопка очистки владельцев без животных -->
+            <div style="margin-bottom: 15px; text-align: right;">
+                <a href="nettoyer_proprietaires.php" class="btn btn-small btn-clean" onclick="return confirm(' Удалить всех владельцев, у которых нет животных?')">
+                     Очистить владельцев без животных
+                </a>
+            </div>
+            
             <table>
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>👤 Имя</th>
-                        <th>👤 Фамилия</th>
-                        <th>📞 Телефон</th>
-                        <th>📧 Email</th>
-                        <th>🐕 Животных</th>
+                        <th> Имя</th>
+                        <th> Фамилия</th>
+                        <th> Телефон</th>
+                        <th> Email</th>
+                        <th> Животных</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -357,25 +396,36 @@ $proprietaires = $pdo->query("SELECT * FROM proprietaires")->fetchAll();
                         <td><?= htmlspecialchars($p['email']) ?></td>
                         <td>
                             <?= $p['nombre_animaux'] ?>
-                            <?php if($p['nombre_animaux'] > 0): ?>
-                                <span style="font-size: 11px; color: #2e7d32;">✓</span>
+                            <?php if($p['nombre_animaux'] == 0): ?>
+                                <span class="badge">Нет животных</span>
+                            <?php elseif($p['nombre_animaux'] > 0): ?>
+                                <span class="badge" style="background: #2e7d32;"></span>
                             <?php endif; ?>
                         </td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
+        <?php else: ?>
+            <p style="color: #999; text-align: center;">👥 Нет зарегистрированных владельцев</p>
         <?php endif; ?>
     </div>
-    
-    <!-- Список болезней -->
+
+    <!-- СПИСОК БОЛЕЗНЕЙ -->
     <div class="card">
-        <h2>🦠 Список болезней</h2>
-        <ul>
-            <?php foreach($maladies as $m): ?>
-                <li><strong><?= htmlspecialchars($m['nom_maladie']) ?></strong> : <?= htmlspecialchars($m['description']) ?></li>
-            <?php endforeach; ?>
-        </ul>
+        <h2> Список болезней</h2>
+        <?php if(count($maladies) > 0): ?>
+            <ul style="list-style: none; padding-left: 0;">
+                <?php foreach($maladies as $m): ?>
+                    <li style="padding: 8px 0; border-bottom: 1px solid #eee;">
+                        <strong> <?= htmlspecialchars($m['nom_maladie']) ?></strong><br>
+                        <span style="color: #666; font-size: 14px;">📝 <?= htmlspecialchars($m['description']) ?></span>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <p style="color: #999; text-align: center;"> Нет зарегистрированных болезней</p>
+        <?php endif; ?>
     </div>
 </div>
 </body>
