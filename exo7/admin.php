@@ -1,44 +1,58 @@
 <?php
-session_start();
-require_once 'config.php';
+            ->execute([$id]);
 
-$db = getDB();
+        $db->commit();
 
-// CSRF
-if (empty($_SESSION['csrf'])) {
-    $_SESSION['csrf'] = bin2hex(random_bytes(32));
-}
-
-// AUTH BASIC (inchangé)
-if (empty($_SERVER['PHP_AUTH_USER']) || empty($_SERVER['PHP_AUTH_PW'])) {
-    header('HTTP/1.1 401 Unauthorized');
-    header('WWW-Authenticate: Basic realm="Admin panel"');
-    exit('Authentication required');
-}
-
-$stmt = $db->prepare("SELECT * FROM admin WHERE login = ?");
-$stmt->execute([$_SERVER['PHP_AUTH_USER']]);
-$admin = $stmt->fetch();
-
-if (!$admin || !password_verify($_SERVER['PHP_AUTH_PW'], $admin['password_hash'])) {
-    exit('Invalid credentials');
-}
-
-$action = $_POST['action'] ?? $_GET['action'] ?? 'list';
-
-// DELETE sécurisé POST + CSRF
-if ($action === 'delete' && isset($_POST['id'])) {
-
-    if (!isset($_POST['csrf']) || $_POST['csrf'] !== $_SESSION['csrf']) {
-        die('CSRF blocked');
+    } catch (Exception $e) {
+        $db->rollBack();
     }
-
-    $id = (int)$_POST['id'];
-
-    $db->beginTransaction();
-    $db->prepare("DELETE FROM application_languages WHERE application_id = ?")->execute([$id]);
-    $db->prepare("DELETE FROM users WHERE application_id = ?")->execute([$id]);
-    $db->prepare("DELETE FROM application WHERE id = ?")->execute([$id]);
-    $db->commit();
 }
+
+$applications = $db->query(
+    "SELECT a.*, u.login
+     FROM application a
+     LEFT JOIN users u ON a.id = u.application_id
+     ORDER BY a.id DESC"
+)->fetchAll();
 ?>
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Admin</title>
+</head>
+<body>
+
+<h1>Administration</h1>
+
+<table border="1">
+<tr>
+<th>ID</th>
+<th>FIO</th>
+<th>Email</th>
+<th>Actions</th>
+</tr>
+
+<?php foreach ($applications as $app): ?>
+<tr>
+<td><?= (int)$app['id'] ?></td>
+<td><?= htmlspecialchars($app['fio'], ENT_QUOTES, 'UTF-8') ?></td>
+<td><?= htmlspecialchars($app['email'], ENT_QUOTES, 'UTF-8') ?></td>
+<td>
+
+<form method="POST">
+<input type="hidden" name="action" value="delete">
+<input type="hidden" name="id" value="<?= (int)$app['id'] ?>">
+<input type="hidden" name="csrf" value="<?= $_SESSION['csrf'] ?>">
+<button type="submit">Delete</button>
+</form>
+
+</td>
+</tr>
+<?php endforeach; ?>
+
+</table>
+
+</body>
+</html>
