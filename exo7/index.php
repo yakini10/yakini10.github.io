@@ -2,8 +2,8 @@
 
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
-header('X-Frame-Options: DENY');           // AJOUTÉ
-header('X-Content-Type-Options: nosniff'); // AJOUTÉ
+header('X-Frame-Options: DENY');           
+header("Content-Security-Policy: default-src 'self'");
 
 require_once 'config.php';
 
