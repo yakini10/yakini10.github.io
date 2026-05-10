@@ -10,10 +10,7 @@ define('DB_NAME', 'u82383');
 define('DB_USER', 'u82383');
 define('DB_PASS', 'dt54#FDrt');
 
-/**
- * Возвращает PDO подключение к базе данных
- * @return PDO
- */
+// Возвращает PDO подключение к базе данных
 function getDB() {
     static $db = null;
     
@@ -29,17 +26,16 @@ function getDB() {
                 ]
             );
         } catch (PDOException $e) {
-            die('Ошибка подключения к базе данных');  // Message générique
+            die('Ошибка подключения к базе данных');  
         }
     }
     
     return $db;
 }
 
-/**
- * Возвращает список языков программирования
- * @return array
- */
+
+//Возвращает список языков программирования
+
 function getLanguagesList() {
     return [
         1 => 'Pascal',
@@ -72,11 +68,7 @@ function validateFormData($data) {
     return $errors;
 }
 
-// ===== FONCTIONS AJOUTÉES POUR LA SÉCURITÉ =====
-
-/**
- * Génère un token CSRF
- */
+ // token CSRF
 function getCSRFToken() {
     if (empty($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -84,16 +76,12 @@ function getCSRFToken() {
     return $_SESSION['csrf_token'];
 }
 
-/**
- * Vérifie un token CSRF
- */
 function verifyCSRFToken($token) {
     return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
 
-/**
- * Échappe une chaîne pour le HTML (protection XSS)
- */
+//protection XSS
+    
 function e($str) {
     return htmlspecialchars($str ?? '', ENT_QUOTES, 'UTF-8');
 }
