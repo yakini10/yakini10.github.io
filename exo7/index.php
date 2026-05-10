@@ -3,7 +3,7 @@
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
 header('X-Frame-Options: DENY');           
-header("Content-Security-Policy: default-src 'self'");
+header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'");
 
 require_once 'config.php';
 
