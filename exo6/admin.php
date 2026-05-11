@@ -226,10 +226,10 @@ $langs_list = getLanguagesList();
 <td><?= htmlspecialchars($app['fio']) ?></td>
 <td><?= htmlspecialchars($app['email']) ?></td>
 <td>
-<a href="?action=edit&id=<?= $app['id'] ?>">Edit</a>
+<a href="admin.php?action=edit&id=<?= $app['id'] ?>">Edit</a>
 </td> 
 <td>
-    <form method="post" ?action="delete_id" onsubmit="return confirm('Удалить запись #<?php echo $app['id']; ?>?');">
+    <form method="post" action="admin.php?action=delete&id=<?php echo $app['id']; ?>" onsubmit="return confirm('Удалить запись #<?php echo $app['id']; ?>?');">
         <input type="hidden" name="delete_id" value="<?php echo $app['id']; ?>">
         <button type="submit" class="btn-del">Delete</button>
     </form>
