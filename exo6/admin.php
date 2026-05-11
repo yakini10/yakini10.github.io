@@ -234,7 +234,6 @@ $langs_list = getLanguagesList();
         <button type="submit" class="btn-del">Delete</button>
     </form>
 </td>
-<?php
 </tr>
 <?php endforeach; ?>
 
