@@ -228,13 +228,13 @@ $langs_list = getLanguagesList();
 <td>
 <a href="?action=edit&id=<?= $app['id'] ?>">Edit</a>
 </td> 
-<?php
 <td>
     <form method="post" onsubmit="return confirm('Удалить запись #<?php echo $a['id']; ?>?');">
         <input type="hidden" name="delete_id" value="<?php echo $a['id']; ?>">
         <button type="submit" class="btn-del">Delete</button>
     </form>
 </td>
+<?php
 </tr>
 <?php endforeach; ?>
 
