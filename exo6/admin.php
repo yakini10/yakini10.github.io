@@ -230,7 +230,7 @@ $langs_list = getLanguagesList();
 </td> 
 <td>
     <form method="post" onsubmit="return confirm('Удалить запись #<?php echo $app['id']; ?>?');">
-        <input type="hidden" name="delete_id" value="<?php echo $app['id']; ?>">
+        <input type="hidden" ?action="delete_id" value="<?php echo $app['id']; ?>">
         <button type="submit" class="btn-del">Delete</button>
     </form>
 </td>
