@@ -240,7 +240,7 @@ $langs_list = getLanguagesList();
     </td>
     <td>
     <form method="POST"
-      action="admin.php?action=delete"
+      action="admin.php?action=delete&id=<?php echo $app['id']; ?>"
       onsubmit="return confirm('Удалить запись #<?= (int)$app['id']; ?> ?');">
 
     <input type="hidden"
