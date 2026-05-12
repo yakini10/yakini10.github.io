@@ -44,28 +44,53 @@ $message = null;
 $error = null;
 
 // DELETE (MODIFIÉ avec CSRF)
-if ($action === 'delete' && isset($_GET['id']) && isset($_GET['csrf_token'])) {
-    if (!verifyCSRFToken($_GET['csrf_token'])) {
-        $error = "Token CSRF invalide";
+if ($_SERVER['REQUEST_METHOD'] === 'POST'
+    && isset($_GET['action'])
+    && $_GET['action'] === 'delete'
+    && isset($_POST['delete_id'])) {
+
+    if (
+        !isset($_POST['csrf_token']) ||
+        !verifyCSRFToken($_POST['csrf_token'])
+    ) {
+
+        $error = "CSRF token invalide";
+
     } else {
-        $id = (int)$_GET['id'];
+
+        $id = (int)$_POST['delete_id'];
 
         try {
+
             $db->beginTransaction();
 
-            $db->prepare("DELETE FROM application_languages WHERE application_id = ?")->execute([$id]);
-            $db->prepare("DELETE FROM users WHERE application_id = ?")->execute([$id]);
-            $db->prepare("DELETE FROM application WHERE id = ?")->execute([$id]);
+            $db->prepare("
+                DELETE FROM application_languages
+                WHERE application_id = ?
+            ")->execute([$id]);
+
+            $db->prepare("
+                DELETE FROM users
+                WHERE application_id = ?
+            ")->execute([$id]);
+
+            $db->prepare("
+                DELETE FROM application
+                WHERE id = ?
+            ")->execute([$id]);
 
             $db->commit();
+
             $message = "Данные удалены.";
+
         } catch (Exception $e) {
+
             $db->rollBack();
+
             $error = "Ошибка удаления.";
         }
     }
 }
-
 // EDIT
 $edit_data = null;
 $edit_languages = [];
@@ -240,18 +265,19 @@ $langs_list = getLanguagesList();
     </td>
     <td>
     <form method="POST"
-      action="admin.php?action=delete&id=<?php echo $app['id']; ?>"
-      onsubmit="return confirm('Удалить запись #<?= (int)$app['id']; ?> ?');">
+      action="admin.php?action=delete"
+      style="display:inline;"
+      onsubmit="return confirm('Удалить запись #<?= (int)$app['id'] ?> ?');">
 
     <input type="hidden"
            name="delete_id"
-           value="<?= (int)$app['id']; ?>">
+           value="<?= (int)$app['id'] ?>">
 
     <input type="hidden"
            name="csrf_token"
            value="<?= e(getCSRFToken()) ?>">
 
-    <button type="submit" class="btn-del">
+    <button type="submit">
         Delete
     </button>
 </form>
