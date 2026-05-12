@@ -237,8 +237,25 @@ $langs_list = getLanguagesList();
     <td><?= e($app['email']) ?></td>
     <td>
         <a href="?action=edit&id=<?= urlencode($app['id']) ?>&csrf_token=<?= urlencode(getCSRFToken()) ?>">Edit</a>
-        <a href="?action=delete&id=<?= urlencode($app['id']) ?>&csrf_token=<?= urlencode(getCSRFToken()) ?>">Delete</a>
     </td>
+    <td>
+    <form method="POST"
+      action="admin.php?action=delete"
+      onsubmit="return confirm('Удалить запись #<?= (int)$app['id']; ?> ?');">
+
+    <input type="hidden"
+           name="delete_id"
+           value="<?= (int)$app['id']; ?>">
+
+    <input type="hidden"
+           name="csrf_token"
+           value="<?= e(getCSRFToken()) ?>">
+
+    <button type="submit" class="btn-del">
+        Delete
+    </button>
+</form>
+</td>
 </tr>
 <?php endforeach; ?>
 
