@@ -1,27 +1,25 @@
 <?php
 
-header("Content-Type: application/json");
-
-$config = require "../config.php";
+require_once "../config.php";
 
 try {
 
     $db = new PDO(
-        "mysql:host={$config['host']};dbname={$config['dbname']};charset=utf8",
-        $config['user'],
-        $config['password']
+
+        "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=utf8",
+
+        DB_USER,
+
+        DB_PASS
+
     );
+
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 } catch (PDOException $e) {
 
-    http_response_code(500);
+    die("Erreur DB : " . $e->getMessage());
 
-    echo json_encode([
-        "success" => false,
-        "message" => "Database connection error"
-    ]);
-
-    exit;
 }
 
 $method = $_SERVER['REQUEST_METHOD'];
