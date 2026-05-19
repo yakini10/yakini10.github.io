@@ -1,277 +1,357 @@
-<?php
-require_once 'config.php';
-?>
-
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ru">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Clinique Vétérinaire - Accueil</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        /* En-tête */
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 40px;
-            padding: 20px;
-        }
-        
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        /* Message de succès */
-        .message {
-            background: #4caf50;
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            text-align: center;
-            animation: slideDown 0.5s ease;
-        }
-        
-        @keyframes slideDown {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-        
-        /* Grille des cartes */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-        
-        /* Cartes */
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px 20px;
-            text-align: center;
-            text-decoration: none;
-            color: #333;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: block;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        /* Icônes */
-        .card-icon {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-        }
-        
-        .card h2 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-            color: #4a5568;
-        }
-        
-        .card p {
-            color: #718096;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-        
-        /* Couleurs spécifiques pour chaque carte */
-        .card-animaux {
-            border-bottom: 4px solid #4299e1;
-        }
-        
-        .card-visites {
-            border-bottom: 4px solid #48bb78;
-        }
-        
-        .card-ajout-animal {
-            border-bottom: 4px solid #ed8936;
-        }
-        
-        .card-ajout-visite {
-            border-bottom: 4px solid #9f7aea;
-        }
-        
-        .card-proprietaires {
-            border-bottom: 4px solid #f687b3;
-        }
-        
-        .card-maladies {
-            border-bottom: 4px solid #f56565;
-        }
-        
-        .card-filtrer {
-            border-bottom: 4px solid #38b2ac;
-        }
-        
-        /* Footer */
-        .footer {
-            text-align: center;
-            color: white;
-            padding: 20px;
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-        
-        /* Responsive pour très petits écrans */
-        @media (max-width: 480px) {
-            body {
-                padding: 15px;
-            }
-            
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .header p {
-                font-size: 0.9rem;
-            }
-            
-            .grid {
-                gap: 15px;
-            }
-            
-            .card {
-                padding: 20px 15px;
-            }
-            
-            .card-icon {
-                font-size: 2.5rem;
-            }
-            
-            .card h2 {
-                font-size: 1.2rem;
-            }
-            
-            .card p {
-                font-size: 0.85rem;
-            }
-        }
-        
-        /* Pour écrans moyens (tablettes) */
-        @media (min-width: 481px) and (max-width: 768px) {
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 20px;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-        }
-        
-        /* Pour grands écrans */
-        @media (min-width: 1200px) {
-            .grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-    </style>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Drupal Coder</title>
+
+    <!-- Bootstrap -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
 </head>
+
 <body>
-<div class="container">
-    <div class="header">
-        <h1>🐾 Clinique Vétérinaire</h1>
-        <p>Gérez facilement vos patients à quatre pattes</p>
-    </div>
 
-    <?php if(isset($_SESSION['message'])): ?>
-        <div class="message">
-            ✅ <?= htmlspecialchars($_SESSION['message']); unset($_SESSION['message']); ?>
+    <!-- ===================================================== -->
+    <!-- HEADER -->
+    <!-- ===================================================== -->
+
+    <header class="py-4 border-bottom">
+
+        <div class="container">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <div class="logo">
+                    <h2 class="m-0">Drupal Coder</h2>
+                </div>
+
+                <nav>
+
+                    <ul class="nav">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Главная
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Услуги
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                Контакты
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </nav>
+
+            </div>
+
         </div>
-    <?php endif; ?>
 
-    <div class="grid">
-        <!-- Lien vers la liste des animaux -->
-        <a href="liste_animaux.php" class="card card-animaux">
-            <div class="card-icon">🐕‍🦺</div>
-            <h2>Liste des animaux</h2>
-            <p>Consulter, modifier ou supprimer les dossiers des animaux</p>
-        </a>
+    </header>
 
-        <!-- Lien vers le journal des visites -->
-        <a href="liste_visites.php" class="card card-visites">
-            <div class="card-icon">📋</div>
-            <h2>Journal des visites</h2>
-            <p>Historique complet de toutes les consultations</p>
-        </a>
+    <!-- ===================================================== -->
+    <!-- MAIN -->
+    <!-- ===================================================== -->
 
-        <!-- Lien pour ajouter un animal -->
-        <a href="form.php" class="card card-ajout-animal">
-            <div class="card-icon">➕🐕</div>
-            <h2>Ajouter un animal</h2>
-            <p>Enregistrer un nouveau patient et son propriétaire</p>
-        </a>
+    <main>
 
-        <!-- Lien pour ajouter une visite -->
-        <a href="ajouter_visite.php" class="card card-ajout-visite">
-            <div class="card-icon">🏥</div>
-            <h2>Ajouter une visite</h2>
-            <p>Enregistrer une nouvelle consultation</p>
-        </a>
+        <!-- ================================================= -->
+        <!-- HERO SECTION -->
+        <!-- ================================================= -->
 
-        <!-- Lien vers la liste des propriétaires -->
-        <a href="liste_proprietaires.php" class="card card-proprietaires">
-            <div class="card-icon">👨‍👩‍👧‍👦</div>
-            <h2>Liste des propriétaires</h2>
-            <p>Consulter tous les propriétaires et leurs animaux</p>
-        </a>
+        <section class="py-5 bg-light">
 
-        <!-- Lien vers la liste des maladies -->
-        <a href="liste_maladies.php" class="card card-maladies">
-            <div class="card-icon">🩺</div>
-            <h2>Liste des maladies</h2>
-            <p>Consulter le catalogue des maladies</p>
-        </a>
+            <div class="container">
 
-        <!-- Lien vers le filtre des visites par maladie -->
-        <a href="filtrer_visites.php" class="card card-filtrer">
-            <div class="card-icon">🔍</div>
-            <h2>Filtrer les visites</h2>
-            <p>Rechercher des visites par type de maladie</p>
-        </a>
-    </div>
+                <div class="row align-items-center">
 
-    <div class="footer">
-        <p>© 2024 Clinique Vétérinaire - Application de gestion</p>
-    </div>
-</div>
+                    <div class="col-12 col-lg-6">
+
+                        <h1 class="display-5 fw-bold mb-4">
+                            Поддержка сайтов <br>
+                            Drupal
+                        </h1>
+
+                        <p class="lead">
+                            Профессиональная поддержка и развитие
+                            ваших WEB-проектов.
+                        </p>
+
+                    </div>
+
+                    <div class="col-12 col-lg-6 text-center">
+
+                        <img
+                            src="img/hero.png"
+                            alt="Hero"
+                            class="img-fluid"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ================================================= -->
+        <!-- FORM SECTION -->
+        <!-- ================================================= -->
+
+        <section id="form-section" class="py-5">
+
+            <div class="container">
+
+                <div class="row">
+
+                    <!-- LEFT COLUMN -->
+
+                    <div
+                        id="text"
+                        class="col-12 col-md-6 mb-5 mb-md-0"
+                    >
+
+                        <div class="text1 mb-4">
+
+                            <h2>
+                                Оставить заявку <br>
+                                на поддержку сайта
+                            </h2>
+
+                        </div>
+
+                        <div class="text2 mb-4">
+
+                            <p>
+                                Срочно нужна поддержка сайта?
+                                Ваша команда не успевает
+                                справиться самостоятельно
+                                или предыдущий подрядчик
+                                не справился с работой?
+                            </p>
+
+                            <p>
+                                Тогда вам стоит обратиться к нам!
+                                Просто оставьте заявку и наш
+                                менеджер свяжется с вами.
+                            </p>
+
+                        </div>
+
+                        <div class="contacts">
+
+                            <ul class="list-unstyled">
+
+                                <li class="mb-3">
+
+                                    <a
+                                        href="tel:88002222673"
+                                        class="text-decoration-none"
+                                    >
+                                        8 800 222-26-73
+                                    </a>
+
+                                </li>
+
+                                <li>
+
+                                    <a
+                                        href="mailto:info@drupal-coder.ru"
+                                        class="text-decoration-underline"
+                                    >
+                                        info@drupal-coder.ru
+                                    </a>
+
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+                    </div>
+
+                    <!-- RIGHT COLUMN -->
+
+                    <div
+                        id="form"
+                        class="col-12 col-md-6"
+                    >
+
+                        <form
+                            id="feedbackForm"
+                            action="api/form.php"
+                            method="POST"
+                            class="row g-3"
+                        >
+
+                            <!-- NAME -->
+
+                            <div class="col-12">
+
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Ваше имя"
+                                    required
+                                >
+
+                            </div>
+
+                            <!-- PHONE -->
+
+                            <div class="col-12">
+
+                                <input
+                                    type="tel"
+                                    class="form-control"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="Телефон"
+                                >
+
+                            </div>
+
+                            <!-- EMAIL -->
+
+                            <div class="col-12">
+
+                                <input
+                                    type="email"
+                                    class="form-control"
+                                    id="email"
+                                    name="email"
+                                    placeholder="E-mail"
+                                    required
+                                >
+
+                            </div>
+
+                            <!-- COMMENT -->
+
+                            <div class="col-12">
+
+                                <textarea
+                                    class="form-control"
+                                    id="comment"
+                                    name="comment"
+                                    rows="5"
+                                    placeholder="Ваш комментарий"
+                                    required
+                                ></textarea>
+
+                            </div>
+
+                            <!-- CHECKBOX -->
+
+                            <div class="col-12">
+
+                                <div class="form-check">
+
+                                    <input
+                                        class="form-check-input"
+                                        type="checkbox"
+                                        id="agree"
+                                        required
+                                    >
+
+                                    <label
+                                        class="form-check-label"
+                                        for="agree"
+                                    >
+                                        Отправляя заявку,
+                                        я даю согласие
+                                        на обработку
+                                        персональных данных
+                                    </label>
+
+                                </div>
+
+                            </div>
+
+                            <!-- BUTTON -->
+
+                            <div class="col-12">
+
+                                <button
+                                    id="submitBtn"
+                                    type="submit"
+                                    class="btn btn-primary w-100"
+                                >
+                                    ОТПРАВИТЬ
+                                </button>
+
+                            </div>
+
+                        </form>
+
+                        <!-- AJAX RESULT -->
+
+                        <div
+                            id="result"
+                            class="mt-4"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- ===================================================== -->
+    <!-- FOOTER -->
+    <!-- ===================================================== -->
+
+    <footer class="py-4 bg-dark text-white">
+
+        <div class="container text-center">
+
+            <p class="m-0">
+                © 2026 Drupal Coder
+            </p>
+
+        </div>
+
+    </footer>
+
+    <!-- Bootstrap JS -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    ></script>
+
+    <!-- JS -->
+
+    <script src="js/form.js"></script>
+
 </body>
+
 </html>
